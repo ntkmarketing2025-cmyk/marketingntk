@@ -1,0 +1,461 @@
+<!DOCTYPE html>
+<html lang="th">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>ตารางงานฝ่ายกราฟิกและตัดต่อวิดีโอ</title>
+    <!-- โหลด Tailwind CSS CDN -->
+    <script src="https://cdn.tailwindcss.com"></script>
+    <!-- Load Sarabun Font for Thai language support -->
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Sarabun:wght@400;500;600;700&display=swap" rel="stylesheet">
+    <style>
+        /* ------------------------------------------- */
+        /* CLEAN LIGHT THEME (Removed Dark BG) */
+        /* ------------------------------------------- */
+        
+        /* General Styles and Background Setup */
+        body {
+            font-family: 'Sarabun', sans-serif;
+            color: #333333; 
+            padding-top: 80px;
+            transition: all 0.5s ease;
+            position: relative; 
+            min-height: 100vh;
+            /* เปลี่ยนพื้นหลังเป็นสีขาวอ่อน */
+            background-color: #f8f8f8; 
+        }
+        
+        /* **REMOVED: body::before (สำหรับพื้นหลังเบลอเมืองกลางคืน) ถูกนำออกแล้ว** */
+
+        /* Fixed Header - สีขาวทึบ */
+        header {
+            background-color: #ffffff; 
+        }
+        
+        /* Main Container - สีขาวทึบ */
+        .modern-container {
+            background-color: #ffffff; 
+            box-shadow: 0 4px 12px rgba(0, 0, 0, 0.1); /* Lighter shadow for light background */
+            border: 1px solid #e0e0e0;
+        }
+
+        /* Task Item Styles adapted for clean light theme */
+        .task-item {
+            padding: 1.25rem 1.5rem;
+            display: flex;
+            align-items: flex-start;
+            gap: 1.5rem;
+            transition: background-color 0.2s ease-in-out;
+            cursor: pointer;
+            border-left: 4px solid transparent; 
+        }
+    </style>
+</head>
+<body>
+
+    <!-- ส่วนหัว (Header) - FIXED Header for constant access -->
+    <header class="fixed top-0 left-0 w-full text-gray-800 shadow-md z-10 border-b border-gray-200">
+        <div class="container mx-auto px-4 py-3 flex justify-between items-center">
+            
+            <!-- ส่วนโลโก้ NTK ทางซ้าย - ใช้สีน้ำเงินเข้มเป็น Accent Color -->
+            <div class="flex items-center space-x-3">
+                <a href="#" class="text-3xl font-extrabold tracking-widest text-blue-600 hover:text-blue-700 transition duration-300">
+                    NTK
+                </a>
+                <span class="hidden sm:inline text-base text-gray-500 border-l border-gray-300 pl-3">
+                    Graphic & Video Schedule
+                </span>
+            </div>
+
+            <!-- ไอคอนช่องทางติดต่อผู้จัดทำ ทางขวา: LINE (เขียว) และ Call (น้ำเงิน) -->
+            <nav class="flex space-x-3 sm:space-x-4 items-center">
+                
+                <!-- ไอคอน LINE (L) - สีเขียวปกติ -->
+                <a href="https://line.me/ti/p/@your_line_id" target="_blank" title="ติดต่อทาง LINE ID/QR" 
+                   class="p-2 w-10 h-10 flex items-center justify-center font-bold text-lg text-white rounded-full bg-green-500 hover:bg-green-600 
+                          shadow-md transition duration-300 focus:outline-none focus:ring-2 focus:ring-green-500">
+                    L
+                    <span class="sr-only">LINE ID</span>
+                </a>
+
+                <!-- ไอคอนโทรศัพท์ (T) - สีน้ำเงินปกติ -->
+                <a href="tel:+66812625455" title="โทรศัพท์ติดต่อ" 
+                   class="p-2 w-10 h-10 flex items-center justify-center font-bold text-lg text-white rounded-full bg-blue-500 hover:bg-blue-600 
+                          shadow-md transition duration-300 focus:outline-none focus:ring-2 focus:ring-blue-500">
+                    T
+                    <span class="sr-only">Phone</span>
+                </a>
+            </nav>
+        </div>
+    </header>
+
+    <!-- เนื้อหาหลักของหน้า (Main Content - ตารางงาน) -->
+    <main class="container mx-auto p-4 sm:p-8 max-w-4xl modern-container rounded-2xl my-8">
+        <header class="text-center mb-10 pt-4 pb-2 border-b border-gray-300">
+            <h1 class="text-3xl md:text-4xl font-semibold text-gray-800 tracking-wider">
+                ตารางงานฝ่ายกราฟิกและตัดต่อวิดีโอ
+            </h1>
+            <p class="text-xl md:text-2xl text-gray-600 font-light mt-2">
+                เดือนตุลาคม 2025
+            </p>
+        </header>
+
+        <section id="schedule-container" class="space-y-8">
+            <!-- Schedule data will be injected here by JavaScript -->
+        </section>
+
+        <footer class="text-center mt-12 pt-4 border-t border-gray-300">
+            <p class="text-gray-500 font-medium text-lg tracking-wide">
+                Presented : FRANK Graphic Design NTK
+            </p>
+            <p class="text-gray-400 text-sm mt-1">&copy; 2025 All Rights Reserved.</p>
+        </footer>
+    </main>
+
+    <script>
+        // --- Schedule Data (Data remains the same) ---
+        const scheduleData = [
+            {
+                date: "วันพุธที่ 8 ตุลาคม 2025",
+                tasks: [
+                    { time: "09.30–10.00", title: "เตรียมอุปกรณ์ / ตรวจตาราง / ยืนยันเวลาถ่าย", client: "internal" },
+                    { time: "10.00–12.00", title: "ถ่ายร้านอิ่มสุข", details: "คอนเทนต์: การเตรียมอาหาร, บรรยากาศตอนสาย, เมนูยอดนิยมช่วงกลางวัน", client: "aimsook" },
+                    { time: "12.00–15.00", title: "พักกลางวัน / ถ่ายนฏกรเทเลคอม", details: "คลิป Tips: วิธีถ่ายรูปให้สวยด้วยมือถือ, เก็บบรรยากาศในห้าง", client: "natakorn" },
+                    { time: "15.00–18.30", title: "ตัดต่อคลิปและออกแบบกราฟิก", client: "internal" },
+                    { time: "18.30–20.00", title: "ถ่ายร้านลูกเจี๊ยบ", details: "คอนเทนต์: หมูกระทะตอนพระอาทิตย์ตก, ครอบครัวมาทานเย็นวันพุธ", client: "lookjeab" },
+                    { time: "20.00–20.30", title: "สรุปและจัดเก็บอุปกรณ์", client: "internal" },
+                ]
+            },
+            {
+                date: "วันพฤหัสบดีที่ 9 ตุลาคม 2025",
+                tasks: [
+                    { time: "09.30–10.00", title: "เตรียมอุปกรณ์ / ตรวจเมมกล้อง", client: "internal" },
+                    { time: "10.00–12.00", title: "ถ่ายร้านอิ่มสุข", details: "คอนเทนต์: เมนูอาหารเช้า, การจัดเรียงไลน์บุฟเฟ่ต์", client: "aimsook" },
+                    { time: "12.00–15.00", title: "ถ่ายร้านนฏกรเทเลคอม", details: "คอนเทนต์: รีวิวมือถือรุ่นใหม่, ถ่ายโปรโมชั่นหน้าร้าน", client: "natakorn" },
+                    { time: "15.00–18.30", title: "ตัดต่อวิดีโอ “อิ่มสุข - เมนูใหม่” / ทำภาพกราฟิกโปรฯ", client: "internal" },
+                    { time: "18.30–20.00", title: "ถ่ายร้านลูกเจี๊ยบ", details: "คอนเทนต์: มุกตลก / meme หมูกระทะ / ช่วงแสงเย็น", client: "lookjeab" },
+                    { time: "20.00–20.30", title: "สรุปงาน / อัปโหลดไฟล์", client: "internal" },
+                ]
+            },
+            {
+                date: "วันศุกร์ที่ 10 ตุลาคม 2025",
+                tasks: [
+                    { time: "09.30–10.00", title: "ตรวจอุปกรณ์, ชาร์จแบตกล้อง", client: "internal" },
+                    { time: "10.00–12.00", title: "ถ่ายร้านอิ่มสุข", details: "คอนเทนต์: ลูกค้าประจำ, ถ่ายเสียงจริงพูดถึงร้าน, บรรยากาศก่อนเที่ยง", client: "aimsook" },
+                    { time: "12.00–15.00", title: "ถ่ายนฏกรเทเลคอม", details: "คอนเทนต์: เทคนิคเลือกมือถือสำหรับเรียน/ทำงาน", client: "natakorn" },
+                    { time: "15.00–18.30", title: "ตัดต่อคลิป “โปรศุกร์สุดคุ้ม” / ทำโพสต์รวมโปรร้านมือถือ", client: "internal" },
+                    { time: "18.30–20.00", title: "ถ่ายร้านลูกเจี๊ยบ", details: "คอนเทนต์: ศุกร์เย็นชวนเพื่อนมากิน, ถ่ายช็อตไฟย่างสวยๆ", client: "lookjeab" },
+                    { time: "20.00–20.30", title: "สรุปและเก็บอุปกรณ์", client: "internal" },
+                ]
+            },
+            {
+                date: "วันเสาร์ที่ 11 ตุลาคม 2025",
+                tasks: [
+                    { time: "09.30–10.00", title: "เตรียมอุปกรณ์ / ตรวจเสียงและไมค์", client: "internal" },
+                    { time: "10.00–12.00", title: "ถ่ายร้านอิ่มสุข", details: "คอนเทนต์: ครอบครัวมาทานข้าว, มุมถ่ายรูปในร้าน", client: "aimsook" },
+                    { time: "12.00–15.00", title: "ถ่ายนฏกรเทเลคอม", details: "คอนเทนต์: รีวิวอุปกรณ์เสริม, การดูแลมือถือในหน้าฝน", client: "natakorn" },
+                    { time: "15.00–18.30", title: "ตัดต่อคลิปรวม “อิ่มสุข x ลูกค้า” / ทำภาพแบนเนอร์", client: "internal" },
+                    { time: "18.30–20.00", title: "ถ่ายร้านลูกเจี๊ยบ", details: "คอนเทนต์: เย็นวันเสาร์สุดคึกคัก, ถ่ายบรรยากาศโต๊ะใหญ่", client: "lookjeab" },
+                    { time: "20.00–20.30", title: "สรุปและจัดเก็บอุปกรณ์", client: "internal" },
+                ]
+            },
+            {
+                date: "วันจันทร์ที่ 13 ตุลาคม 2025",
+                tasks: [
+                    { time: "09.30–10.00", title: "เตรียมอุปกรณ์ / ตรวจนัดถ่าย", client: "internal" },
+                    { time: "10.00–12.00", title: "ถ่ายร้านอิ่มสุข", details: "คอนเทนต์: เปิดเช้า, พนักงานเตรียมอาหาร, เบื้องหลังครัว", client: "aimsook" },
+                    { time: "12.00–15.00", title: "ถ่ายร้านนฏกรเทเลคอม", details: "คอนเทนต์: คลิปเบื้องหลังการซ่อมมือถือ, ช่างซ่อมพูด", client: "natakorn" },
+                    { time: "15.00–18.30", title: "ตัดต่อและออกแบบกราฟิก “อิ่มสุขประจำสัปดาห์”", client: "internal" },
+                    { time: "18.30–20.00", title: "ถ่ายร้านลูกเจี๊ยบ", details: "คอนเทนต์: แนะนำเมนูใหม่ / มุกสั้นๆแบบไวรัล", client: "lookjeab" },
+                    { time: "20.00–20.30", title: "สรุปและเก็บงาน", client: "internal" },
+                ]
+            },
+            {
+                date: "วันอังคารที่ 14 ตุลาคม 2025",
+                tasks: [
+                    { time: "09.30–10.00", title: "เตรียมอุปกรณ์ / ยืนยันเวลาร้าน", client: "internal" },
+                    { time: "10.00–12.00", title: "ถ่ายร้านอิ่มสุข", details: "คอนเทนต์: ถ่ายเมนูพิเศษ, มุมอิ่มสุขโซนใหม่", client: "aimsook" },
+                    { time: "12.00–15.00", title: "ถ่ายร้านนฏกรเทเลคอม", details: "คอนเทนต์: โปร Vivo / ถ่ายศูนย์บริการ, ทีมบริการ", client: "natakorn" },
+                    { time: "15.00–18.30", title: "ตัดต่อคลิปและออกแบบแบนเนอร์มือถือ", client: "internal" },
+                    { time: "18.30–20.00", title: "ถ่ายร้านลูกเจี๊ยบ", details: "คอนเทนต์: เก็บมู้ดไฟย่าง, บรรยากาศหัวค่ำ, เสียงหัวเราะลูกค้า", client: "lookjeab" },
+                    { time: "20.00–20.30", title: "สรุปงาน / อัปโหลดไฟล์", client: "internal" },
+                ]
+            },
+            {
+                date: "วันพุธที่ 15 ตุลาคม 2025",
+                tasks: [
+                    { time: "09.30–10.00", title: "ตรวจอุปกรณ์ / เตรียมเสียง", client: "internal" },
+                    { time: "10.00–12.00", title: "ถ่ายร้านอิ่มสุข", details: "คอนเทนต์: เมนูยอดฮิต, ถ่ายแบบสโลโมชั่นขณะตักอาหาร", client: "aimsook" },
+                    { time: "12.00–15.00", title: "ถ่ายร้านนฏกรเทเลคอม", details: "คอนเทนต์: รีวิว Samsung / โปรอุปกรณ์เสริม", client: "natakorn" },
+                    { time: "15.00–18.30", title: "ตัดต่อคลิปไวรัล “ลูกเจี๊ยบชวนกิน”", client: "internal" },
+                    { time: "18.30–20.00", title: "ถ่ายร้านลูกเจี๊ยบ", details: "คอนเทนต์: Meme สั้น 5 วิ, ถ่าย Reaction ลูกค้า", client: "lookjeab" },
+                    { time: "20.00–20.30", title: "สรุปงาน", client: "internal" },
+                ]
+            },
+            {
+                date: "วันพฤหัสบดีที่ 16 ตุลาคม 2025",
+                tasks: [
+                    { time: "09.30–10.00", title: "เตรียมอุปกรณ์ / ตรวจกล้องและไมค์", client: "internal" },
+                    { time: "10.00–12.00", title: "ถ่ายร้านอิ่มสุข", details: "คอนเทนต์: เมนูประจำวันพฤหัส, บรรยากาศลูกค้าช่วงสาย", client: "aimsook" },
+                    { time: "12.00–15.00", title: "ถ่ายร้านนฏกรเทเลคอม", details: "คอนเทนต์: โปรลดราคา, ถ่ายพนักงานแนะนำลูกค้า", client: "natakorn" },
+                    { time: "15.00–18.30", title: "ตัดต่อคลิป “อิ่มสุข - เมนูใหม่ประจำสัปดาห์”", client: "internal" },
+                    { time: "18.30–20.00", title: "ถ่ายร้านลูกเจี๊ยบ", details: "คอนเทนต์: ช่วงหัวค่ำ ลูกค้าแน่น, ถ่ายควันไฟย่าง", client: "lookjeab" },
+                    { time: "20.00–20.30", title: "สรุปงาน / อัปโหลดไฟล์", client: "internal" },
+                ]
+            },
+            {
+                date: "วันศุกร์ที่ 17 ตุลาคม 2025",
+                tasks: [
+                    { time: "09.30–10.00", title: "เตรียมกล้อง / สำรวจจุดถ่าย", client: "internal" },
+                    { time: "10.00–12.00", title: "ถ่ายร้านอิ่มสุข", details: "คอนเทนต์: มื้อเที่ยงสุดสัปดาห์, ถ่ายเมนูจัดจานสวยๆ", client: "aimsook" },
+                    { time: "12.00–15.00", title: "ถ่ายร้านนฏกรเทเลคอม", details: "คอนเทนต์: รีวิวมือถือมือสอง, ถ่ายตอนลูกค้าซ่อมเสร็จรับเครื่อง", client: "natakorn" },
+                    { time: "15.00–18.30", title: "ตัดต่อคลิป / ใส่ซับ / ปรับสี", client: "internal" },
+                    { time: "18.30–20.00", title: "ถ่ายร้านลูกเจี๊ยบ", details: "คอนเทนต์: ศุกร์เย็นไฟย่าง, เพื่อนๆ นัดกินหมูกระทะ", client: "lookjeab" },
+                    { time: "20.00–20.30", title: "สรุปและเก็บอุปกรณ์", client: "internal" },
+                ]
+            },
+            {
+                date: "วันเสาร์ที่ 18 ตุลาคม 2025",
+                tasks: [
+                    { time: "09.30–10.00", title: "ตรวจตารางถ่ายทำ / เตรียม SD Card", client: "internal" },
+                    { time: "10.00–12.00", title: "ถ่ายร้านอิ่มสุข", details: "คอนเทนต์: บรรยากาศครอบครัวมาทาน, ถ่ายเด็กๆ / คนสูงอายุ", client: "aimsook" },
+                    { time: "12.00–15.00", title: "ถ่ายร้านนฏกรเทเลคอม", details: "คอนเทนต์: ถ่ายรีวิวแกะกล่อง / แนะนำเคสและอุปกรณ์เสริม", client: "natakorn" },
+                    { time: "15.00–18.30", title: "ตัดต่อวิดีโอ “บรรยากาศวันหยุด”", client: "internal" },
+                    { time: "18.30–20.00", title: "ถ่ายร้านลูกเจี๊ยบ", details: "คอนเทนต์: เย็นวันเสาร์สุดคึกคัก, ถ่ายบรรยากาศโต๊ะใหญ่", client: "lookjeab" },
+                    { time: "20.00–20.30", title: "สรุปงาน / สำรองไฟล์", client: "internal" },
+                ]
+            },
+            {
+                date: "วันจันทร์ที่ 20 ตุลาคม 2025",
+                tasks: [
+                    { time: "09.30–10.00", title: "เตรียมอุปกรณ์ / ตรวจนัดร้าน", client: "internal" },
+                    { time: "10.00–12.00", title: "ถ่ายร้านอิ่มสุข", details: "คอนเทนต์: ถ่ายพนักงานยิ้มแย้ม / แนะนำเมนูสุขภาพ", client: "aimsook" },
+                    { time: "12.00–15.00", title: "ถ่ายร้านนฏกรเทเลคอม", details: "คอนเทนต์: How to ทำความสะอาดมือถืออย่างปลอดภัย", client: "natakorn" },
+                    { time: "15.00–18.30", title: "ตัดต่อคลิป “เทคนิคมือถือประจำสัปดาห์”", client: "internal" },
+                    { time: "18.30–20.00", title: "ถ่ายร้านลูกเจี๊ยบ", details: "คอนเทนต์: เปิดร้านวันจันทร์, โปรลดชุดหมูกระทะ", client: "lookjeab" },
+                    { time: "20.00–20.30", title: "สรุปงาน / อัปโหลดไฟล์", client: "internal" },
+                ]
+            },
+            {
+                date: "วันอังคารที่ 21 ตุลาคม 2025",
+                tasks: [
+                    { time: "09.30–10.00", title: "ตรวจเช็กแบตกล้อง / เตรียมขาตั้ง", client: "internal" },
+                    { time: "10.00–12.00", title: "ถ่ายร้านอิ่มสุข", details: "คอนเทนต์: เมนูพิเศษวันอังคาร, ถ่ายช่วงแสงสวยจากหน้าร้าน", client: "aimsook" },
+                    { time: "12.00–15.00", title: "ถ่ายร้านนฏกรเทเลคอม", details: "คอนเทนต์: รีวิวมือถือราคาประหยัด, พูดคุยพนักงานขาย", client: "natakorn" },
+                    { time: "15.00–18.30", title: "ตัดต่อคลิป “รีวิวมือถือ” / ทำกราฟิกโปรฯ", client: "internal" },
+                    { time: "18.30–20.00", title: "ถ่ายร้านลูกเจี๊ยบ", details: "คอนเทนต์: ถ่าย Reaction ลูกค้า, มุกสั้นๆ ตลกๆ", client: "lookjeab" },
+                    { time: "20.00–20.30", title: "สรุปงาน / ส่งไฟล์", client: "internal" },
+                ]
+            },
+            {
+                date: "วันพุธที่ 22 ตุลาคม 2025",
+                tasks: [
+                    { time: "09.30–10.00", title: "ตรวจตารางถ่าย / เตรียมไฟ LED", client: "internal" },
+                    { time: "10.00–12.00", title: "ถ่ายร้านอิ่มสุข", details: "คอนเทนต์: ถ่าย Slow motion ตอนตักอาหาร, ถ่ายมือพนักงานบริการ", client: "aimsook" },
+                    { time: "12.00–15.00", title: "ถ่ายร้านนฏกรเทเลคอม", details: "คอนเทนต์: เบื้องหลังทีมซ่อมมือถือ / ลูกค้ารีวิวจริง", client: "natakorn" },
+                    { time: "15.00–18.30", title: "ตัดต่อคลิป “Behind the scene”", client: "internal" },
+                    { time: "18.30–20.00", title: "ถ่ายร้านลูกเจี๊ยบ", details: "คอนเทนต์: โปรหมูกระทะกลางสัปดาห์, ถ่ายลูกค้าโต๊ะใหญ่", client: "lookjeab" },
+                    { time: "20.00–20.30", title: "สรุปและเก็บไฟล์", client: "internal" },
+                ]
+            },
+            {
+                date: "วันพฤหัสบดีที่ 23 ตุลาคม 2025",
+                tasks: [
+                    { time: "09.30–10.00", title: "เตรียมอุปกรณ์ / ตรวจเสียง", client: "internal" },
+                    { time: "10.00–12.00", title: "ถ่ายร้านอิ่มสุข", details: "คอนเทนต์: เบื้องหลังพ่อครัว, เมนูยอดฮิต, พนักงานคุยสนุก", client: "aimsook" },
+                    { time: "12.00–15.00", title: "ถ่ายร้านนฏกรเทเลคอม", details: "คอนเทนต์: ถ่ายโปรศุกร์สิ้นเดือน / รีวิวกล้องมือถือ", client: "natakorn" },
+                    { time: "15.00–18.30", title: "ตัดต่อคลิปและออกแบบภาพนิ่ง", client: "internal" },
+                    { time: "18.30–20.00", title: "ถ่ายร้านลูกเจี๊ยบ", details: "คอนเทนต์: Meme หมูกระทะตอนค่ำ, แสงควันเย็น", client: "lookjeab" },
+                    { time: "20.00–20.30", title: "สรุปงาน", client: "internal" },
+                ]
+            },
+            {
+                date: "วันศุกร์ที่ 24 ตุลาคม 2025",
+                tasks: [
+                    { time: "09.30–10.00", title: "ตรวจกล้อง / เตรียมไฟ", client: "internal" },
+                    { time: "10.00–12.00", title: "ถ่ายร้านอิ่มสุข", details: "คอนเทนต์: เมนูแนะนำวันศุกร์, ถ่ายโต๊ะอาหารเต็ม", client: "aimsook" },
+                    { time: "12.00–15.00", title: "ถ่ายร้านนฏกรเทเลคอม", details: "คอนเทนต์: รีวิว iPhone, ถ่ายเทียบรุ่นกล้องมือถือ", client: "natakorn" },
+                    { time: "15.00–18.30", title: "ตัดต่อคลิป “อิ่มสุข x ความสุขวันศุกร์”", client: "internal" },
+                    { time: "18.30–20.00", title: "ถ่ายร้านลูกเจี๊ยบ", details: "คอนเทนต์: ศุกร์เย็นชวนเพื่อนมากิน, บรรยากาศไฟย่างสวยๆ", client: "lookjeab" },
+                    { time: "20.00–20.30", title: "สรุปงาน", client: "internal" },
+                ]
+            },
+            {
+                date: "วันเสาร์ที่ 25 ตุลาคม 2025",
+                tasks: [
+                    { time: "09.30–10.00", title: "ตรวจกล้อง / เตรียมอุปกรณ์", client: "internal" },
+                    { time: "10.00–12.00", title: "ถ่ายร้านอิ่มสุข", details: "คอนเทนต์: ถ่ายลูกค้ากลุ่มใหญ่, มุมครอบครัว", client: "aimsook" },
+                    { time: "12.00–15.00", title: "ถ่ายร้านนฏกรเทเลคอม", details: "คอนเทนต์: โปรมือถือสุดสัปดาห์, ถ่ายหน้าร้านคนเยอะ", client: "natakorn" },
+                    { time: "15.00–18.30", title: "ตัดต่อวิดีโอรวมสัปดาห์", client: "internal" },
+                    { time: "18.30–20.00", title: "ถ่ายร้านลูกเจี๊ยบ", details: "คอนเทนต์: เสาร์เย็นคึกคัก, ถ่ายเสียงจริงลูกค้า", client: "lookjeab" },
+                    { time: "20.00–20.30", title: "สรุปงาน / แบ็กอัปไฟล์", client: "internal" },
+                ]
+            },
+            {
+                date: "วันจันทร์ที่ 27 ตุลาคม 2025",
+                tasks: [
+                    { time: "09.30–10.00", title: "เตรียมอุปกรณ์ / ตรวจนัดถ่าย", client: "internal" },
+                    { time: "10.00–12.00", title: "ถ่ายร้านอิ่มสุข", details: "คอนเทนต์: เมนูสุขภาพ, บรรยากาศเช้าเบาๆ", client: "aimsook" },
+                    { time: "12.00–15.00", title: "ถ่ายร้านนฏกรเทเลคอม", details: "คอนเทนต์: ถ่ายเบื้องหลังศูนย์ซ่อม, ช่างพูดแนะนำลูกค้า", client: "natakorn" },
+                    { time: "15.00–18.30", title: "ตัดต่อคลิป “มินิรีวิวมือถือ”", client: "internal" },
+                    { time: "18.30–20.00", title: "ถ่ายร้านลูกเจี๊ยบ", details: "คอนเทนต์: โปรต้นสัปดาห์, ถ่ายแสงไฟเย็น", client: "lookjeab" },
+                    { time: "20.00–20.30", title: "สรุปงาน", client: "internal" },
+                ]
+            },
+            {
+                date: "วันอังคารที่ 28 ตุลาคม 2025",
+                tasks: [
+                    { time: "09.30–10.00", title: "ตรวจตาราง / เตรียมอุปกรณ์", client: "internal" },
+                    { time: "10.00–12.00", title: "ถ่ายร้านอิ่มสุข", details: "คอนเทนต์: เมนูพิเศษ / บรรยากาศช่วงเที่ยง", client: "aimsook" },
+                    { time: "12.00–15.00", title: "ถ่ายร้านนฏกรเทเลคอม", details: "คอนเทนต์: รีวิวมือถือรุ่นใหม่ล่าสุด / โปรท้ายเดือน", client: "natakorn" },
+                    { time: "15.00–18.30", title: "ตัดต่อคลิป “โปรสิ้นเดือน”", client: "internal" },
+                    { time: "18.30–20.00", title: "ถ่ายร้านลูกเจี๊ยบ", details: "คอนเทนต์: หมูกระทะเดือนใหม่ใกล้มา / ลูกค้าแน่นร้าน", client: "lookjeab" },
+                    { time: "20.00–20.30", title: "สรุปงาน", client: "internal" },
+                ]
+            },
+            {
+                date: "วันพุธที่ 29 ตุลาคม 2025",
+                tasks: [
+                    { time: "09.30–10.00", title: "เตรียมอุปกรณ์ / ตรวจไฟ", client: "internal" },
+                    { time: "10.00–12.00", title: "ถ่ายร้านอิ่มสุข", details: "คอนเทนต์: ถ่ายเสียงจริงลูกค้า / เมนูยอดนิยม", client: "aimsook" },
+                    { time: "12.00–15.00", title: "ถ่ายร้านนฏกรเทเลคอม", details: "คอนเทนต์: โปรท้ายเดือน / พนักงานขายพูดในคลิป", client: "natakorn" },
+                    { time: "15.00–18.30", title: "ตัดต่อคลิป “รวมไฮไลต์เดือนตุลาคม”", client: "internal" },
+                    { time: "18.30–20.00", title: "ถ่ายร้านลูกเจี๊ยบ", details: "คอนเทนต์: ถ่าย Reaction ลูกค้า / โปรปิดเดือน", client: "lookjeab" },
+                    { time: "20.00–20.30", title: "สรุปและเก็บไฟล์", client: "internal" },
+                ]
+            },
+            {
+                date: "วันพฤหัสบดีที่ 30 ตุลาคม 2025",
+                tasks: [
+                    { time: "09.30–10.00", title: "เตรียมอุปกรณ์ / ตรวจนัดร้าน", client: "internal" },
+                    { time: "10.00–12.00", title: "ถ่ายร้านอิ่มสุข", details: "คอนเทนต์: เมนูพิเศษสิ้นเดือน / ถ่ายมุมใหม่ของร้าน", client: "aimsook" },
+                    { time: "12.00–15.00", title: "ถ่ายร้านนฏกรเทเลคอม", details: "คอนเทนต์: โปร Halloween / รีวิวของตกแต่งร้าน", client: "natakorn" },
+                    { time: "15.00–18.30", title: "ตัดต่อคลิป “รวมโปรสิ้นเดือน”", client: "internal" },
+                    { time: "18.30–20.00", title: "ถ่ายร้านลูกเจี๊ยบ", details: "คอนเทนต์: บรรยากาศพิเศษสิ้นเดือน, มุกตลกส่งท้ายเดือน", client: "lookjeab" },
+                    { time: "20.00–20.30", title: "สรุปงาน", client: "internal" },
+                ]
+            },
+            {
+                date: "วันศุกร์ที่ 31 ตุลาคม 2025",
+                tasks: [
+                    { time: "09.30–10.00", title: "ตรวจอุปกรณ์ / เตรียมสรุปเดือน", client: "internal" },
+                    { time: "10.00–12.00", title: "ถ่ายร้านอิ่มสุข", details: "คอนเทนต์: ถ่ายรวมทีม / ปิดท้ายเดือน / ขอบคุณลูกค้า", client: "aimsook" },
+                    { time: "12.00–15.00", title: "ถ่ายร้านนฏกรเทเลคอม", details: "คอนเทนต์: โปรเดือนพฤศจิกายน / สรุปยอดมือถือฮิต", client: "natakorn" },
+                    { time: "15.00–18.30", title: "ตัดต่อวิดีโอ “สรุปเดือนตุลาคม”", client: "internal" },
+                    { time: "18.30–20.00", title: "ถ่ายร้านลูกเจี๊ยบ", details: "คอนเทนต์: ปิดท้ายเดือนด้วยหมูกระทะ / บรรยากาศอบอุ่น", client: "lookjeab" },
+                    { time: "20.00–20.30", title: "สรุปงานทั้งเดือน / แบ็กอัปไฟล์ลง Drive", client: "internal" },
+                ]
+            },
+        ];
+
+        // --- Color Configuration (Light Theme) ---
+        const clientColors = {
+            aimsook: {
+                // Food - Orange/Gold theme
+                bg: 'bg-yellow-50 hover:bg-yellow-100', 
+                border: 'border-orange-500', 
+                text: 'text-orange-700', 
+                shadow: 'shadow-none',
+            },
+            natakorn: {
+                // Tech - Blue theme
+                bg: 'bg-blue-50 hover:bg-blue-100', 
+                border: 'border-blue-500', 
+                text: 'text-blue-700', 
+                shadow: 'shadow-none',
+            },
+            lookjeab: {
+                // BBQ - Red/Pink theme
+                bg: 'bg-pink-50 hover:bg-pink-100', 
+                border: 'border-red-500', 
+                text: 'text-red-700',
+                shadow: 'shadow-none',
+            },
+            internal: {
+                // Internal Tasks - Subtle gray
+                bg: 'bg-gray-100 hover:bg-gray-200', 
+                border: 'border-gray-300', 
+                text: 'text-gray-600',
+                shadow: 'shadow-none',
+            }
+        };
+
+        // --- Render Function ---
+        function renderSchedule() {
+            const container = document.getElementById('schedule-container');
+            if (!container) return;
+
+            // Clear any existing content
+            container.innerHTML = '';
+            
+            // Loop through each day in the data
+            scheduleData.forEach(day => {
+                // Create the main card for the day
+                const dayCard = document.createElement('div');
+                // White card background with light border and shadow
+                dayCard.className = 'bg-white rounded-xl shadow-lg overflow-hidden border border-gray-200 transition duration-300';
+                
+                // Create the header for the day card
+                const dayHeader = document.createElement('h2');
+                // Header background is light gray, text is dark
+                dayHeader.className = 'text-xl font-semibold p-4 bg-gray-100 border-b border-gray-200 text-gray-800 tracking-wide';
+                dayHeader.textContent = day.date;
+                dayCard.appendChild(dayHeader);
+
+                // Create a container for the tasks
+                const tasksList = document.createElement('div');
+                tasksList.className = 'divide-y divide-gray-200';
+                
+                // Loop through each task for the current day
+                day.tasks.forEach(task => {
+                    const colors = clientColors[task.client] || clientColors.internal;
+
+                    const taskElement = document.createElement('div');
+                    // Apply light background, remove shadow, set solid border color
+                    taskElement.className = `task-item ${colors.bg} ${colors.shadow} border-l-4`; // Added border-l-4 class back
+                    taskElement.style.borderLeftColor = colors.border.replace('border-', '').replace('[', '').replace(']', '').replace('500', ''); // Use Tailwind utility class in JS
+                    
+                    // Task Time
+                    const timeElement = document.createElement('div');
+                    // Time is dark gray and prominent
+                    timeElement.className = 'w-24 text-right font-bold text-base text-gray-700 flex-shrink-0 pt-0.5';
+                    timeElement.textContent = task.time;
+                    
+                    // Task Content
+                    const contentElement = document.createElement('div');
+                    contentElement.className = 'flex-grow';
+                    
+                    const titleElement = document.createElement('p');
+                    // Task title uses client accent dark color
+                    titleElement.className = `font-medium text-base ${colors.text}`;
+                    titleElement.textContent = task.title;
+                    contentElement.appendChild(titleElement);
+
+                    if (task.details) {
+                        const detailsElement = document.createElement('p');
+                        // Details are lighter gray and italic
+                        detailsElement.className = 'text-sm text-gray-500 italic mt-1 font-light';
+                        detailsElement.textContent = `รายละเอียด: ${task.details}`;
+                        contentElement.appendChild(detailsElement);
+                    }
+                    
+                    taskElement.appendChild(timeElement);
+                    taskElement.appendChild(contentElement);
+                    
+                    tasksList.appendChild(taskElement);
+                });
+
+                dayCard.appendChild(tasksList);
+                container.appendChild(dayCard);
+            });
+        }
+
+        // --- Initial Load ---
+        document.addEventListener('DOMContentLoaded', () => {
+            renderSchedule();
+        });
+    </script>
+</body>
+</html>
