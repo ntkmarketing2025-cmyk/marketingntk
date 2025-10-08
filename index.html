@@ -92,6 +92,18 @@
             </a>
         </div>
         <nav class="flex items-center space-x-2 sm:space-x-4">
+            <!-- Notification Icon -->
+            <button id="header-notify-btn"
+                class="relative p-2 w-10 h-10 flex items-center justify-center rounded-full bg-gray-100 dark:bg-gray-700
+                       text-blue-500 dark:text-yellow-300 hover:bg-blue-100 dark:hover:bg-yellow-900
+                       shadow transition duration-300 focus:outline-none focus:ring-2 focus:ring-blue-500"
+                title="แจ้งเตือนงานวันนี้">
+                <svg class="w-6 h-6" fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24">
+                    <path stroke-linecap="round" stroke-linejoin="round"
+                        d="M15 17h5l-1.405-1.405A2.032 2.032 0 0118 14.158V11a6.002 6.002 0 00-4-5.659V5a2 2 0 10-4 0v.341C7.67 6.165 6 8.388 6 11v3.159c0 .538-.214 1.055-.595 1.436L4 17h5m6 0v1a3 3 0 11-6 0v-1m6 0H9"/>
+                </svg>
+            </button>
+            <!-- ...existing buttons... -->
             <button id="theme-toggle"
                 class="p-2 w-10 h-10 flex items-center justify-center rounded-full bg-gray-100 dark:bg-gray-700
                        text-gray-700 dark:text-yellow-400 hover:bg-blue-100 dark:hover:bg-yellow-900
@@ -120,6 +132,10 @@
             เดือนตุลาคม 2025
         </p>
     </header>
+    <!-- Section งานวันนี้ -->
+    <section id="today-tasks-section" class="mb-8">
+        <!-- งานวันนี้จะถูกเติมที่นี่ -->
+    </section>
     <nav id="tabs-container" class="mb-8 flex flex-wrap justify-center gap-2 sm:gap-3 p-2 bg-gray-50 dark:bg-gray-800 rounded-xl shadow-inner border border-gray-200 dark:border-gray-700">
         <!-- Tabs will be injected here -->
     </nav>
@@ -614,6 +630,7 @@
         activeClient = localStorage.getItem('activeClient') || 'all';
         renderTabs();
         renderSchedule();
+        renderTodayTasks();
 
         const closeBtn = document.getElementById('close-modal-btn');
         if (closeBtn) {
@@ -626,7 +643,90 @@
                 if (e.target === modal) closeNotifyModal();
             };
         }
+        // เพิ่ม event ให้ไอคอนแจ้งเตือน
+        const notifyBtn = document.getElementById('header-notify-btn');
+        if (notifyBtn) {
+            notifyBtn.onclick = showTodayNotifyModal;
+        }
     });
+    // ฟังก์ชันเปิด modal แจ้งเตือน (ใช้กับ header)
+    function showTodayNotifyModal() {
+        const modal = document.getElementById('notify-modal');
+        const modalContent = document.getElementById('modal-content');
+        if (!modal || !modalContent) return;
+        // หาวันที่วันนี้
+        const today = new Date();
+        const todayStr = today.toLocaleDateString('th-TH', {
+            year: 'numeric', month: 'long', day: 'numeric'
+        });
+        // หา entry schedule ที่ตรงกับวันนี้
+        let foundDay = null;
+        for (const day of scheduleData) {
+            if (day.date.includes(todayStr)) {
+                foundDay = day;
+                break;
+            }
+        }
+        if (!foundDay) {
+            modalContent.innerHTML = `<div class="text-center text-lg text-gray-600 dark:text-gray-300">วันนี้ไม่มีงานในตาราง</div>`;
+        } else {
+            let html = `<div class="mb-2 font-bold text-blue-700 dark:text-yellow-300">งานประจำวันที่ ${foundDay.date}</div>`;
+            foundDay.tasks.forEach(task => {
+                html += `
+                <div class="mb-3 p-3 rounded-lg bg-gray-50 dark:bg-gray-800 border border-gray-200 dark:border-gray-700">
+                    <div><span class="font-bold text-gray-700 dark:text-gray-200">เวลา:</span> <span class="ml-2 text-blue-700 dark:text-yellow-300">${task.time}</span></div>
+                    <div><span class="font-bold text-gray-700 dark:text-gray-200">หัวข้อ:</span> <span class="ml-2 text-green-700 dark:text-green-300">${task.title}</span></div>
+                    ${task.details ? `<div><span class="font-bold text-gray-700 dark:text-gray-200">รายละเอียด:</span> <span class="ml-2 text-gray-600 dark:text-gray-400">${task.details}</span></div>` : ''}
+                </div>
+                `;
+            });
+            modalContent.innerHTML = html;
+        }
+        modal.classList.remove('hidden');
+        setTimeout(() => { modal.classList.add('opacity-100'); }, 10);
+    }
+
+    // ฟังก์ชันแสดงงานวันนี้
+    function renderTodayTasks() {
+        const section = document.getElementById('today-tasks-section');
+        if (!section) return;
+        const today = new Date();
+        const todayStr = today.toLocaleDateString('th-TH', {
+            year: 'numeric', month: 'long', day: 'numeric'
+        });
+        let foundDay = null;
+        for (const day of scheduleData) {
+            if (day.date.includes(todayStr)) {
+                foundDay = day;
+                break;
+            }
+        }
+        if (!foundDay) {
+            section.innerHTML = `
+                <div class="bg-yellow-50 dark:bg-yellow-900 rounded-xl shadow p-6 text-center text-lg text-gray-700 dark:text-yellow-200 border border-yellow-200 dark:border-yellow-700">
+                    วันนี้ไม่มีงานในตาราง
+                </div>
+            `;
+        } else {
+            let html = `
+                <div class="bg-blue-50 dark:bg-blue-900 rounded-xl shadow p-6 border border-blue-200 dark:border-blue-700">
+                    <h2 class="text-2xl font-bold text-blue-700 dark:text-yellow-300 mb-4">งานวันนี้ (${foundDay.date})</h2>
+            `;
+            foundDay.tasks.forEach(task => {
+                html += `
+                    <div class="mb-4 p-4 rounded-lg bg-white dark:bg-gray-800 border border-gray-200 dark:border-gray-700 shadow flex flex-col sm:flex-row sm:items-center">
+                        <div class="font-bold text-blue-700 dark:text-yellow-300 w-24 sm:w-32 text-right flex-shrink-0">${task.time}</div>
+                        <div class="flex-grow ml-0 sm:ml-6">
+                            <div class="font-semibold text-green-700 dark:text-green-300">${task.title}</div>
+                            ${task.details ? `<div class="text-gray-600 dark:text-gray-400 text-sm mt-1">รายละเอียด: ${task.details}</div>` : ''}
+                        </div>
+                    </div>
+                `;
+            });
+            html += `</div>`;
+            section.innerHTML = html;
+        }
+    }
 </script>
 </body>
 </html>
