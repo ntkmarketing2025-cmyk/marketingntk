@@ -135,6 +135,18 @@
         <p class="text-gray-400 dark:text-gray-600 text-sm mt-1">&copy; 2025 All Rights Reserved.</p>
     </footer>
 </main>
+
+<!-- Modal แจ้งเตือน -->
+<div id="notify-modal" class="fixed inset-0 z-50 flex items-center justify-center bg-black bg-opacity-40 hidden transition-opacity duration-300">
+    <div class="bg-white dark:bg-gray-900 rounded-2xl shadow-2xl max-w-md w-full p-6 relative border border-gray-200 dark:border-gray-700">
+        <button id="close-modal-btn" class="absolute top-3 right-3 text-gray-400 hover:text-red-500 text-2xl font-bold focus:outline-none">&times;</button>
+        <h2 class="text-xl font-semibold text-blue-600 dark:text-yellow-300 mb-2">แจ้งเตือนงาน</h2>
+        <div id="modal-content" class="space-y-2">
+            <!-- รายละเอียดงานจะถูกเติมที่นี่ -->
+        </div>
+    </div>
+</div>
+
 <script>
     // --- Schedule Data ---
     const scheduleData = [
@@ -485,52 +497,115 @@
         const isDark = body.classList.contains('dark');
         container.innerHTML = '';
         let totalTasksFound = 0;
-        scheduleData.forEach(day => {
-            const filteredTasks = filterTasksByClient(day.tasks, activeClient);
-            if (filteredTasks.length > 0) {
-                totalTasksFound += filteredTasks.length;
-                const dayCard = document.createElement('div');
-                dayCard.className = 'bg-white dark:bg-gray-800 rounded-xl shadow-lg dark:shadow-2xl overflow-hidden border border-gray-200 dark:border-gray-700 transition duration-300';
-                const dayHeader = document.createElement('h2');
-                dayHeader.className = 'day-header text-xl font-semibold p-4 tracking-wide';
-                dayHeader.textContent = day.date;
-                dayCard.appendChild(dayHeader);
-                const tasksList = document.createElement('div');
-                tasksList.className = 'divide-y tasks-list divide-gray-200 dark:divide-gray-700';
-                filteredTasks.forEach(task => {
-                    const clientKey = task.client;
-                    const themeColors = clientColors[clientKey] ? (isDark ? clientColors[clientKey].dark : clientColors[clientKey].light) : (isDark ? clientColors.internal.dark : clientColors.internal.light);
-                    const taskElement = document.createElement('div');
-                    taskElement.className = `task-item ${themeColors.bg} border-l-4 p-4 flex items-start space-x-4 transition duration-200`;
-                    taskElement.style.borderLeftColor = themeColors.border;
-                    const timeElement = document.createElement('div');
-                    timeElement.className = 'w-24 text-right font-bold text-base time-text flex-shrink-0 pt-0.5';
-                    timeElement.textContent = task.time;
-                    const contentElement = document.createElement('div');
-                    contentElement.className = 'flex-grow';
-                    const titleElement = document.createElement('p');
-                    titleElement.className = `font-medium text-base ${themeColors.text}`;
-                    titleElement.textContent = task.title;
-                    contentElement.appendChild(titleElement);
-                    if (task.details) {
-                        const detailsElement = document.createElement('p');
-                        detailsElement.className = 'text-sm text-gray-500 dark:text-gray-400 italic mt-1 font-light';
-                        detailsElement.textContent = `รายละเอียด: ${task.details}`;
-                        contentElement.appendChild(detailsElement);
-                    }
-                    taskElement.appendChild(timeElement);
-                    taskElement.appendChild(contentElement);
-                    tasksList.appendChild(taskElement);
-                });
-                dayCard.appendChild(tasksList);
-                container.appendChild(dayCard);
+
+        // --- Lazy Loading Variables ---
+        const daysPerLoad = 5;
+        let currentIndex = 0;
+
+        function loadMoreDays() {
+            let loaded = 0;
+            while (currentIndex < scheduleData.length && loaded < daysPerLoad) {
+                const day = scheduleData[currentIndex];
+                const filteredTasks = filterTasksByClient(day.tasks, activeClient);
+                if (filteredTasks.length > 0) {
+                    totalTasksFound += filteredTasks.length;
+                    const dayCard = document.createElement('div');
+                    dayCard.className = 'bg-white dark:bg-gray-800 rounded-xl shadow-lg dark:shadow-2xl overflow-hidden border border-gray-200 dark:border-gray-700 transition duration-300';
+                    const dayHeader = document.createElement('h2');
+                    dayHeader.className = 'day-header text-xl font-semibold p-4 tracking-wide';
+                    dayHeader.textContent = day.date;
+                    dayCard.appendChild(dayHeader);
+                    const tasksList = document.createElement('div');
+                    tasksList.className = 'divide-y tasks-list divide-gray-200 dark:divide-gray-700';
+                    filteredTasks.forEach(task => {
+                        const clientKey = task.client;
+                        const themeColors = clientColors[clientKey] ? (isDark ? clientColors[clientKey].dark : clientColors[clientKey].light) : (isDark ? clientColors.internal.dark : clientColors.internal.light);
+                        const taskElement = document.createElement('div');
+                        taskElement.className = `task-item ${themeColors.bg} border-l-4 p-4 flex items-start space-x-4 transition duration-200 cursor-pointer hover:ring-2 hover:ring-blue-400`;
+                        taskElement.style.borderLeftColor = themeColors.border;
+                        taskElement.onclick = () => showNotifyModal(task, day.date);
+                        const timeElement = document.createElement('div');
+                        timeElement.className = 'w-24 text-right font-bold text-base time-text flex-shrink-0 pt-0.5';
+                        timeElement.textContent = task.time;
+                        const contentElement = document.createElement('div');
+                        contentElement.className = 'flex-grow';
+                        const titleElement = document.createElement('p');
+                        titleElement.className = `font-medium text-base ${themeColors.text}`;
+                        titleElement.textContent = task.title;
+                        contentElement.appendChild(titleElement);
+                        if (task.details) {
+                            const detailsElement = document.createElement('p');
+                            detailsElement.className = 'text-sm text-gray-500 dark:text-gray-400 italic mt-1 font-light';
+                            detailsElement.textContent = `รายละเอียด: ${task.details}`;
+                            contentElement.appendChild(detailsElement);
+                        }
+                        taskElement.appendChild(timeElement);
+                        taskElement.appendChild(contentElement);
+                        tasksList.appendChild(taskElement);
+                    });
+                    dayCard.appendChild(tasksList);
+                    container.appendChild(dayCard);
+                    loaded++;
+                }
+                currentIndex++;
             }
-        });
-        if (totalTasksFound === 0) {
-            noTasksMessage.classList.remove('hidden');
-        } else {
-            noTasksMessage.classList.add('hidden');
+            if (totalTasksFound === 0) {
+                noTasksMessage.classList.remove('hidden');
+            } else {
+                noTasksMessage.classList.add('hidden');
+            }
+            // Show Load More button if there are more days
+            let loadMoreBtn = document.getElementById('load-more-btn');
+            if (currentIndex < scheduleData.length) {
+                if (!loadMoreBtn) {
+                    loadMoreBtn = document.createElement('button');
+                    loadMoreBtn.id = 'load-more-btn';
+                    loadMoreBtn.textContent = 'แสดงวันถัดไป';
+                    loadMoreBtn.className = 'mt-6 mx-auto block px-6 py-2 rounded-full bg-blue-500 hover:bg-blue-600 text-white font-semibold shadow transition duration-300 focus:outline-none focus:ring-2 focus:ring-blue-400';
+                    loadMoreBtn.onclick = loadMoreDays;
+                    container.appendChild(loadMoreBtn);
+                }
+            } else if (loadMoreBtn) {
+                loadMoreBtn.remove();
+            }
         }
+
+        // Initial load
+        loadMoreDays();
+    }
+    // ฟังก์ชันเปิด modal แจ้งเตือน
+    function showNotifyModal(task, dayDate) {
+        const modal = document.getElementById('notify-modal');
+        const modalContent = document.getElementById('modal-content');
+        if (!modal || !modalContent) return;
+        modalContent.innerHTML = `
+            <div>
+                <span class="font-bold text-gray-700 dark:text-gray-200">วันที่:</span>
+                <span class="ml-2 text-blue-700 dark:text-yellow-300">${dayDate}</span>
+            </div>
+            <div>
+                <span class="font-bold text-gray-700 dark:text-gray-200">เวลา:</span>
+                <span class="ml-2 text-blue-700 dark:text-yellow-300">${task.time}</span>
+            </div>
+            <div>
+                <span class="font-bold text-gray-700 dark:text-gray-200">หัวข้อ:</span>
+                <span class="ml-2 text-green-700 dark:text-green-300">${task.title}</span>
+            </div>
+            ${task.details ? `
+            <div>
+                <span class="font-bold text-gray-700 dark:text-gray-200">รายละเอียด:</span>
+                <span class="ml-2 text-gray-600 dark:text-gray-400">${task.details}</span>
+            </div>
+            ` : ''}
+        `;
+        modal.classList.remove('hidden');
+        setTimeout(() => { modal.classList.add('opacity-100'); }, 10);
+    }
+
+    // ฟังก์ชันปิด modal
+    function closeNotifyModal() {
+        const modal = document.getElementById('notify-modal');
+        if (modal) modal.classList.add('hidden');
     }
     document.addEventListener('DOMContentLoaded', () => {
         const storedTheme = localStorage.getItem('theme');
@@ -539,6 +614,18 @@
         activeClient = localStorage.getItem('activeClient') || 'all';
         renderTabs();
         renderSchedule();
+
+        const closeBtn = document.getElementById('close-modal-btn');
+        if (closeBtn) {
+            closeBtn.onclick = closeNotifyModal;
+        }
+        // ปิด modal เมื่อคลิกพื้นหลัง
+        const modal = document.getElementById('notify-modal');
+        if (modal) {
+            modal.onclick = function(e) {
+                if (e.target === modal) closeNotifyModal();
+            };
+        }
     });
 </script>
 </body>
