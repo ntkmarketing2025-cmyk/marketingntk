@@ -63,7 +63,7 @@
 </head>
 <body>
 <header class="fixed top-0 left-0 w-full bg-white shadow-lg z-10 border-b border-gray-200 transition duration-500">
-    <div class="container mx-auto px-4 py-3 flex justify-between items-center">
+    <div class="container mx-auto px-4 py-3 flex justify-between items-center relative">
         <div class="flex items-center space-x-4">
             <a href="#" class="flex items-center group">
                 <span class="text-3xl font-extrabold tracking-widest text-green-500 group-hover:text-green-600 transition duration-300">
@@ -74,7 +74,7 @@
                 </span>
             </a>
         </div>
-        <nav class="flex items-center space-x-2 sm:space-x-4">
+        <nav class="flex items-center space-x-2 sm:space-x-4 relative">
             <!-- Notification Icon -->
             <button id="header-notify-btn"
                 class="relative p-2 w-10 h-10 flex items-center justify-center rounded-full bg-gray-100
@@ -86,6 +86,15 @@
                         d="M15 17h5l-1.405-1.405A2.032 2.032 0 0118 14.158V11a6.002 6.002 0 00-4-5.659V5a2 2 0 10-4 0v.341C7.67 6.165 6 8.388 6 11v3.159c0 .538-.214 1.055-.595 1.436L4 17h5m6 0v1a3 3 0 11-6 0v-1m6 0H9"/>
                 </svg>
             </button>
+            <!-- Modal แจ้งเตือน (ย้ายมาอยู่ใน nav ใกล้ไอคอน) -->
+            <div id="notify-modal" class="absolute top-12 right-0 z-50 bg-white rounded-2xl shadow-2xl w-full max-w-xs sm:max-w-md p-4 sm:p-6 border border-gray-200 hidden transition-opacity duration-300"
+                 style="backdrop-filter: blur(8px); background: rgba(255,255,255,0.95);">
+                <button id="close-modal-btn" class="absolute top-3 right-3 text-gray-400 hover:text-red-500 text-2xl font-bold focus:outline-none">&times;</button>
+                <h2 class="text-lg sm:text-xl font-semibold text-blue-700 mb-2">แจ้งเตือนงาน</h2>
+                <div id="modal-content" class="space-y-2 text-sm sm:text-base text-gray-800">
+                    <!-- รายละเอียดงานจะถูกเติมที่นี่ -->
+                </div>
+            </div>
             <a href="https://line.me/ti/p/Z58j7HN-vt" target="_blank" title="ติดต่อทาง LINE"
                 class="flex items-center px-3 py-2 rounded-full bg-green-500 hover:bg-green-600 text-white font-semibold shadow transition duration-300 focus:outline-none focus:ring-2 focus:ring-green-400">
                 LINE
@@ -126,18 +135,6 @@
         <p class="text-gray-400 text-sm mt-1">&copy; 2025 All Rights Reserved.</p>
     </footer>
 </main>
-
-<!-- Modal แจ้งเตือน -->
-<div id="notify-modal" class="fixed inset-0 z-50 flex items-center justify-center bg-black bg-opacity-40 backdrop-blur-sm hidden transition-opacity duration-300">
-    <div class="bg-white rounded-2xl shadow-2xl w-full max-w-xs sm:max-w-md p-4 sm:p-6 relative border border-gray-200"
-         style="backdrop-filter: blur(8px); background: rgba(255,255,255,0.85);">
-        <button id="close-modal-btn" class="absolute top-3 right-3 text-gray-400 hover:text-red-500 text-2xl font-bold focus:outline-none">&times;</button>
-        <h2 class="text-lg sm:text-xl font-semibold text-blue-700 mb-2">แจ้งเตือนงาน</h2>
-        <div id="modal-content" class="space-y-2 text-sm sm:text-base text-gray-800">
-            <!-- รายละเอียดงานจะถูกเติมที่นี่ -->
-        </div>
-    </div>
-</div>
 
 <script>
     // --- Schedule Data ---
@@ -541,7 +538,7 @@
             }
         });
     }
-    // ฟังก์ชันเปิด modal แจ้งเตือน
+    // ปรับฟังก์ชันเปิด/ปิด modal ให้ใช้แบบ dropdown
     function showNotifyModal(task, dayDate) {
         const modal = document.getElementById('notify-modal');
         const modalContent = document.getElementById('modal-content');
@@ -569,8 +566,6 @@
         modal.classList.remove('hidden');
         setTimeout(() => { modal.classList.add('opacity-100'); }, 10);
     }
-
-    // ฟังก์ชันปิด modal
     function closeNotifyModal() {
         const modal = document.getElementById('notify-modal');
         if (modal) modal.classList.add('hidden');
@@ -585,7 +580,7 @@
         if (closeBtn) {
             closeBtn.onclick = closeNotifyModal;
         }
-        // ปิด modal เมื่อคลิกพื้นหลัง
+        // ปิด modal เมื่อคลิกนอก modal
         const modal = document.getElementById('notify-modal');
         if (modal) {
             modal.onclick = function(e) {
@@ -595,7 +590,14 @@
         // เพิ่ม event ให้ไอคอนแจ้งเตือน
         const notifyBtn = document.getElementById('header-notify-btn');
         if (notifyBtn) {
-            notifyBtn.onclick = showTodayNotifyModal;
+            notifyBtn.onclick = function() {
+                const modal = document.getElementById('notify-modal');
+                if (modal.classList.contains('hidden')) {
+                    showTodayNotifyModal();
+                } else {
+                    closeNotifyModal();
+                }
+            };
         }
     });
     // ฟังก์ชันเปิด modal แจ้งเตือน (ใช้กับ header)
