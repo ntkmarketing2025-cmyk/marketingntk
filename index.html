@@ -9,10 +9,10 @@
     <!-- Load Sarabun Font for Thai language support -->
     <link rel="preconnect" href="https://fonts.googleapis.com">
     <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
-    <link href="https://fonts.googleapis.com/css2?family=Sarabun:wght@400;500;600;700&display=swap" rel="stylesheet">
+    <link href="https://fonts.googleapis.com/css2?family=Kanit:wght@400;500;600;700&display=swap" rel="stylesheet">
     <style>
         body {
-            font-family: 'Sarabun', sans-serif;
+            font-family: 'Kanit', 'Sarabun', sans-serif;
             transition: background-color 0.5s, color 0.5s;
             min-height: 100vh;
             padding-top: 80px;
@@ -109,10 +109,10 @@
 </header>
 <main class="container mx-auto p-4 sm:p-8 max-w-4xl modern-container rounded-2xl my-8">
     <header class="text-center mb-8 pt-4 pb-2 border-b border-gray-300">
-        <h1 class="text-xl md:text-4xl font-semibold text-gray-800 tracking-wider">
+        <h1 class="text-xl md:text-4xl font-semibold text-gray-800 tracking-wider font-kanit">
             ตารางงานฝ่ายกราฟิกและตัดต่อวิดีโอ
         </h1>
-        <p class="text-xl md:text-2xl text-gray-600 font-light mt-2">
+        <p class="text-xl md:text-2xl text-gray-600 font-light mt-2 font-kanit">
             เดือนตุลาคม 2568
         </p>
     </header>
@@ -438,6 +438,41 @@
         if (clientKey === 'all') return tasks;
         return tasks.filter(task => task.client === clientKey);
     }
+    let filterDate = '';
+    let filterMonth = '';
+    let filterYear = '';
+
+    document.addEventListener('DOMContentLoaded', () => {
+        activeClient = localStorage.getItem('activeClient') || 'all';
+        renderTabs();
+        renderSchedule();
+        renderTodayTasks();
+
+        const closeBtn = document.getElementById('close-modal-btn');
+        if (closeBtn) {
+            closeBtn.onclick = closeNotifyModal;
+        }
+        // ปิด modal เมื่อคลิกนอก modal
+        const modal = document.getElementById('notify-modal');
+        if (modal) {
+            modal.onclick = function(e) {
+                if (e.target === modal) closeNotifyModal();
+            };
+        }
+        // เพิ่ม event ให้ไอคอนแจ้งเตือน
+        const notifyBtn = document.getElementById('header-notify-btn');
+        if (notifyBtn) {
+            notifyBtn.onclick = function() {
+                const modal = document.getElementById('notify-modal');
+                if (modal.classList.contains('hidden')) {
+                    showTodayNotifyModal();
+                } else {
+                    closeNotifyModal();
+                }
+            };
+        }
+    });
+
     function renderSchedule() {
         const container = document.getElementById('schedule-container');
         const noTasksMessage = document.getElementById('no-tasks-message');
@@ -464,15 +499,33 @@
         const daysPerLoad = 5;
         let currentIndex = 0;
 
-        // สร้างแถวแนวนอนแบบ Netflix
+        // ฟิลเตอร์วัน/เดือน/ปี
+        let filteredSchedule = scheduleData;
+        if (filterDate) {
+            // date format: yyyy-mm-dd
+            const [year, month, day] = filterDate.split('-');
+            const buddhistYear = (parseInt(year) + 543).toString();
+            const thaiMonth = new Date(filterDate).toLocaleString('th-TH', { month: 'long' });
+            const pattern = `${parseInt(day)} ${thaiMonth} ${buddhistYear}`;
+            filteredSchedule = filteredSchedule.filter(d => d.date.includes(pattern));
+        }
+        if (filterMonth) {
+            filteredSchedule = filteredSchedule.filter(d => d.date.includes(filterMonth));
+        }
+        if (filterYear) {
+            filteredSchedule = filteredSchedule.filter(d => d.date.includes(filterYear));
+        }
+
+        // --- Netflix style row ---
         const row = document.createElement('div');
         row.className = 'flex overflow-x-auto gap-6 pb-4 px-2 hide-scrollbar';
         row.style.scrollSnapType = 'x mandatory';
+        row.style.scrollBehavior = 'smooth';
 
         function loadMoreDays() {
             let loaded = 0;
-            while (currentIndex < scheduleData.length && loaded < daysPerLoad) {
-                const day = scheduleData[currentIndex];
+            while (currentIndex < filteredSchedule.length && loaded < daysPerLoad) {
+                const day = filteredSchedule[currentIndex];
                 const filteredTasks = filterTasksByClient(day.tasks, activeClient);
                 if (filteredTasks.length > 0) {
                     totalTasksFound += filteredTasks.length;
@@ -529,10 +582,35 @@
         // โหลดครั้งแรก
         loadMoreDays();
 
+        // ปรับ scroll snap ให้สมดุล: เลื่อนไปทีละการ์ด (snap)
+        let isScrolling = false;
+        row.addEventListener('scroll', function () {
+            if (isScrolling) return;
+            isScrolling = true;
+            setTimeout(() => {
+                // หาตำแหน่งการ์ดที่ใกล้ที่สุด
+                const cards = Array.from(row.children);
+                let closestCard = null;
+                let minDiff = Infinity;
+                const scrollLeft = row.scrollLeft;
+                cards.forEach(card => {
+                    const diff = Math.abs(card.offsetLeft - scrollLeft);
+                    if (diff < minDiff) {
+                        minDiff = diff;
+                        closestCard = card;
+                    }
+                });
+                if (closestCard) {
+                    closestCard.scrollIntoView({ behavior: 'smooth', inline: 'start' });
+                }
+                isScrolling = false;
+            }, 120);
+        });
+
         // โหลดเพิ่มเมื่อ scroll แนวนอนใกล้ขวาสุด
         row.addEventListener('scroll', function lazyLoadScroll() {
             if (row.scrollLeft + row.clientWidth >= row.scrollWidth - 100) {
-                if (currentIndex < scheduleData.length) {
+                if (currentIndex < filteredSchedule.length) {
                     loadMoreDays();
                 }
             }
