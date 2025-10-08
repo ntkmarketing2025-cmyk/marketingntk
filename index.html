@@ -55,10 +55,10 @@
     <div class="container mx-auto px-4 py-3 flex justify-between items-center">
         <div class="flex items-center space-x-4">
             <a href="#" class="flex items-center group">
-                <span class="text-3xl font-extrabold tracking-widest text-green-500 dark:text-green-400 group-hover:text-green-600 dark:group-hover:text-green-300 transition duration-300">
+                <span class="text-3xl font-extrabold tracking-widest text-green-500 group-hover:text-green-600 transition duration-300">
                     NTK
                 </span>
-                <span class="ml-3 hidden sm:inline text-base font-medium text-gray-500 dark:text-gray-300 border-l border-gray-300 dark:border-gray-700 pl-4">
+                <span class="ml-3 hidden sm:inline text-base font-medium text-gray-500 border-l border-gray-300 pl-4">
                     Graphic & Video Schedule
                 </span>
             </a>
@@ -75,7 +75,6 @@
                         d="M15 17h5l-1.405-1.405A2.032 2.032 0 0118 14.158V11a6.002 6.002 0 00-4-5.659V5a2 2 0 10-4 0v.341C7.67 6.165 6 8.388 6 11v3.159c0 .538-.214 1.055-.595 1.436L4 17h5m6 0v1a3 3 0 11-6 0v-1m6 0H9"/>
                 </svg>
             </button>
-            <!-- ...existing buttons... -->
             <a href="https://line.me/ti/p/Z58j7HN-vt" target="_blank" title="ติดต่อทาง LINE"
                 class="flex items-center px-3 py-2 rounded-full bg-green-500 hover:bg-green-600 text-white font-semibold shadow transition duration-300 focus:outline-none focus:ring-2 focus:ring-green-400">
                 LINE
@@ -89,11 +88,11 @@
     </div>
 </header>
 <main class="container mx-auto p-4 sm:p-8 max-w-4xl modern-container rounded-2xl my-8">
-    <header class="text-center mb-8 pt-4 pb-2 border-b border-gray-300 dark:border-gray-700">
-        <h1 class="text-xl md:text-4xl font-semibold text-gray-800 dark:text-yellow-300 tracking-wider">
+    <header class="text-center mb-8 pt-4 pb-2 border-b border-gray-300">
+        <h1 class="text-xl md:text-4xl font-semibold text-gray-800 tracking-wider">
             ตารางงานฝ่ายกราฟิกและตัดต่อวิดีโอ
         </h1>
-        <p class="text-xl md:text-2xl text-gray-600 dark:text-white font-light mt-2">
+        <p class="text-xl md:text-2xl text-gray-600 font-light mt-2">
             เดือนตุลาคม 2568
         </p>
     </header>
@@ -101,19 +100,19 @@
     <section id="today-tasks-section" class="mb-8">
         <!-- งานวันนี้จะถูกเติมที่นี่ -->
     </section>
-    <nav id="tabs-container" class="mb-8 flex flex-wrap justify-center gap-2 sm:gap-3 p-2 bg-gray-50 dark:bg-gray-800 rounded-xl shadow-inner border border-gray-200 dark:border-gray-700">
+    <nav id="tabs-container" class="mb-8 flex flex-wrap justify-center gap-2 sm:gap-3 p-2 bg-gray-50 rounded-xl shadow-inner border border-gray-200">
         <!-- Tabs will be injected here -->
     </nav>
     <section id="schedule-container" class="space-y-8">
-        <div id="no-tasks-message" class="hidden text-center p-8 text-xl font-medium text-gray-500 dark:text-gray-400">
+        <div id="no-tasks-message" class="hidden text-center p-8 text-xl font-medium text-gray-500">
             ไม่มีรายการงานสำหรับร้านนี้ในช่วงเวลานี้
         </div>
     </section>
-    <footer class="text-center mt-12 pt-4 border-t border-gray-300 dark:border-gray-700">
-        <p class="text-gray-500 dark:text-gray-400 font-medium text-lg tracking-wide">
+    <footer class="text-center mt-12 pt-4 border-t border-gray-300">
+        <p class="text-gray-500 font-medium text-lg tracking-wide">
             Presented : FRANK Graphic Design NTK
         </p>
-        <p class="text-gray-400 dark:text-gray-600 text-sm mt-1">&copy; 2025 All Rights Reserved.</p>
+        <p class="text-gray-400 text-sm mt-1">&copy; 2025 All Rights Reserved.</p>
     </footer>
 </main>
 
@@ -122,8 +121,8 @@
     <div class="bg-white rounded-2xl shadow-2xl w-full max-w-xs sm:max-w-md p-4 sm:p-6 relative border border-gray-200"
          style="backdrop-filter: blur(8px); background: rgba(255,255,255,0.85);">
         <button id="close-modal-btn" class="absolute top-3 right-3 text-gray-400 hover:text-red-500 text-2xl font-bold focus:outline-none">&times;</button>
-        <h2 class="text-lg sm:text-xl font-semibold text-blue-600 mb-2">แจ้งเตือนงาน</h2>
-        <div id="modal-content" class="space-y-2 text-sm sm:text-base">
+        <h2 class="text-lg sm:text-xl font-semibold text-blue-700 mb-2">แจ้งเตือนงาน</h2>
+        <div id="modal-content" class="space-y-2 text-sm sm:text-base text-gray-800">
             <!-- รายละเอียดงานจะถูกเติมที่นี่ -->
         </div>
     </div>
@@ -373,20 +372,16 @@
     ];
     const clientColors = {
         aimsook: {
-            light: { bg: 'bg-yellow-50 hover:bg-yellow-100', text: 'text-orange-700', border: '#f97316' },
-            dark: { bg: 'bg-yellow-950 hover:bg-yellow-900', text: 'text-yellow-400', border: '#d97706' },
+            light: { bg: 'bg-yellow-50 hover:bg-yellow-100', text: 'text-orange-700', border: '#f97316' }
         },
         natakorn: {
-            light: { bg: 'bg-blue-50 hover:bg-blue-100', text: 'text-blue-700', border: '#2563eb' },
-            dark: { bg: 'bg-blue-950 hover:bg-blue-900', text: 'text-blue-400', border: '#3b82f6' },
+            light: { bg: 'bg-blue-50 hover:bg-blue-100', text: 'text-blue-700', border: '#2563eb' }
         },
         lookjeab: {
-            light: { bg: 'bg-pink-50 hover:bg-pink-100', text: 'text-red-700', border: '#ef4444' },
-            dark: { bg: 'bg-red-950 hover:bg-red-900', text: 'text-red-400', border: '#dc2626' },
+            light: { bg: 'bg-pink-50 hover:bg-pink-100', text: 'text-red-700', border: '#ef4444' }
         },
         internal: {
-            light: { bg: 'bg-gray-100 hover:bg-gray-200', text: 'text-gray-600', border: '#d1d5db' },
-            dark: { bg: 'bg-gray-800 hover:bg-gray-700', text: 'text-gray-400', border: '#4b5563' },
+            light: { bg: 'bg-gray-100 hover:bg-gray-200', text: 'text-gray-600', border: '#d1d5db' }
         }
     };
     let activeClient = localStorage.getItem('activeClient') || 'all';
@@ -519,21 +514,21 @@
         if (!modal || !modalContent) return;
         modalContent.innerHTML = `
             <div>
-                <span class="font-bold text-gray-700 dark:text-gray-200">วันที่:</span>
-                <span class="ml-2 text-blue-700 dark:text-yellow-300">${dayDate}</span>
+                <span class="font-bold text-gray-700">วันที่:</span>
+                <span class="ml-2 text-blue-700">${dayDate}</span>
             </div>
             <div>
-                <span class="font-bold text-gray-700 dark:text-gray-200">เวลา:</span>
-                <span class="ml-2 text-blue-700 dark:text-yellow-300">${task.time}</span>
+                <span class="font-bold text-gray-700">เวลา:</span>
+                <span class="ml-2 text-blue-700">${task.time}</span>
             </div>
             <div>
-                <span class="font-bold text-gray-700 dark:text-gray-200">หัวข้อ:</span>
-                <span class="ml-2 text-green-700 dark:text-green-300">${task.title}</span>
+                <span class="font-bold text-gray-700">หัวข้อ:</span>
+                <span class="ml-2 text-green-700">${task.title}</span>
             </div>
             ${task.details ? `
             <div>
-                <span class="font-bold text-gray-700 dark:text-gray-200">รายละเอียด:</span>
-                <span class="ml-2 text-gray-600 dark:text-gray-400">${task.details}</span>
+                <span class="font-bold text-gray-700">รายละเอียด:</span>
+                <span class="ml-2 text-gray-800">${task.details}</span>
             </div>
             ` : ''}
         `;
@@ -576,8 +571,8 @@
         if (!modal || !modalContent) return;
         // เนื้อหาประกาศจากแอดมิน (แก้ไขตรงนี้ได้ตามต้องการ)
         const adminMessage = `
-            <div class="text-center text-lg text-blue-700 font-bold mb-2">ประกาศ</div>
-            <div class="text-base text-gray-700 mb-2">
+            <div class="text-center text-lg font-bold text-blue-700 mb-2">ประกาศ</div>
+            <div class="text-base text-gray-800 mb-2">
                 แจ้งข่าวสาร/หมายเหตุ :<br>
                 - งานถ่ายทำอาจมีการเปลี่ยนแปลงตามหน้างาน<br>
                 - กรุณาเตรียมความพร้อมของท่าน<br>
@@ -609,22 +604,22 @@
         }
         if (!foundDay) {
             section.innerHTML = `
-                <div class="bg-yellow-50 dark:bg-yellow-900 rounded-xl shadow p-6 text-center text-lg text-gray-700 dark:text-yellow-200 border border-yellow-200 dark:border-yellow-700">
+                <div class="bg-yellow-50 rounded-xl shadow p-6 text-center text-lg text-gray-700 border border-yellow-200">
                     วันนี้ไม่มีงานในตาราง
                 </div>
             `;
         } else {
             let html = `
-                <div class="bg-blue-50 dark:bg-blue-900 rounded-xl shadow p-6 border border-blue-200 dark:border-blue-700">
-                    <h2 class="text-2xl font-bold text-blue-700 dark:text-yellow-300 mb-4">งานวันนี้ (${foundDay.date})</h2>
+                <div class="bg-blue-50 rounded-xl shadow p-6 border border-blue-200">
+                    <h2 class="text-2xl font-bold text-blue-700 mb-4">งานวันนี้ (${foundDay.date})</h2>
             `;
             foundDay.tasks.forEach(task => {
                 html += `
-                    <div class="mb-4 p-4 rounded-lg bg-white dark:bg-gray-800 border border-gray-200 dark:border-gray-700 shadow flex flex-col sm:flex-row sm:items-center">
-                        <div class="font-bold text-blue-700 dark:text-yellow-300 w-24 sm:w-32 text-right flex-shrink-0">${task.time}</div>
+                    <div class="mb-4 p-4 rounded-lg bg-white border border-gray-200 shadow flex flex-col sm:flex-row sm:items-center">
+                        <div class="font-bold text-blue-700 w-24 sm:w-32 text-right flex-shrink-0">${task.time}</div>
                         <div class="flex-grow ml-0 sm:ml-6">
-                            <div class="font-semibold text-green-700 dark:text-green-300">${task.title}</div>
-                            ${task.details ? `<div class="text-gray-600 dark:text-gray-400 text-sm mt-1">รายละเอียด: ${task.details}</div>` : ''}
+                            <div class="font-semibold text-green-700">${task.title}</div>
+                            ${task.details ? `<div class="text-gray-800 text-sm mt-1">รายละเอียด: ${task.details}</div>` : ''}
                         </div>
                     </div>
                 `;
