@@ -469,9 +469,6 @@
         row.className = 'flex overflow-x-auto gap-6 pb-4 px-2 hide-scrollbar';
         row.style.scrollSnapType = 'x mandatory';
 
-        // ปรับ scroll snap ให้ smooth และสมดุล
-        row.style.scrollBehavior = 'smooth';
-
         function loadMoreDays() {
             let loaded = 0;
             while (currentIndex < scheduleData.length && loaded < daysPerLoad) {
@@ -531,31 +528,6 @@
 
         // โหลดครั้งแรก
         loadMoreDays();
-
-        // ปรับ scroll snap ให้สมดุล: เลื่อนไปทีละการ์ด (snap)
-        let isScrolling = false;
-        row.addEventListener('scroll', function () {
-            if (isScrolling) return;
-            isScrolling = true;
-            setTimeout(() => {
-                // หาตำแหน่งการ์ดที่ใกล้ที่สุด
-                const cards = Array.from(row.children);
-                let closestCard = null;
-                let minDiff = Infinity;
-                const scrollLeft = row.scrollLeft;
-                cards.forEach(card => {
-                    const diff = Math.abs(card.offsetLeft - scrollLeft);
-                    if (diff < minDiff) {
-                        minDiff = diff;
-                        closestCard = card;
-                    }
-                });
-                if (closestCard) {
-                    closestCard.scrollIntoView({ behavior: 'smooth', inline: 'start' });
-                }
-                isScrolling = false;
-            }, 120); // ปรับ delay ให้เหมาะสม
-        });
 
         // โหลดเพิ่มเมื่อ scroll แนวนอนใกล้ขวาสุด
         row.addEventListener('scroll', function lazyLoadScroll() {
