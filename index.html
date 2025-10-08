@@ -656,14 +656,15 @@
         if (!modal || !modalContent) return;
         // หาวันที่วันนี้
         const today = new Date();
-        const todayStr = today.toLocaleDateString('th-TH', {
-            year: 'numeric', month: 'long', day: 'numeric'
-        });
+        const buddhistYear = today.getFullYear() + 543;
+        const day = today.getDate();
+        const month = today.toLocaleString('th-TH', { month: 'long' });
+        const todayPattern = `${day} ${month} ${buddhistYear}`;
         // หา entry schedule ที่ตรงกับวันนี้
         let foundDay = null;
-        for (const day of scheduleData) {
-            if (day.date.includes(todayStr)) {
-                foundDay = day;
+        for (const entry of scheduleData) {
+            if (entry.date.includes(todayPattern)) {
+                foundDay = entry;
                 break;
             }
         }
@@ -691,13 +692,16 @@
         const section = document.getElementById('today-tasks-section');
         if (!section) return;
         const today = new Date();
-        const todayStr = today.toLocaleDateString('th-TH', {
-            year: 'numeric', month: 'long', day: 'numeric'
-        });
+        // แปลงปี ค.ศ. เป็น พ.ศ.
+        const buddhistYear = today.getFullYear() + 543;
+        const day = today.getDate();
+        const month = today.toLocaleString('th-TH', { month: 'long' });
+        // สร้าง pattern สำหรับค้นหาใน scheduleData
+        const todayPattern = `${day} ${month} ${buddhistYear}`;
         let foundDay = null;
-        for (const day of scheduleData) {
-            if (day.date.includes(todayStr)) {
-                foundDay = day;
+        for (const entry of scheduleData) {
+            if (entry.date.includes(todayPattern)) {
+                foundDay = entry;
                 break;
             }
         }
