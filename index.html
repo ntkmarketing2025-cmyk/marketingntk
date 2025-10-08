@@ -48,6 +48,17 @@
             transform: translateY(-2px);
             box-shadow: 0 2px 4px rgba(0,0,0,0.1);
         }
+        /* Hide scrollbar styles */
+        .hide-scrollbar::-webkit-scrollbar { display: none; }
+        .hide-scrollbar { -ms-overflow-style: none; scrollbar-width: none; }
+
+        @keyframes bounce-x {
+            0%, 100% { transform: translateX(0); }
+            50% { transform: translateX(12px); }
+        }
+        .animate-bounce-x {
+            animation: bounce-x 1.2s infinite;
+        }
     </style>
 </head>
 <body>
@@ -435,11 +446,31 @@
         const noTasksMessage = document.getElementById('no-tasks-message');
         if (!container || !noTasksMessage) return;
         container.innerHTML = '';
-        let totalTasksFound = 0;
 
-        // --- Lazy Loading Variables ---
+        // --- Add visual hint for horizontal scroll ---
+        const hint = document.createElement('div');
+        hint.className = 'w-full flex items-center justify-center mb-2';
+        hint.innerHTML = `
+            <div class="flex items-center gap-2 text-gray-500 text-sm animate-bounce-x">
+                <svg class="w-5 h-5 text-blue-400" fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24">
+                    <path stroke-linecap="round" stroke-linejoin="round" d="M9 5l7 7-7 7"/>
+                </svg>
+                <span>ปัดการ์ดไปด้านข้างเพื่อดูวันถัดไป</span>
+                <svg class="w-5 h-5 text-blue-400" fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24">
+                    <path stroke-linecap="round" stroke-linejoin="round" d="M9 5l7 7-7 7"/>
+                </svg>
+            </div>
+        `;
+        container.appendChild(hint);
+
+        let totalTasksFound = 0;
         const daysPerLoad = 5;
         let currentIndex = 0;
+
+        // สร้างแถวแนวนอนแบบ Netflix
+        const row = document.createElement('div');
+        row.className = 'flex overflow-x-auto gap-6 pb-4 px-2 hide-scrollbar';
+        row.style.scrollSnapType = 'x mandatory';
 
         function loadMoreDays() {
             let loaded = 0;
@@ -449,9 +480,11 @@
                 if (filteredTasks.length > 0) {
                     totalTasksFound += filteredTasks.length;
                     const dayCard = document.createElement('div');
-                    dayCard.className = 'bg-white rounded-xl shadow-lg overflow-hidden border border-gray-200 transition duration-300';
+                    dayCard.className = 'bg-white rounded-xl shadow-lg overflow-hidden border border-gray-200 transition duration-300 min-w-[260px] max-w-[90vw] sm:min-w-[320px] sm:max-w-[340px] flex-shrink-0 scroll-snap-align-start';
+                    dayCard.style.scrollSnapAlign = 'start';
+                    dayCard.style.minHeight = '220px';
                     const dayHeader = document.createElement('h2');
-                    dayHeader.className = 'day-header text-xl font-semibold p-4 tracking-wide';
+                    dayHeader.className = 'day-header text-lg font-semibold p-4 tracking-wide text-gray-800';
                     dayHeader.textContent = day.date;
                     dayCard.appendChild(dayHeader);
                     const tasksList = document.createElement('div');
@@ -460,21 +493,21 @@
                         const clientKey = task.client;
                         const themeColors = clientColors[clientKey] ? clientColors[clientKey].light : clientColors.internal.light;
                         const taskElement = document.createElement('div');
-                        taskElement.className = `task-item ${themeColors.bg} border-l-4 p-4 flex items-start space-x-4 transition duration-200 cursor-pointer hover:ring-2 hover:ring-blue-400`;
+                        taskElement.className = `task-item ${themeColors.bg} border-l-4 p-3 flex items-start space-x-3 transition duration-200 cursor-pointer hover:ring-2 hover:ring-blue-400`;
                         taskElement.style.borderLeftColor = themeColors.border;
                         taskElement.onclick = () => showNotifyModal(task, day.date);
                         const timeElement = document.createElement('div');
-                        timeElement.className = 'w-24 text-right font-bold text-base time-text flex-shrink-0 pt-0.5';
+                        timeElement.className = 'w-20 text-right font-bold text-xs sm:text-sm time-text flex-shrink-0 pt-0.5';
                         timeElement.textContent = task.time;
                         const contentElement = document.createElement('div');
                         contentElement.className = 'flex-grow';
                         const titleElement = document.createElement('p');
-                        titleElement.className = `font-medium text-base ${themeColors.text}`;
+                        titleElement.className = `font-medium text-sm ${themeColors.text}`;
                         titleElement.textContent = task.title;
                         contentElement.appendChild(titleElement);
                         if (task.details) {
                             const detailsElement = document.createElement('p');
-                            detailsElement.className = 'text-sm text-gray-500 italic mt-1 font-light';
+                            detailsElement.className = 'text-xs text-gray-500 italic mt-1 font-light';
                             detailsElement.textContent = `รายละเอียด: ${task.details}`;
                             contentElement.appendChild(detailsElement);
                         }
@@ -483,11 +516,12 @@
                         tasksList.appendChild(taskElement);
                     });
                     dayCard.appendChild(tasksList);
-                    container.appendChild(dayCard);
+                    row.appendChild(dayCard);
                     loaded++;
                 }
                 currentIndex++;
             }
+            container.appendChild(row);
             if (totalTasksFound === 0) {
                 noTasksMessage.classList.remove('hidden');
             } else {
@@ -498,9 +532,9 @@
         // โหลดครั้งแรก
         loadMoreDays();
 
-        // โหลดเพิ่มเมื่อ scroll ใกล้ล่างสุด
-        window.addEventListener('scroll', function lazyLoadScroll() {
-            if ((window.innerHeight + window.scrollY) >= (document.body.offsetHeight - 200)) {
+        // โหลดเพิ่มเมื่อ scroll แนวนอนใกล้ขวาสุด
+        row.addEventListener('scroll', function lazyLoadScroll() {
+            if (row.scrollLeft + row.clientWidth >= row.scrollWidth - 100) {
                 if (currentIndex < scheduleData.length) {
                     loadMoreDays();
                 }
