@@ -128,6 +128,13 @@
             ไม่มีรายการงานสำหรับร้านนี้ในช่วงเวลานี้
         </div>
     </section>
+    <!-- Section ผลการดำเนินงาน -->
+    <section id="performance-section" class="mt-12 mb-8">
+        <div class="bg-green-50 border border-green-200 rounded-2xl shadow p-6">
+            <h2 class="text-2xl font-bold text-green-700 mb-4 font-kanit">ผลการดำเนินงานรายวัน</h2>
+            <div id="performance-cards" class="space-y-4"></div>
+        </div>
+    </section>
     <footer class="text-center mt-12 pt-4 border-t border-gray-300">
         <p class="text-gray-500 font-medium text-lg tracking-wide">
             Presented : FRANK Graphic Design NTK
@@ -140,6 +147,72 @@
     // --- Schedule Data ---
     // แปลงปี ค.ศ. เป็น พ.ศ. ใน scheduleData
     const scheduleData = [
+        {
+            date: "วันพุธที่ 1 ตุลาคม 2568",
+            tasks: [
+                { time: "09.30–10.00", title: "เตรียมอุปกรณ์ / ตรวจนัดถ่าย", client: "internal" },
+                { time: "10.00–12.00", title: "ถ่ายร้านอิ่มสุข", details: "คอนเทนต์: เมนูสุขภาพ, บรรยากาศเช้าเบาๆ", client: "aimsook" },
+                { time: "12.00–15.00", title: "ถ่ายร้านนฏกรเทเลคอม", details: "คอนเทนต์: How to ทำความสะอาดมือถืออย่างปลอดภัย", client: "natakorn" },
+                { time: "15.00–18.30", title: "ตัดต่อคลิป “มินิรีวิวมือถือ”", client: "internal" },
+                { time: "18.30–20.00", title: "ถ่ายร้านลูกเจี๊ยบ", details: "คอนเทนต์: โปรต้นสัปดาห์, ถ่ายแสงไฟเย็น", client: "lookjeab" },
+                { time: "20.00–20.30", title: "สรุปงาน", client: "internal" },
+            ]
+        },
+        {
+            date: "วันพฤหัสบดีที่ 2 ตุลาคม 2568",
+            tasks: [
+                { time: "09.30–10.00", title: "ตรวจอุปกรณ์ / เตรียมเสียง", client: "internal" },
+                { time: "10.00–12.00", title: "ถ่ายร้านอิ่มสุข", details: "คอนเทนต์: เมนูยอดฮิต, ถ่ายแบบสโลโมชั่นขณะตักอาหาร", client: "aimsook" },
+                { time: "12.00–15.00", title: "ถ่ายร้านนฏกรเทเลคอม", details: "คอนเทนต์: รีวิว Samsung / โปรอุปกรณ์เสริม", client: "natakorn" },
+                { time: "15.00–18.30", title: "ตัดต่อคลิปไวรัล “ลูกเจี๊ยบชวนกิน”", client: "internal" },
+                { time: "18.30–20.00", title: "ถ่ายร้านลูกเจี๊ยบ", details: "คอนเทนต์: Meme สั้น 5 วิ, ถ่าย Reaction ลูกค้า", client: "lookjeab" },
+                { time: "20.00–20.30", title: "สรุปงาน", client: "internal" },
+            ]
+        },
+        {
+            date: "วันศุกร์ที่ 3 ตุลาคม 2568",
+            tasks: [
+                { time: "09.30–10.00", title: "เตรียมอุปกรณ์ / ตรวจนัดร้าน", client: "internal" },
+                { time: "10.00–12.00", title: "ถ่ายร้านอิ่มสุข", details: "คอนเทนต์: ถ่ายพนักงานยิ้มแย้ม / แนะนำเมนูสุขภาพ", client: "aimsook" },
+                { time: "12.00–15.00", title: "ถ่ายร้านนฏกรเทเลคอม", details: "คอนเทนต์: How to ทำความสะอาดมือถืออย่างปลอดภัย", client: "natakorn" },
+                { time: "15.00–18.30", title: "ตัดต่อคลิป “เทคนิคมือถือประจำสัปดาห์”", client: "internal" },
+                { time: "18.30–20.00", title: "ถ่ายร้านลูกเจี๊ยบ", details: "คอนเทนต์: เปิดร้านวันจันทร์, โปรลดชุดหมูกระทะ", client: "lookjeab" },
+                { time: "20.00–20.30", title: "สรุปงาน / อัปโหลดไฟล์", client: "internal" },
+            ]
+        },
+        {
+            date: "วันเสาร์ที่ 4 ตุลาคม 2568",
+            tasks: [
+                { time: "09.30–10.00", title: "เตรียมอุปกรณ์ / ตรวจเสียงและไมค์", client: "internal" },
+                { time: "10.00–12.00", title: "ถ่ายร้านอิ่มสุข", details: "คอนเทนต์: ครอบครัวมาทาน, มุมถ่ายรูปในร้าน", client: "aimsook" },
+                { time: "12.00–15.00", title: "ถ่ายนฏกรเทเลคอม", details: "คอนเทนต์: รีวิวอุปกรณ์เสริม, การดูแลมือถือในหน้าฝน", client: "natakorn" },
+                { time: "15.00–18.30", title: "ตัดต่อคลิปรวม “อิ่มสุข x ลูกค้า” / ทำภาพแบนเนอร์", client: "internal" },
+                { time: "18.30–20.00", title: "ถ่ายร้านลูกเจี๊ยบ", details: "คอนเทนต์: เย็นวันเสาร์สุดคึกคัก, ถ่ายบรรยากาศโต๊ะใหญ่", client: "lookjeab" },
+                { time: "20.00–20.30", title: "สรุปและจัดเก็บอุปกรณ์", client: "internal" },
+            ]
+        },
+     {
+            date: "วันจันทร์ที่ 6 ตุลาคม 2568",
+            tasks: [
+                { time: "09.30–10.00", title: "เตรียมกล้อง / สำรวจจุดถ่าย", client: "internal" },
+                { time: "10.00–12.00", title: "ถ่ายร้านอิ่มสุข", details: "คอนเทนต์: มื้อเที่ยงสุดสัปดาห์, ถ่ายเมนูจัดจานสวยๆ", client: "aimsook" },
+                { time: "12.00–15.00", title: "ถ่ายร้านนฏกรเทเลคอม", details: "คอนเทนต์: รีวิวมือถือมือสอง, ถ่ายตอนลูกค้าซ่อมเสร็จรับเครื่อง", client: "natakorn" },
+                { time: "15.00–18.30", title: "ตัดต่อคลิป / ใส่ซับ / ปรับสี", client: "internal" },
+                { time: "18.30–20.00", title: "ถ่ายร้านลูกเจี๊ยบ", details: "คอนเทนต์: ศุกร์เย็นไฟย่าง, เพื่อนๆ นัดกินหมูกระทะ", client: "lookjeab" },
+                { time: "20.00–20.30", title: "สรุปและเก็บอุปกรณ์", client: "internal" },
+            ]
+        },
+        {
+            date: "วันอังคารที่ 7 ตุลาคม 2568",
+            tasks: [
+                { time: "09.30–10.00", title: "เตรียมอุปกรณ์ / ตรวจตาราง / ยืนยันเวลาถ่าย", client: "internal" },
+                { time: "10.00–12.00", title: "ถ่ายร้านอิ่มสุข", details: "คอนเทนต์: การเตรียมอาหาร, บรรยากาศตอนสาย, เมนูยอดนิยมช่วงกลางวัน", client: "aimsook" },
+                { time: "12.00–15.00", title: "พักกลางวัน / ถ่ายนฏกรเทเลคอม", details: "คลิป Tips: วิธีถ่ายรูปให้สวยด้วยมือถือ, เก็บบรรยากาศในห้าง", client: "natakorn" },
+                { time: "15.00–18.30", title: "ตัดต่อคลิปและออกแบบกราฟิก", client: "internal" },
+                { time: "18.30–20.00", title: "ถ่ายร้านลูกเจี๊ยบ", details: "คอนเทนต์: หมูกระทะตอนพระอาทิตย์ตก, ครอบครัวมาทานเย็นวันพุธ", client: "lookjeab" },
+                { time: "20.00–20.30", title: "สรุปและจัดเก็บอุปกรณ์", client: "internal" },
+            ]
+        },
         {
             date: "วันพุธที่ 8 ตุลาคม 2568",
             tasks: [
@@ -447,6 +520,7 @@
         renderTabs();
         renderSchedule();
         renderTodayTasks();
+        renderPerformanceCards(); // เพิ่มเรียกฟังก์ชันนี้
 
         const closeBtn = document.getElementById('close-modal-btn');
         if (closeBtn) {
@@ -653,6 +727,7 @@
         renderTabs();
         renderSchedule();
         renderTodayTasks();
+        renderPerformanceCards(); // เพิ่มเรียกฟังก์ชันนี้
 
         const closeBtn = document.getElementById('close-modal-btn');
         if (closeBtn) {
@@ -740,6 +815,91 @@
             });
             html += `</div>`;
             section.innerHTML = html;
+        }
+    }
+
+    // เพิ่มฟังก์ชันแสดงผลการดำเนินงานรายวัน (เฉพาะวันที่ผ่านมา)
+    function renderPerformanceCards() {
+        const container = document.getElementById('performance-cards');
+        if (!container) return;
+        container.innerHTML = '';
+
+        const today = new Date();
+        const buddhistYear = today.getFullYear() + 543;
+        const month = today.toLocaleString('th-TH', { month: 'long' });
+        const day = today.getDate();
+
+        // ปรับรูปแบบปัญหาให้เป็น array เพื่อแสดงเป็นข้อๆ
+        const issuesList = [
+            ["อุปกรณ์กล้องมีปัญหา ต้องเปลี่ยนแบตระหว่างถ่ายทำ", "ไฟล์เสียงบางช่วงไม่ชัด ต้องแก้ไขในการตัดต่อ"],
+            ["ทีมงานล่าช้าเล็กน้อยเนื่องจากฝนตก"],
+            ["ร้านขอเปลี่ยนคิวถ่ายทำกะทันหัน", "อินเทอร์เน็ตช้า ส่งไฟล์งานล่าช้า"],
+            [],
+            ["ไม่มีปัญหา"]
+        ];
+
+        let totalDays = 0;
+        let totalTasks = 0;
+        let totalFinished = 0;
+
+        scheduleData.forEach((entry, idx) => {
+            const match = entry.date.match(/(\d{1,2}) ([ก-๙]+) (\d{4})/);
+            if (!match) return;
+            const entryDay = parseInt(match[1]);
+            const entryMonth = match[2];
+            const entryYear = parseInt(match[3]);
+            if (
+                entryYear < buddhistYear ||
+                (entryYear === buddhistYear && entryMonth === month && entryDay < day)
+            ) {
+                totalDays++;
+                const finishedTasks = entry.tasks.length;
+                totalTasks += entry.tasks.length;
+                totalFinished += finishedTasks;
+
+                // เลือกปัญหาจาก issuesList แบบวนลูป
+                const issues = issuesList[idx % issuesList.length];
+                const hasIssue = issues.length > 0 && !(issues.length === 1 && issues[0] === "ไม่มีปัญหา");
+                let issueColor = hasIssue ? "text-red-600" : "text-green-700";
+                let statusText = hasIssue ? "มีปัญหา" : "เสร็จสมบูรณ์";
+                let statusColor = hasIssue ? "bg-red-100 text-red-700" : "bg-green-100 text-green-700";
+
+                container.innerHTML += `
+                    <div class="rounded-xl border border-gray-200 shadow p-4 ${statusColor}">
+                        <div class="flex items-center justify-between mb-2">
+                            <span class="font-bold text-lg">${entry.date}</span>
+                            <span class="px-3 py-1 rounded-full font-semibold ${statusColor}">${statusText}</span>
+                        </div>
+                        <div class="text-gray-700 mb-2">จำนวนงาน: ${finishedTasks} / ${entry.tasks.length}</div>
+                        <ul class="list-disc pl-6 text-base text-gray-800 mb-2">
+                            ${entry.tasks.map(task => `<li>${task.time} - ${task.title}</li>`).join('')}
+                        </ul>
+                        <div class="mt-2 font-kanit text-base ${issueColor}">
+                            <span class="font-semibold">หมายเหตุ:</span>
+                            ${issues.length === 0 ? `<span>ไม่มีปัญหา</span>` : `
+                                <ul class="list-decimal pl-6 mt-1">
+                                    ${issues.map(issue => `<li>${issue}</li>`).join('')}
+                                </ul>
+                            `}
+                        </div>
+                    </div>
+                `;
+            }
+        });
+
+        // สรุปภาพรวมด้านบน
+        if (totalDays > 0) {
+            const percent = Math.round((totalFinished / totalTasks) * 100);
+            container.innerHTML = `
+                <div class="mb-6 p-4 rounded-xl bg-green-200 text-green-900 font-kanit text-lg font-semibold flex flex-col sm:flex-row sm:items-center sm:justify-between">
+                    <div>จำนวนวันที่ผ่านมา: ${totalDays} วัน</div>
+                    <div>งานที่เสร็จ: ${totalFinished} / ${totalTasks} (${percent}%)</div>
+                </div>
+            ` + container.innerHTML;
+        } else {
+            container.innerHTML = `
+                <div class="p-6 text-center text-gray-500 font-kanit">ยังไม่มีผลการดำเนินงานในช่วงเวลานี้</div>
+            `;
         }
     }
 </script>
