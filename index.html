@@ -3,905 +3,402 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>ตารางงานฝ่ายกราฟิกและตัดต่อวิดีโอ</title>
-    <!-- โหลด Tailwind CSS CDN -->
+    <title>แผนคอนเทนต์ร้านลูกเจี๊ยบ หมูกระทะ (ต.ค. 2025) - Luxury Edition</title>
     <script src="https://cdn.tailwindcss.com"></script>
-    <!-- Load Sarabun Font for Thai language support -->
-    <link rel="preconnect" href="https://fonts.googleapis.com">
-    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
-    <link href="https://fonts.googleapis.com/css2?family=Kanit:wght@400;500;600;700&display=swap" rel="stylesheet">
+    <link href="https://fonts.googleapis.com/css2?family=Kanit:wght@300;400;500;600;700&display=swap" rel="stylesheet">
+    <script src="https://unpkg.com/lucide@latest"></script>
     <style>
         body {
-            font-family: 'Kanit', 'Sarabun', sans-serif;
-            transition: background-color 0.5s, color 0.5s;
-            min-height: 100vh;
-            padding-top: 80px;
-            color: #333;
-            background-color: #f8f8f8;
+            font-family: 'Kanit', sans-serif;
+            background-color: #000000; /* Deep black for luxury */
+            color: #e5e7eb; 
         }
-        header {
-            transition: background-color 0.5s, box-shadow 0.5s;
-            background-color: #fff;
+        .header-gradient {
+            background: linear-gradient(145deg, #1f1f1f 0%, #000000 100%);
         }
-        .modern-container {
-            transition: background-color 0.5s, box-shadow 0.5s;
-            background-color: #fff;
-            box-shadow: 0 4px 12px rgba(0,0,0,0.1);
-            border: 1px solid #e0e0e0;
+        .shoot-day-badge {
+            background-color: #fbbf24; /* Amber/Gold */
+            color: #000000;
+            font-weight: 600;
+            text-transform: uppercase;
+            letter-spacing: 0.5px;
         }
-        .day-header {
-            transition: background-color 0.5s, color 0.5s;
-            background-color: #f3f4f6;
-            border-bottom-color: #e5e7eb;
+        .modal {
+            transition: opacity 0.3s ease, visibility 0.3s ease;
         }
-        .tasks-list {
-            border-color: #e5e7eb;
+        .modal-content {
+            transition: transform 0.3s ease;
+            box-shadow: 0px 0px 50px rgba(251, 191, 36, 0.1);
         }
-        .time-text {
-            color: #4b5563;
-        }
-        .tab-button {
-            transition: all 0.2s ease-in-out;
-            transform: translateY(0);
-        }
-        .tab-button:hover {
-            transform: translateY(-2px);
-            box-shadow: 0 2px 4px rgba(0,0,0,0.1);
-        }
-        /* Hide scrollbar styles */
-        .hide-scrollbar::-webkit-scrollbar { display: none; }
-        .hide-scrollbar { -ms-overflow-style: none; scrollbar-width: none; }
 
-        @keyframes bounce-x {
-            0%, 100% { transform: translateX(0); }
-            50% { transform: translateX(12px); }
+        /* Animation */
+        @keyframes fadeInUp {
+            from {
+                opacity: 0;
+                transform: translateY(30px);
+            }
+            to {
+                opacity: 1;
+                transform: translateY(0);
+            }
         }
-        .animate-bounce-x {
-            animation: bounce-x 1.2s infinite;
+        .fade-in-up {
+            animation: fadeInUp 0.7s ease-out forwards;
+        }
+        
+        .content-card {
+            border: 2px solid #374151;
+            box-shadow: 8px 8px 0px #111827;
+        }
+
+        .content-card:hover {
+           transform: translate(2px, 2px);
+           box-shadow: 4px 4px 0px #fbbf24;
+           border-color: #fbbf24;
         }
     </style>
 </head>
-<body>
-<header class="fixed top-0 left-0 w-full bg-white shadow-lg z-10 border-b border-gray-200 transition duration-500">
-    <div class="container mx-auto px-4 py-3 flex justify-between items-center relative">
-        <div class="flex items-center space-x-4">
-            <a href="#" class="flex items-center group">
-                <span class="text-3xl font-extrabold tracking-widest text-green-500 group-hover:text-green-600 transition duration-300">
-                    NTK
-                </span>
-                <span class="ml-3 hidden sm:inline text-base font-medium text-gray-500 border-l border-gray-300 pl-4">
-                    Graphic & Video Schedule
-                </span>
-            </a>
-        </div>
-        <nav class="flex items-center space-x-2 sm:space-x-4 relative">
-            <!-- Notification Icon -->
-            <button id="header-notify-btn"
-                class="relative p-2 w-10 h-10 flex items-center justify-center rounded-full bg-gray-100
-                       text-blue-500 hover:bg-blue-100
-                       shadow transition duration-300 focus:outline-none focus:ring-2 focus:ring-blue-500"
-                title="แจ้งเตือนงานวันนี้">
-                <svg class="w-6 h-6" fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24">
-                    <path stroke-linecap="round" stroke-linejoin="round"
-                        d="M15 17h5l-1.405-1.405A2.032 2.032 0 0118 14.158V11a6.002 6.002 0 00-4-5.659V5a2 2 0 10-4 0v.341C7.67 6.165 6 8.388 6 11v3.159c0 .538-.214 1.055-.595 1.436L4 17h5m6 0v1a3 3 0 11-6 0v-1m6 0H9"/>
-                </svg>
-            </button>
-            <!-- Modal แจ้งเตือน (ย้ายมาอยู่ใน nav ใกล้ไอคอน) -->
-            <div id="notify-modal" class="absolute top-12 right-0 z-50 bg-white rounded-2xl shadow-2xl w-full max-w-xs sm:max-w-md p-4 sm:p-6 border border-gray-200 hidden transition-opacity duration-300"
-                 style="backdrop-filter: blur(8px); background: rgba(255,255,255,0.95);">
-                <button id="close-modal-btn" class="absolute top-3 right-3 text-gray-400 hover:text-red-500 text-2xl font-bold focus:outline-none">&times;</button>
-                <h2 class="text-lg sm:text-xl font-semibold text-blue-700 mb-2">แจ้งเตือนงาน</h2>
-                <div id="modal-content" class="space-y-2 text-sm sm:text-base text-gray-800">
-                    <!-- รายละเอียดงานจะถูกเติมที่นี่ -->
-                </div>
-            </div>
-            <a href="https://line.me/ti/p/Z58j7HN-vt" target="_blank" title="ติดต่อทาง LINE"
-                class="flex items-center px-3 py-2 rounded-full bg-green-500 hover:bg-green-600 text-white font-semibold shadow transition duration-300 focus:outline-none focus:ring-2 focus:ring-green-400">
-                LINE
-            </a>
-            <a href="tel:+66812625455" title="โทรศัพท์ติดต่อ"
-                class="flex items-center px-3 py-2 rounded-full bg-blue-500 hover:bg-blue-600 text-white font-semibold shadow transition duration-300 focus:outline-none focus:ring-2 focus:ring-blue-400">
-                <svg class="w-5 h-5 mr-2" fill="currentColor" viewBox="0 0 24 24"><path d="M6.62 10.79a15.053 15.053 0 0 0 6.59 6.59l2.2-2.2a1.003 1.003 0 0 1 1.11-.21c1.21.49 2.53.76 3.9.76a1 1 0 0 1 1 1V20a1 1 0 0 1-1 1C10.07 21 3 13.93 3 5a1 1 0 0 1 1-1h3.5a1 1 0 0 1 1 1c0 1.37.27 2.69.76 3.9a1.003 1.003 0 0 1-.21 1.11l-2.2 2.2z"></path></svg>
-                โทร
-            </a>
-        </nav>
-    </div>
-</header>
-<main class="container mx-auto p-4 sm:p-8 max-w-4xl modern-container rounded-2xl my-8">
-    <header class="text-center mb-8 pt-4 pb-2 border-b border-gray-300">
-        <h1 class="text-xl md:text-4xl font-semibold text-gray-800 tracking-wider font-kanit">
-            ตารางงานฝ่ายกราฟิกและตัดต่อวิดีโอ
-        </h1>
-        <p class="text-xl md:text-2xl text-gray-600 font-light mt-2 font-kanit">
-            เดือนตุลาคม 2568
-        </p>
+<body class="text-gray-200">
+
+    <!-- Header -->
+    <header class="header-gradient text-white p-6 sm:p-8 shadow-2xl text-center border-b-2 border-amber-500 fade-in-up">
+        <h1 class="text-3xl sm:text-4xl md:text-5xl font-bold tracking-wide">Production Plan</h1>
+        <p class="text-lg sm:text-xl mt-2 font-light text-amber-400">ร้านลูกเจี๊ยบ หมูกระทะ | ตุลาคม 2025</p>
     </header>
-    <!-- Section งานวันนี้ -->
-    <section id="today-tasks-section" class="mb-8">
-        <!-- งานวันนี้จะถูกเติมที่นี่ -->
-    </section>
-    <nav id="tabs-container" class="mb-8 flex flex-wrap justify-center gap-2 sm:gap-3 p-2 bg-gray-50 rounded-xl shadow-inner border border-gray-200">
-        <!-- Tabs will be injected here -->
-    </nav>
-    <section id="schedule-container" class="space-y-8">
-        <div id="no-tasks-message" class="hidden text-center p-8 text-xl font-medium text-gray-500">
-            ไม่มีรายการงานสำหรับร้านนี้ในช่วงเวลานี้
-        </div>
-    </section>
-    <!-- Section ผลการดำเนินงาน -->
-    <section id="performance-section" class="mt-12 mb-8">
-        <div class="bg-green-50 border border-green-200 rounded-2xl shadow p-6">
-            <h2 class="text-2xl font-bold text-green-700 mb-4 font-kanit">ผลการดำเนินงานรายวัน</h2>
-            <div id="performance-cards" class="space-y-4"></div>
-        </div>
-    </section>
-    <footer class="text-center mt-12 pt-4 border-t border-gray-300">
-        <p class="text-gray-500 font-medium text-lg tracking-wide">
-            Presented : FRANK Graphic Design NTK
-        </p>
-        <p class="text-gray-400 text-sm mt-1">&copy; 2025 All Rights Reserved.</p>
-    </footer>
-</main>
 
-<script>
-    // --- Schedule Data ---
-    // แปลงปี ค.ศ. เป็น พ.ศ. ใน scheduleData
-    const scheduleData = [
-        {
-            date: "วันพุธที่ 1 ตุลาคม 2568",
-            tasks: [
-                { time: "09.30–10.00", title: "เตรียมอุปกรณ์ / ตรวจนัดถ่าย", client: "internal" },
-                { time: "10.00–12.00", title: "ถ่ายร้านอิ่มสุข", details: "คอนเทนต์: เมนูสุขภาพ, บรรยากาศเช้าเบาๆ", client: "aimsook" },
-                { time: "12.00–15.00", title: "ถ่ายร้านนฏกรเทเลคอม", details: "คอนเทนต์: How to ทำความสะอาดมือถืออย่างปลอดภัย", client: "natakorn" },
-                { time: "15.00–18.30", title: "ตัดต่อคลิป “มินิรีวิวมือถือ”", client: "internal" },
-                { time: "18.30–20.00", title: "ถ่ายร้านลูกเจี๊ยบ", details: "คอนเทนต์: โปรต้นสัปดาห์, ถ่ายแสงไฟเย็น", client: "lookjeab" },
-                { time: "20.00–20.30", title: "สรุปงาน", client: "internal" },
-            ]
-        },
-        {
-            date: "วันพฤหัสบดีที่ 2 ตุลาคม 2568",
-            tasks: [
-                { time: "09.30–10.00", title: "ตรวจอุปกรณ์ / เตรียมเสียง", client: "internal" },
-                { time: "10.00–12.00", title: "ถ่ายร้านอิ่มสุข", details: "คอนเทนต์: เมนูยอดฮิต, ถ่ายแบบสโลโมชั่นขณะตักอาหาร", client: "aimsook" },
-                { time: "12.00–15.00", title: "ถ่ายร้านนฏกรเทเลคอม", details: "คอนเทนต์: รีวิว Samsung / โปรอุปกรณ์เสริม", client: "natakorn" },
-                { time: "15.00–18.30", title: "ตัดต่อคลิปไวรัล “ลูกเจี๊ยบชวนกิน”", client: "internal" },
-                { time: "18.30–20.00", title: "ถ่ายร้านลูกเจี๊ยบ", details: "คอนเทนต์: Meme สั้น 5 วิ, ถ่าย Reaction ลูกค้า", client: "lookjeab" },
-                { time: "20.00–20.30", title: "สรุปงาน", client: "internal" },
-            ]
-        },
-        {
-            date: "วันศุกร์ที่ 3 ตุลาคม 2568",
-            tasks: [
-                { time: "09.30–10.00", title: "เตรียมอุปกรณ์ / ตรวจนัดร้าน", client: "internal" },
-                { time: "10.00–12.00", title: "ถ่ายร้านอิ่มสุข", details: "คอนเทนต์: ถ่ายพนักงานยิ้มแย้ม / แนะนำเมนูสุขภาพ", client: "aimsook" },
-                { time: "12.00–15.00", title: "ถ่ายร้านนฏกรเทเลคอม", details: "คอนเทนต์: How to ทำความสะอาดมือถืออย่างปลอดภัย", client: "natakorn" },
-                { time: "15.00–18.30", title: "ตัดต่อคลิป “เทคนิคมือถือประจำสัปดาห์”", client: "internal" },
-                { time: "18.30–20.00", title: "ถ่ายร้านลูกเจี๊ยบ", details: "คอนเทนต์: เปิดร้านวันจันทร์, โปรลดชุดหมูกระทะ", client: "lookjeab" },
-                { time: "20.00–20.30", title: "สรุปงาน / อัปโหลดไฟล์", client: "internal" },
-            ]
-        },
-        {
-            date: "วันเสาร์ที่ 4 ตุลาคม 2568",
-            tasks: [
-                { time: "09.30–10.00", title: "เตรียมอุปกรณ์ / ตรวจเสียงและไมค์", client: "internal" },
-                { time: "10.00–12.00", title: "ถ่ายร้านอิ่มสุข", details: "คอนเทนต์: ครอบครัวมาทาน, มุมถ่ายรูปในร้าน", client: "aimsook" },
-                { time: "12.00–15.00", title: "ถ่ายนฏกรเทเลคอม", details: "คอนเทนต์: รีวิวอุปกรณ์เสริม, การดูแลมือถือในหน้าฝน", client: "natakorn" },
-                { time: "15.00–18.30", title: "ตัดต่อคลิปรวม “อิ่มสุข x ลูกค้า” / ทำภาพแบนเนอร์", client: "internal" },
-                { time: "18.30–20.00", title: "ถ่ายร้านลูกเจี๊ยบ", details: "คอนเทนต์: เย็นวันเสาร์สุดคึกคัก, ถ่ายบรรยากาศโต๊ะใหญ่", client: "lookjeab" },
-                { time: "20.00–20.30", title: "สรุปและจัดเก็บอุปกรณ์", client: "internal" },
-            ]
-        },
-     {
-            date: "วันจันทร์ที่ 6 ตุลาคม 2568",
-            tasks: [
-                { time: "09.30–10.00", title: "เตรียมกล้อง / สำรวจจุดถ่าย", client: "internal" },
-                { time: "10.00–12.00", title: "ถ่ายร้านอิ่มสุข", details: "คอนเทนต์: มื้อเที่ยงสุดสัปดาห์, ถ่ายเมนูจัดจานสวยๆ", client: "aimsook" },
-                { time: "12.00–15.00", title: "ถ่ายร้านนฏกรเทเลคอม", details: "คอนเทนต์: รีวิวมือถือมือสอง, ถ่ายตอนลูกค้าซ่อมเสร็จรับเครื่อง", client: "natakorn" },
-                { time: "15.00–18.30", title: "ตัดต่อคลิป / ใส่ซับ / ปรับสี", client: "internal" },
-                { time: "18.30–20.00", title: "ถ่ายร้านลูกเจี๊ยบ", details: "คอนเทนต์: ศุกร์เย็นไฟย่าง, เพื่อนๆ นัดกินหมูกระทะ", client: "lookjeab" },
-                { time: "20.00–20.30", title: "สรุปและเก็บอุปกรณ์", client: "internal" },
-            ]
-        },
-        {
-            date: "วันอังคารที่ 7 ตุลาคม 2568",
-            tasks: [
-                { time: "09.30–10.00", title: "เตรียมอุปกรณ์ / ตรวจตาราง / ยืนยันเวลาถ่าย", client: "internal" },
-                { time: "10.00–12.00", title: "ถ่ายร้านอิ่มสุข", details: "คอนเทนต์: การเตรียมอาหาร, บรรยากาศตอนสาย, เมนูยอดนิยมช่วงกลางวัน", client: "aimsook" },
-                { time: "12.00–15.00", title: "พักกลางวัน / ถ่ายนฏกรเทเลคอม", details: "คลิป Tips: วิธีถ่ายรูปให้สวยด้วยมือถือ, เก็บบรรยากาศในห้าง", client: "natakorn" },
-                { time: "15.00–18.30", title: "ตัดต่อคลิปและออกแบบกราฟิก", client: "internal" },
-                { time: "18.30–20.00", title: "ถ่ายร้านลูกเจี๊ยบ", details: "คอนเทนต์: หมูกระทะตอนพระอาทิตย์ตก, ครอบครัวมาทานเย็นวันพุธ", client: "lookjeab" },
-                { time: "20.00–20.30", title: "สรุปและจัดเก็บอุปกรณ์", client: "internal" },
-            ]
-        },
-        {
-            date: "วันพุธที่ 8 ตุลาคม 2568",
-            tasks: [
-                { time: "09.30–10.00", title: "เตรียมอุปกรณ์ / ตรวจตาราง / ยืนยันเวลาถ่าย", client: "internal" },
-                { time: "10.00–12.00", title: "ถ่ายร้านอิ่มสุข", details: "คอนเทนต์: การเตรียมอาหาร, บรรยากาศตอนสาย, เมนูยอดนิยมช่วงกลางวัน", client: "aimsook" },
-                { time: "12.00–15.00", title: "พักกลางวัน / ถ่ายนฏกรเทเลคอม", details: "คลิป Tips: วิธีถ่ายรูปให้สวยด้วยมือถือ, เก็บบรรยากาศในห้าง", client: "natakorn" },
-                { time: "15.00–18.30", title: "ตัดต่อคลิปและออกแบบกราฟิก", client: "internal" },
-                { time: "18.30–20.00", title: "ถ่ายร้านลูกเจี๊ยบ", details: "คอนเทนต์: หมูกระทะตอนพระอาทิตย์ตก, ครอบครัวมาทานเย็นวันพุธ", client: "lookjeab" },
-                { time: "20.00–20.30", title: "สรุปและจัดเก็บอุปกรณ์", client: "internal" },
-            ]
-        },
-        {
-            date: "วันพฤหัสบดีที่ 9 ตุลาคม 2568",
-            tasks: [
-                { time: "09.30–10.00", title: "เตรียมอุปกรณ์ / ตรวจเมมกล้อง", client: "internal" },
-                { time: "10.00–12.00", title: "ถ่ายร้านอิ่มสุข", details: "คอนเทนต์: เมนูอาหารเช้า, การจัดเรียงไลน์บุฟเฟ่ต์", client: "aimsook" },
-                { time: "12.00–15.00", title: "ถ่ายร้านนฏกรเทเลคอม", details: "คอนเทนต์: รีวิวมือถือรุ่นใหม่, ถ่ายโปรโมชั่นหน้าร้าน", client: "natakorn" },
-                { time: "15.00–18.30", title: "ตัดต่อวิดีโอ “อิ่มสุข - เมนูใหม่” / ทำภาพกราฟิกโปรฯ", client: "internal" },
-                { time: "18.30–20.00", title: "ถ่ายร้านลูกเจี๊ยบ", details: "คอนเทนต์: มุกตลก / meme หมูกระทะ / ช่วงแสงเย็น", client: "lookjeab" },
-                { time: "20.00–20.30", title: "สรุปงาน / อัปโหลดไฟล์", client: "internal" },
-            ]
-        },
-        {
-            date: "วันศุกร์ที่ 10 ตุลาคม 2568",
-            tasks: [
-                { time: "09.30–10.00", title: "ตรวจอุปกรณ์, ชาร์จแบตกล้อง", client: "internal" },
-                { time: "10.00–12.00", title: "ถ่ายร้านอิ่มสุข", details: "คอนเทนต์: ลูกค้าประจำ, ถ่ายเสียงจริงพูดถึงร้าน, บรรยากาศก่อนเที่ยง", client: "aimsook" },
-                { time: "12.00–15.00", title: "ถ่ายนฏกรเทเลคอม", details: "คอนเทนต์: เทคนิคเลือกมือถือสำหรับเรียน/ทำงาน", client: "natakorn" },
-                { time: "15.00–18.30", title: "ตัดต่อคลิป “โปรศุกร์สุดคุ้ม” / ทำโพสต์รวมโปรร้านมือถือ", client: "internal" },
-                { time: "18.30–20.00", title: "ถ่ายร้านลูกเจี๊ยบ", details: "คอนเทนต์: ศุกร์เย็นชวนเพื่อนมากิน, ถ่ายช็อตไฟย่างสวยๆ", client: "lookjeab" },
-                { time: "20.00–20.30", title: "สรุปและเก็บอุปกรณ์", client: "internal" },
-            ]
-        },
-        {
-            date: "วันเสาร์ที่ 11 ตุลาคม 2568",
-            tasks: [
-                { time: "09.30–10.00", title: "เตรียมอุปกรณ์ / ตรวจเสียงและไมค์", client: "internal" },
-                { time: "10.00–12.00", title: "ถ่ายร้านอิ่มสุข", details: "คอนเทนต์: ครอบครัวมาทาน, มุมถ่ายรูปในร้าน", client: "aimsook" },
-                { time: "12.00–15.00", title: "ถ่ายนฏกรเทเลคอม", details: "คอนเทนต์: รีวิวอุปกรณ์เสริม, การดูแลมือถือในหน้าฝน", client: "natakorn" },
-                { time: "15.00–18.30", title: "ตัดต่อคลิปรวม “อิ่มสุข x ลูกค้า” / ทำภาพแบนเนอร์", client: "internal" },
-                { time: "18.30–20.00", title: "ถ่ายร้านลูกเจี๊ยบ", details: "คอนเทนต์: เย็นวันเสาร์สุดคึกคัก, ถ่ายบรรยากาศโต๊ะใหญ่", client: "lookjeab" },
-                { time: "20.00–20.30", title: "สรุปและจัดเก็บอุปกรณ์", client: "internal" },
-            ]
-        },
-        {
-            date: "วันจันทร์ที่ 13 ตุลาคม 2568",
-            tasks: [
-                { time: "09.30–10.00", title: "เตรียมอุปกรณ์ / ตรวจนัดถ่าย", client: "internal" },
-                { time: "10.00–12.00", title: "ถ่ายร้านอิ่มสุข", details: "คอนเทนต์: เปิดเช้า, พนักงานเตรียมอาหาร, เบื้องหลังครัว", client: "aimsook" },
-                { time: "12.00–15.00", title: "ถ่ายร้านนฏกรเทเลคอม", details: "คอนเทนต์: คลิปเบื้องหลังการซ่อมมือถือ, ช่างซ่อมพูด", client: "natakorn" },
-                { time: "15.00–18.30", title: "ตัดต่อและออกแบบกราฟิก “อิ่มสุขประจำสัปดาห์”", client: "internal" },
-                { time: "18.30–20.00", title: "ถ่ายร้านลูกเจี๊ยบ", details: "คอนเทนต์: แนะนำเมนูใหม่ / มุกสั้นๆแบบไวรัล", client: "lookjeab" },
-                { time: "20.00–20.30", title: "สรุปและเก็บงาน", client: "internal" },
-            ]
-        },
-        {
-            date: "วันอังคารที่ 14 ตุลาคม 2568",
-            tasks: [
-                { time: "09.30–10.00", title: "เตรียมอุปกรณ์ / ยืนยันเวลาร้าน", client: "internal" },
-                { time: "10.00–12.00", title: "ถ่ายร้านอิ่มสุข", details: "คอนเทนต์: ถ่ายเมนูพิเศษ, มุมอิ่มสุขโซนใหม่", client: "aimsook" },
-                { time: "12.00–15.00", title: "ถ่ายร้านนฏกรเทเลคอม", details: "คอนเทนต์: โปร Vivo / ถ่ายศูนย์บริการ, ทีมบริการ", client: "natakorn" },
-                { time: "15.00–18.30", title: "ตัดต่อคลิปและออกแบบแบนเนอร์มือถือ", client: "internal" },
-                { time: "18.30–20.00", title: "ถ่ายร้านลูกเจี๊ยบ", details: "คอนเทนต์: เก็บมู้ดไฟย่าง, บรรยากาศหัวค่ำ, เสียงหัวเราะลูกค้า", client: "lookjeab" },
-                { time: "20.00–20.30", title: "สรุปงาน / อัปโหลดไฟล์", client: "internal" },
-            ]
-        },
-        {
-            date: "วันพุธที่ 15 ตุลาคม 2568",
-            tasks: [
-                { time: "09.30–10.00", title: "ตรวจอุปกรณ์ / เตรียมเสียง", client: "internal" },
-                { time: "10.00–12.00", title: "ถ่ายร้านอิ่มสุข", details: "คอนเทนต์: เมนูยอดฮิต, ถ่ายแบบสโลโมชั่นขณะตักอาหาร", client: "aimsook" },
-                { time: "12.00–15.00", title: "ถ่ายร้านนฏกรเทเลคอม", details: "คอนเทนต์: รีวิว Samsung / โปรอุปกรณ์เสริม", client: "natakorn" },
-                { time: "15.00–18.30", title: "ตัดต่อคลิปไวรัล “ลูกเจี๊ยบชวนกิน”", client: "internal" },
-                { time: "18.30–20.00", title: "ถ่ายร้านลูกเจี๊ยบ", details: "คอนเทนต์: Meme สั้น 5 วิ, ถ่าย Reaction ลูกค้า", client: "lookjeab" },
-                { time: "20.00–20.30", title: "สรุปงาน", client: "internal" },
-            ]
-        },
-        {
-            date: "วันพฤหัสบดีที่ 16 ตุลาคม 2568",
-            tasks: [
-                { time: "09.30–10.00", title: "เตรียมอุปกรณ์ / ตรวจกล้องและไมค์", client: "internal" },
-                { time: "10.00–12.00", title: "ถ่ายร้านอิ่มสุข", details: "คอนเทนต์: เมนูประจำวันพฤหัส, บรรยากาศลูกค้าช่วงสาย", client: "aimsook" },
-                { time: "12.00–15.00", title: "ถ่ายร้านนฏกรเทเลคอม", details: "คอนเทนต์: โปรลดราคา, ถ่ายพนักงานแนะนำลูกค้า", client: "natakorn" },
-                { time: "15.00–18.30", title: "ตัดต่อคลิป “อิ่มสุข - เมนูใหม่ประจำสัปดาห์”", client: "internal" },
-                { time: "18.30–20.00", title: "ถ่ายร้านลูกเจี๊ยบ", details: "คอนเทนต์: ช่วงหัวค่ำ ลูกค้าแน่น, ถ่ายควันไฟย่าง", client: "lookjeab" },
-                { time: "20.00–20.30", title: "สรุปงาน / อัปโหลดไฟล์", client: "internal" },
-            ]
-        },
-        {
-            date: "วันศุกร์ที่ 17 ตุลาคม 2568",
-            tasks: [
-                { time: "09.30–10.00", title: "เตรียมกล้อง / สำรวจจุดถ่าย", client: "internal" },
-                { time: "10.00–12.00", title: "ถ่ายร้านอิ่มสุข", details: "คอนเทนต์: มื้อเที่ยงสุดสัปดาห์, ถ่ายเมนูจัดจานสวยๆ", client: "aimsook" },
-                { time: "12.00–15.00", title: "ถ่ายร้านนฏกรเทเลคอม", details: "คอนเทนต์: รีวิวมือถือมือสอง, ถ่ายตอนลูกค้าซ่อมเสร็จรับเครื่อง", client: "natakorn" },
-                { time: "15.00–18.30", title: "ตัดต่อคลิป / ใส่ซับ / ปรับสี", client: "internal" },
-                { time: "18.30–20.00", title: "ถ่ายร้านลูกเจี๊ยบ", details: "คอนเทนต์: ศุกร์เย็นไฟย่าง, เพื่อนๆ นัดกินหมูกระทะ", client: "lookjeab" },
-                { time: "20.00–20.30", title: "สรุปและเก็บอุปกรณ์", client: "internal" },
-            ]
-        },
-        {
-            date: "วันเสาร์ที่ 18 ตุลาคม 2568",
-            tasks: [
-                { time: "09.30–10.00", title: "ตรวจตารางถ่ายทำ / เตรียม SD Card", client: "internal" },
-                { time: "10.00–12.00", title: "ถ่ายร้านอิ่มสุข", details: "คอนเทนต์: บรรยากาศครอบครัวมาทาน, ถ่ายเด็กๆ / คนสูงอายุ", client: "aimsook" },
-                { time: "12.00–15.00", title: "ถ่ายร้านนฏกรเทเลคอม", details: "คอนเทนต์: ถ่ายรีวิวแกะกล่อง / แนะนำเคสและอุปกรณ์เสริม", client: "natakorn" },
-                { time: "15.00–18.30", title: "ตัดต่อวิดีโอ “บรรยากาศวันหยุด”", client: "internal" },
-                { time: "18.30–20.00", title: "ถ่ายร้านลูกเจี๊ยบ", details: "คอนเทนต์: เย็นวันเสาร์สุดคึกคัก, ถ่ายบรรยากาศโต๊ะใหญ่", client: "lookjeab" },
-                { time: "20.00–20.30", title: "สรุปงาน / สำรองไฟล์", client: "internal" },
-            ]
-        },
-        {
-            date: "วันจันทร์ที่ 20 ตุลาคม 2568",
-            tasks: [
-                { time: "09.30–10.00", title: "เตรียมอุปกรณ์ / ตรวจนัดร้าน", client: "internal" },
-                { time: "10.00–12.00", title: "ถ่ายร้านอิ่มสุข", details: "คอนเทนต์: ถ่ายพนักงานยิ้มแย้ม / แนะนำเมนูสุขภาพ", client: "aimsook" },
-                { time: "12.00–15.00", title: "ถ่ายร้านนฏกรเทเลคอม", details: "คอนเทนต์: How to ทำความสะอาดมือถืออย่างปลอดภัย", client: "natakorn" },
-                { time: "15.00–18.30", title: "ตัดต่อคลิป “เทคนิคมือถือประจำสัปดาห์”", client: "internal" },
-                { time: "18.30–20.00", title: "ถ่ายร้านลูกเจี๊ยบ", details: "คอนเทนต์: เปิดร้านวันจันทร์, โปรลดชุดหมูกระทะ", client: "lookjeab" },
-                { time: "20.00–20.30", title: "สรุปงาน / อัปโหลดไฟล์", client: "internal" },
-            ]
-        },
-        {
-            date: "วันอังคารที่ 21 ตุลาคม 2568",
-            tasks: [
-                { time: "09.30–10.00", title: "ตรวจเช็กแบตกล้อง / เตรียมขาตั้ง", client: "internal" },
-                { time: "10.00–12.00", title: "ถ่ายร้านอิ่มสุข", details: "คอนเทนต์: เมนูพิเศษวันอังคาร, ถ่ายช่วงแสงสวยจากหน้าร้าน", client: "aimsook" },
-                { time: "12.00–15.00", title: "ถ่ายร้านนฏกรเทเลคอม", details: "คอนเทนต์: รีวิวมือถือราคาประหยัด, พูดคุยพนักงานขาย", client: "natakorn" },
-                { time: "15.00–18.30", title: "ตัดต่อคลิป “รีวิวมือถือ” / ทำกราฟิกโปรฯ", client: "internal" },
-                { time: "18.30–20.00", title: "ถ่ายร้านลูกเจี๊ยบ", details: "คอนเทนต์: ถ่าย Reaction ลูกค้า, มุกสั้นๆ ตลกๆ", client: "lookjeab" },
-                { time: "20.00–20.30", title: "สรุปงาน / ส่งไฟล์", client: "internal" },
-            ]
-        },
-        {
-            date: "วันพุธที่ 22 ตุลาคม 2568",
-            tasks: [
-                { time: "09.30–10.00", title: "ตรวจตารางถ่าย / เตรียมไฟ LED", client: "internal" },
-                { time: "10.00–12.00", title: "ถ่ายร้านอิ่มสุข", details: "คอนเทนต์: ถ่าย Slow motion ตอนตักอาหาร, ถ่ายมือพนักงานบริการ", client: "aimsook" },
-                { time: "12.00–15.00", title: "ถ่ายร้านนฏกรเทเลคอม", details: "คอนเทนต์: เบื้องหลังทีมซ่อมมือถือ / ลูกค้ารีวิวจริง", client: "natakorn" },
-                { time: "15.00–18.30", title: "ตัดต่อคลิป “Behind the scene”", client: "internal" },
-                { time: "18.30–20.00", title: "ถ่ายร้านลูกเจี๊ยบ", details: "คอนเทนต์: โปรหมูกระทะกลางสัปดาห์, ถ่ายลูกค้าโต๊ะใหญ่", client: "lookjeab" },
-                { time: "20.00–20.30", title: "สรุปและเก็บไฟล์", client: "internal" },
-            ]
-        },
-        {
-            date: "วันพฤหัสบดีที่ 23 ตุลาคม 2568",
-            tasks: [
-                { time: "09.30–10.00", title: "เตรียมอุปกรณ์ / ตรวจเสียง", client: "internal" },
-                { time: "10.00–12.00", title: "ถ่ายร้านอิ่มสุข", details: "คอนเทนต์: เบื้องหลังพ่อครัว, เมนูยอดฮิต, พนักงานคุยสนุก", client: "aimsook" },
-                { time: "12.00–15.00", title: "ถ่ายร้านนฏกรเทเลคอม", details: "คอนเทนต์: โปรศุกร์สิ้นเดือน / รีวิวกล้องมือถือ", client: "natakorn" },
-                { time: "15.00–18.30", title: "ตัดต่อคลิปและออกแบบภาพนิ่ง", client: "internal" },
-                { time: "18.30–20.00", title: "ถ่ายร้านลูกเจี๊ยบ", details: "คอนเทนต์: Meme หมูกระทะตอนค่ำ, แสงควันเย็น", client: "lookjeab" },
-                { time: "20.00–20.30", title: "สรุปงาน", client: "internal" },
-            ]
-        },
-        {
-            date: "วันศุกร์ที่ 24 ตุลาคม 2568",
-            tasks: [
-                { time: "09.30–10.00", title: "ตรวจกล้อง / เตรียมไฟ", client: "internal" },
-                { time: "10.00–12.00", title: "ถ่ายร้านอิ่มสุข", details: "คอนเทนต์: เมนูแนะนำวันศุกร์, ถ่ายโต๊ะอาหารเต็ม", client: "aimsook" },
-                { time: "12.00–15.00", title: "ถ่ายร้านนฏกรเทเลคอม", details: "คอนเทนต์: รีวิว iPhone, ถ่ายเทียบรุ่นกล้องมือถือ", client: "natakorn" },
-                { time: "15.00–18.30", title: "ตัดต่อคลิป “อิ่มสุข x ความสุขวันศุกร์”", client: "internal" },
-                { time: "18.30–20.00", title: "ถ่ายร้านลูกเจี๊ยบ", details: "คอนเทนต์: ศุกร์เย็นไฟย่าง, เพื่อนๆ นัดกินหมูกระทะ", client: "lookjeab" },
-                { time: "20.00–20.30", title: "สรุปงาน", client: "internal" },
-            ]
-        },
-        {
-            date: "วันเสาร์ที่ 25 ตุลาคม 2568",
-            tasks: [
-                { time: "09.30–10.00", title: "ตรวจกล้อง / เตรียมอุปกรณ์", client: "internal" },
-                { time: "10.00–12.00", title: "ถ่ายร้านอิ่มสุข", details: "คอนเทนต์: ถ่ายลูกค้ากลุ่มใหญ่, มุมครอบครัว", client: "aimsook" },
-                { time: "12.00–15.00", title: "ถ่ายร้านนฏกรเทเลคอม", details: "คอนเทนต์: โปรมือถือสุดสัปดาห์, ถ่ายหน้าร้านคนเยอะ", client: "natakorn" },
-                { time: "15.00–18.30", title: "ตัดต่อวิดีโอรวมสัปดาห์", client: "internal" },
-                { time: "18.30–20.00", title: "ถ่ายร้านลูกเจี๊ยบ", details: "คอนเทนต์: เสาร์เย็นคึกคัก, ถ่ายเสียงจริงลูกค้า", client: "lookjeab" },
-                { time: "20.00–20.30", title: "สรุปงาน / แบ็กอัปไฟล์", client: "internal" },
-            ]
-        },
-        {
-            date: "วันจันทร์ที่ 27 ตุลาคม 2568",
-            tasks: [
-                { time: "09.30–10.00", title: "เตรียมอุปกรณ์ / ตรวจนัดถ่าย", client: "internal" },
-                { time: "10.00–12.00", title: "ถ่ายร้านอิ่มสุข", details: "คอนเทนต์: เมนูสุขภาพ, บรรยากาศเช้าเบาๆ", client: "aimsook" },
-                { time: "12.00–15.00", title: "ถ่ายร้านนฏกรเทเลคอม", details: "คอนเทนต์: How to ทำความสะอาดมือถืออย่างปลอดภัย", client: "natakorn" },
-                { time: "15.00–18.30", title: "ตัดต่อคลิป “มินิรีวิวมือถือ”", client: "internal" },
-                { time: "18.30–20.00", title: "ถ่ายร้านลูกเจี๊ยบ", details: "คอนเทนต์: โปรต้นสัปดาห์, ถ่ายแสงไฟเย็น", client: "lookjeab" },
-                { time: "20.00–20.30", title: "สรุปงาน", client: "internal" },
-            ]
-        },
-        {
-            date: "วันอังคารที่ 28 ตุลาคม 2568",
-            tasks: [
-                { time: "09.30–10.00", title: "ตรวจตาราง / เตรียมอุปกรณ์", client: "internal" },
-                { time: "10.00–12.00", title: "ถ่ายร้านอิ่มสุข", details: "คอนเทนต์: เมนูพิเศษ / บรรยากาศช่วงเที่ยง", client: "aimsook" },
-                { time: "12.00–15.00", title: "ถ่ายร้านนฏกรเทเลคอม", details: "คอนเทนต์: รีวิวมือถือรุ่นใหม่ล่าสุด / โปรท้ายเดือน", client: "natakorn" },
-                { time: "15.00–18.30", title: "ตัดต่อคลิป “โปรสิ้นเดือน”", client: "internal" },
-                { time: "18.30–20.00", title: "ถ่ายร้านลูกเจี๊ยบ", details: "คอนเทนต์: หมูกระทะเดือนใหม่ใกล้มา / ลูกค้าแน่นร้าน", client: "lookjeab" },
-                { time: "20.00–20.30", title: "สรุปงาน", client: "internal" },
-            ]
-        },
-        {
-            date: "วันพุธที่ 29 ตุลาคม 2568",
-            tasks: [
-                { time: "09.30–10.00", title: "เตรียมอุปกรณ์ / ตรวจไฟ", client: "internal" },
-                { time: "10.00–12.00", title: "ถ่ายร้านอิ่มสุข", details: "คอนเทนต์: ถ่ายเสียงจริงลูกค้า / เมนูยอดนิยม", client: "aimsook" },
-                { time: "12.00–15.00", title: "ถ่ายร้านนฏกรเทเลคอม", details: "คอนเทนต์: โปรท้ายเดือน / พนักงานขายพูดในคลิป", client: "natakorn" },
-                { time: "15.00–18.30", title: "ตัดต่อคลิป “รวมไฮไลต์เดือนตุลาคม”", client: "internal" },
-                { time: "18.30–20.00", title: "ถ่ายร้านลูกเจี๊ยบ", details: "คอนเทนต์: ถ่าย Reaction ลูกค้า / โปรปิดเดือน", client: "lookjeab" },
-                { time: "20.00–20.30", title: "สรุปและเก็บไฟล์", client: "internal" },
-            ]
-        },
-        {
-            date: "วันพฤหัสบดีที่ 30 ตุลาคม 2568",
-            tasks: [
-                { time: "09.30–10.00", title: "เตรียมอุปกรณ์ / ตรวจนัดร้าน", client: "internal" },
-                { time: "10.00–12.00", title: "ถ่ายร้านอิ่มสุข", details: "คอนเทนต์: เมนูพิเศษสิ้นเดือน / ถ่ายมุมใหม่ของร้าน", client: "aimsook" },
-                { time: "12.00–15.00", title: "ถ่ายร้านนฏกรเทเลคอม", details: "คอนเทนต์: โปร Halloween / รีวิวของตกแต่งร้าน", client: "natakorn" },
-                { time: "15.00–18.30", title: "ตัดต่อคลิป “รวมโปรสิ้นเดือน”", client: "internal" },
-                { time: "18.30–20.00", title: "ถ่ายร้านลูกเจี๊ยบ", details: "คอนเทนต์: บรรยากาศพิเศษสิ้นเดือน, มุกตลกส่งท้ายเดือน", client: "lookjeab" },
-                { time: "20.00–20.30", title: "สรุปงาน", client: "internal" },
-            ]
-        },
-        {
-            date: "วันศุกร์ที่ 31 ตุลาคม 2568",
-            tasks: [
-                { time: "09.30–10.00", title: "ตรวจกล้อง / เตรียมสรุปเดือน", client: "internal" },
-                { time: "10.00–12.00", title: "ถ่ายร้านอิ่มสุข", details: "คอนเทนต์: ถ่ายรวมทีม / ปิดท้ายเดือน / ขอบคุณลูกค้า", client: "aimsook" },
-                { time: "12.00–15.00", title: "ถ่ายร้านนฏกรเทเลคอม", details: "คอนเทนต์: โปรเดือนพฤศจิกายน / สรุปยอดมือถือฮิต", client: "natakorn" },
-                { time: "15.00–18.30", title: "ตัดต่อวิดีโอ “สรุปเดือนตุลาคม”", client: "internal" },
-                { time: "18.30–20.00", title: "ถ่ายร้านลูกเจี๊ยบ", details: "คอนเทนต์: ปิดท้ายเดือนด้วยหมูกระทะ / บรรยากาศอบอุ่น", client: "lookjeab" },
-                { time: "20.00–20.30", title: "สรุปงานทั้งเดือน / แบ็กอัปไฟล์ลง Drive", client: "internal" },
-            ]
-        },
-    ];
-    const clientTabs = [
-        { key: 'all', name: 'งานทั้งหมด' },
-        { key: 'aimsook', name: 'ร้านอิ่มสุข' },
-        { key: 'natakorn', name: 'นฏกรเทเลคอม' },
-        { key: 'lookjeab', name: 'ร้านลูกเจี๊ยบ' },
-    ];
-    const clientColors = {
-        aimsook: {
-            light: { bg: 'bg-yellow-50 hover:bg-yellow-100', text: 'text-orange-700', border: '#f97316' }
-        },
-        natakorn: {
-            light: { bg: 'bg-blue-50 hover:bg-blue-100', text: 'text-blue-700', border: '#2563eb' }
-        },
-        lookjeab: {
-            light: { bg: 'bg-pink-50 hover:bg-pink-100', text: 'text-red-700', border: '#ef4444' }
-        },
-        internal: {
-            light: { bg: 'bg-gray-100 hover:bg-gray-200', text: 'text-gray-600', border: '#d1d5db' }
-        }
-    };
-    let activeClient = localStorage.getItem('activeClient') || 'all';
-
-    function setActiveClient(clientKey) {
-        activeClient = clientKey;
-        localStorage.setItem('activeClient', clientKey);
-        renderTabs();
-        renderSchedule();
-    }
-    function renderTabs() {
-        const tabsContainer = document.getElementById('tabs-container');
-        if (!tabsContainer) return;
-        tabsContainer.innerHTML = '';
-        clientTabs.forEach(tab => {
-            const button = document.createElement('button');
-            button.textContent = tab.name;
-            button.setAttribute('data-client', tab.key);
-            button.className = `
-                tab-button
-                px-3 py-2
-                text-xs sm:text-base
-                font-semibold
-                rounded-lg
-                shadow-md
-                focus:outline-none
-                focus:ring-2
-                focus:ring-offset-2
-                transition-all
-                min-w-[80px] sm:min-w-[120px]
-                max-w-[48vw] sm:max-w-none
-                whitespace-nowrap
-            `;
-            button.onclick = () => setActiveClient(tab.key);
-            if (tab.key === activeClient) {
-                button.classList.add('bg-blue-600', 'text-white', 'focus:ring-blue-500', 'focus:ring-offset-white', 'ring-2');
-                button.classList.remove('bg-transparent', 'text-gray-700');
-            } else {
-                button.classList.add('bg-transparent', 'text-gray-700', 'hover:bg-gray-100', 'focus:ring-blue-500', 'focus:ring-offset-white');
-                button.classList.remove('bg-blue-600', 'text-white', 'ring-2');
-            }
-            tabsContainer.appendChild(button);
-        });
-    }
-    function filterTasksByClient(tasks, clientKey) {
-        if (clientKey === 'all') return tasks;
-        return tasks.filter(task => task.client === clientKey);
-    }
-    let filterDate = '';
-    let filterMonth = '';
-    let filterYear = '';
-
-    document.addEventListener('DOMContentLoaded', () => {
-        activeClient = localStorage.getItem('activeClient') || 'all';
-        renderTabs();
-        renderSchedule();
-        renderTodayTasks();
-        renderPerformanceCards(); // เพิ่มเรียกฟังก์ชันนี้
-
-        const closeBtn = document.getElementById('close-modal-btn');
-        if (closeBtn) {
-            closeBtn.onclick = closeNotifyModal;
-        }
-        // ปิด modal เมื่อคลิกนอก modal
-        const modal = document.getElementById('notify-modal');
-        if (modal) {
-            modal.onclick = function(e) {
-                if (e.target === modal) closeNotifyModal();
-            };
-        }
-        // เพิ่ม event ให้ไอคอนแจ้งเตือน
-        const notifyBtn = document.getElementById('header-notify-btn');
-        if (notifyBtn) {
-            notifyBtn.onclick = function() {
-                const modal = document.getElementById('notify-modal');
-                if (modal.classList.contains('hidden')) {
-                    showTodayNotifyModal();
-                } else {
-                    closeNotifyModal();
-                }
-            };
-        }
-    });
-
-    function renderSchedule() {
-        const container = document.getElementById('schedule-container');
-        const noTasksMessage = document.getElementById('no-tasks-message');
-        if (!container || !noTasksMessage) return;
-        container.innerHTML = '';
-
-        // --- Add visual hint for horizontal scroll ---
-        const hint = document.createElement('div');
-        hint.className = 'w-full flex items-center justify-center mb-2';
-        hint.innerHTML = `
-            <div class="flex items-center gap-2 text-gray-500 text-sm animate-bounce-x">
-                <svg class="w-5 h-5 text-blue-400" fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24">
-                    <path stroke-linecap="round" stroke-linejoin="round" d="M9 5l7 7-7 7"/>
-                </svg>
-                <span>ปัดการ์ดไปด้านข้างเพื่อดูวันถัดไป</span>
-                <svg class="w-5 h-5 text-blue-400" fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24">
-                    <path stroke-linecap="round" stroke-linejoin="round" d="M9 5l7 7-7 7"/>
-                </svg>
+    <!-- Shooting Day Summary -->
+    <div class="container mx-auto p-4 sm:px-6 md:px-8 mt-8">
+        <section id="shooting-summary" class="fade-in-up" style="animation-delay: 150ms;">
+            <h2 class="text-2xl sm:text-3xl font-bold text-amber-400 mb-4 border-b-2 border-gray-800 pb-2 flex items-center space-x-3">
+                <i data-lucide="clapperboard" class="w-7 h-7 sm:w-8 sm:h-8"></i>
+                <span>สรุปวันถ่ายทำ (Shooting Schedule)</span>
+            </h2>
+            <div id="schedule-container" class="space-y-4">
+                <!-- Schedule will be injected here by JavaScript -->
             </div>
-        `;
-        container.appendChild(hint);
+        </section>
+    </div>
 
-        let totalTasksFound = 0;
-        const daysPerLoad = 5;
-        let currentIndex = 0;
+    <!-- Main Content -->
+    <main class="container mx-auto p-4 sm:p-6 md:p-8">
+        <div id="content-grid" class="space-y-16">
+            <!-- Content will be injected here by JavaScript -->
+        </div>
+    </main>
 
-        // ฟิลเตอร์วัน/เดือน/ปี
-        let filteredSchedule = scheduleData;
-        if (filterDate) {
-            // date format: yyyy-mm-dd
-            const [year, month, day] = filterDate.split('-');
-            const buddhistYear = (parseInt(year) + 543).toString();
-            const thaiMonth = new Date(filterDate).toLocaleString('th-TH', { month: 'long' });
-            const pattern = `${parseInt(day)} ${thaiMonth} ${buddhistYear}`;
-            filteredSchedule = filteredSchedule.filter(d => d.date.includes(pattern));
-        }
-        if (filterMonth) {
-            filteredSchedule = filteredSchedule.filter(d => d.date.includes(filterMonth));
-        }
-        if (filterYear) {
-            filteredSchedule = filteredSchedule.filter(d => d.date.includes(filterYear));
-        }
+    <!-- Modal -->
+    <div id="detail-modal" class="modal fixed inset-0 z-50 flex items-center justify-center bg-black bg-opacity-80 p-4 opacity-0 invisible">
+        <div id="modal-content" class="modal-content bg-black border-2 border-amber-500 rounded-lg shadow-2xl w-full max-w-2xl max-h-[90vh] overflow-y-auto transform scale-95">
+            <!-- Modal Header -->
+            <div class="sticky top-0 bg-black bg-opacity-80 backdrop-blur-sm p-4 sm:p-5 border-b border-amber-500/50 flex justify-between items-center">
+                <h2 id="modal-title" class="text-xl sm:text-2xl font-semibold text-amber-400"></h2>
+                <button id="close-modal-btn" class="text-gray-400 hover:text-red-500 transition-colors">
+                    <i data-lucide="x-circle" class="w-8 h-8"></i>
+                </button>
+            </div>
+            <!-- Modal Body -->
+            <div id="modal-body" class="p-4 sm:p-6 space-y-5">
+                <!-- Details will be injected here -->
+            </div>
+        </div>
+    </div>
+    
+    <!-- Footer -->
+    <footer class="mt-20 py-10 border-t border-gray-800">
+        <div class="container mx-auto text-center text-gray-500 px-4">
+            <p class="font-bold text-base sm:text-lg text-gray-400">LUKJEAB Mookrata Official</p>
+            <p class="text-sm mt-1">Production & Content Calendar Management System</p>
+            <p class="text-xs mt-2">&copy; 2025 LUKJEAB Mookrata PCL. All Rights Reserved.</p>
+        </div>
+    </footer>
 
-        // --- Netflix style row ---
-        const row = document.createElement('div');
-        row.className = 'flex overflow-x-auto gap-6 pb-4 px-2 hide-scrollbar';
-        row.style.scrollSnapType = 'x mandatory';
-        row.style.scrollBehavior = 'smooth';
 
-        function loadMoreDays() {
-            let loaded = 0;
-            while (currentIndex < filteredSchedule.length && loaded < daysPerLoad) {
-                const day = filteredSchedule[currentIndex];
-                const filteredTasks = filterTasksByClient(day.tasks, activeClient);
-                if (filteredTasks.length > 0) {
-                    totalTasksFound += filteredTasks.length;
-                    const dayCard = document.createElement('div');
-                    dayCard.className = 'bg-white rounded-xl shadow-lg overflow-hidden border border-gray-200 transition duration-300 min-w-[260px] max-w-[90vw] sm:min-w-[320px] sm:max-w-[340px] flex-shrink-0 scroll-snap-align-start';
-                    dayCard.style.scrollSnapAlign = 'start';
-                    dayCard.style.minHeight = '220px';
-                    const dayHeader = document.createElement('h2');
-                    dayHeader.className = 'day-header text-lg font-semibold p-4 tracking-wide text-gray-800';
-                    dayHeader.textContent = day.date;
-                    dayCard.appendChild(dayHeader);
-                    const tasksList = document.createElement('div');
-                    tasksList.className = 'divide-y tasks-list divide-gray-200';
-                    filteredTasks.forEach(task => {
-                        const clientKey = task.client;
-                        const themeColors = clientColors[clientKey] ? clientColors[clientKey].light : clientColors.internal.light;
-                        const taskElement = document.createElement('div');
-                        taskElement.className = `task-item ${themeColors.bg} border-l-4 p-3 flex items-start space-x-3 transition duration-200 cursor-pointer hover:ring-2 hover:ring-blue-400`;
-                        taskElement.style.borderLeftColor = themeColors.border;
-                        taskElement.onclick = () => showNotifyModal(task, day.date);
-                        const timeElement = document.createElement('div');
-                        timeElement.className = 'w-20 text-right font-bold text-xs sm:text-sm time-text flex-shrink-0 pt-0.5';
-                        timeElement.textContent = task.time;
-                        const contentElement = document.createElement('div');
-                        contentElement.className = 'flex-grow';
-                        const titleElement = document.createElement('p');
-                        titleElement.className = `font-medium text-sm ${themeColors.text}`;
-                        titleElement.textContent = task.title;
-                        contentElement.appendChild(titleElement);
-                        if (task.details) {
-                            const detailsElement = document.createElement('p');
-                            detailsElement.className = 'text-xs text-gray-500 italic mt-1 font-light';
-                            detailsElement.textContent = `รายละเอียด: ${task.details}`;
-                            contentElement.appendChild(detailsElement);
-                        }
-                        taskElement.appendChild(timeElement);
-                        taskElement.appendChild(contentElement);
-                        tasksList.appendChild(taskElement);
-                    });
-                    dayCard.appendChild(tasksList);
-                    row.appendChild(dayCard);
-                    loaded++;
+    <script>
+        const contentData = {
+            weeks: [
+                {
+                    weekNumber: 1,
+                    range: "1–7 ตุลาคม 2025",
+                    shootDate: "3 ตุลาคม 2025",
+                    theme: "อบอุ่น, ตลก, โปรโมต, โรแมนติก",
+                    content: Array(7).fill({}).map((_, i) => ({
+                        postDate: `${i + 1} ต.ค.`,
+                        title: `คอนเทนต์เปิดสัปดาห์ที่ 1 - วันที่ ${i+1}`,
+                        length: "0:30",
+                        details: "เนื่องจากไม่มีรายละเอียดสำหรับสัปดาห์ที่ 1 จึงใส่ข้อมูลตัวอย่างไว้ก่อน",
+                        mood: "รอรายละเอียด",
+                        filming: "รอรายละเอียด",
+                        equipment: "มือถือ, ไฟ LED",
+                        location: "ในร้าน",
+                        shootDate: "3 ต.ค.",
+                        notes: "โทนรวม: อบอุ่น, ตลก, โปรโมต, โรแมนติก"
+                    }))
+                },
+                {
+                    weekNumber: 2,
+                    range: "8–14 ตุลาคม 2025",
+                    shootDate: "10 ตุลาคม 2025",
+                    theme: "ไวรัล, ครอบครัว, โปรโมชัน, เบื้องหลัง, เสียงพากย์จริง",
+                    content: [
+                        { postDate: "8 ต.ค.", title: "🍖 หมูเต้นบนเตา (ไวรัล)", length: "0:15", details: "0–3s หมูเด้งบนเตา / 3–7s เสียงพากย์ “อุ๊ย! ร้อนๆ เด้งใหญ่เลย!” / 7–15s zoom-in พร้อมข้อความ “หมูเด้งในตำนาน”", mood: "ตลก / เพลง remix funny", filming: "handheld close-up 240fps", equipment: "มือถือ, ไมค์พากย์, ไฟ LED", location: "เตากลางร้าน", shootDate: "10 ต.ค.", notes: "ไวรัลเสียงพากย์" },
+                        { postDate: "9 ต.ค.", title: "👨‍👩‍👧 คืนแห่งครอบครัว", length: "0:45", details: "0–8s ครอบครัวเข้าร้าน / 8–15s เด็กหัวเราะ / 15–25s พ่อจ่ายเงิน / 25–40s แม่พูด “ถูกและอร่อย” / 40–45s โลโก้ร้าน", mood: "อบอุ่น / เพลง family acoustic", filming: "tripod / pan slow / wide shot", equipment: "มือถือ, ไฟ LED warm", location: "โต๊ะใหญ่กลางร้าน", shootDate: "10 ต.ค.", notes: "mood ครอบครัว" },
+                        { postDate: "10 ต.ค.", title: "🧂 เบื้องหลัง “เตรียมหมู”", length: "0:60", details: "0–10s พนักงานหั่นหมู / 10–20s หมักซอส / 20–30s คลุกมือ / 30–45s วางถาดเรียง / 45–55s ซูมใกล้เนื้อ / 55–60s ตัวหนังสือ “ทุกจานคือความตั้งใจ”", mood: "documentary / เพลง soft beat", filming: "handheld / macro", equipment: "มือถือ, ไฟ LED, ถุงมือ, เขียง", location: "ครัวหลังร้าน", shootDate: "10 ต.ค.", notes: "เบื้องหลังจริง" },
+                        { postDate: "11 ต.ค.", title: "💬 เสียงพากย์พนักงาน “ลูกค้าประจำ”", length: "0:30", details: "0–5s พนักงานพูด “เจอกันทุกศุกร์เลยนะคะ” / 5–15s ภาพลูกค้าหัวเราะ / 15–25s เตาย่างหมู / 25–30s ปิดด้วยโลโก้", mood: "เป็นกันเอง / เพลง chill pop", filming: "mid shot / talking head", equipment: "มือถือ, ไมค์ไร้สาย", location: "มุมพนักงานหน้าเคาน์เตอร์", shootDate: "10 ต.ค.", notes: "ใช้เสียงจริง" },
+                        { postDate: "12 ต.ค.", title: "🐷 โปร “มากับเพื่อนลดอีก!”", length: "0:20", details: "0–4s ป้ายโปร / 4–10s เพื่อน 3 คน high five / 10–15s zoom ใบเสร็จ / 15–20s ตัวหนังสือ “ชวนเพื่อนมากินกัน!”", mood: "สนุก / เพลง upbeat", filming: "wide shot / handheld move", equipment: "มือถือ, ป้ายโปร", location: "หน้าร้าน", shootDate: "10 ต.ค.", notes: "โปรโมตวันอาทิตย์" },
+                        { postDate: "13 ต.ค.", title: "🔥 สโลว์หมูไหม้ (Art shot)", length: "0:10", details: "0–3s หมูค่อยๆ เปลี่ยนสี / 3–6s ควันลอย / 6–10s fade to logo", mood: "ศิลป์ / เพลง ambient", filming: "slow motion macro", equipment: "มือถือ, ขาตั้ง", location: "เตากลางร้าน", shootDate: "10 ต.ค.", notes: "Visual filler" },
+                        { postDate: "14 ต.ค.", title: "🪩 รวมช็อตบรรยากาศ 1 สัปดาห์", length: "0:60", details: "0–8s เปิดร้าน / 8–20s ลูกค้าแน่น / 20–35s ย่างหมู / 35–45s เสิร์ฟอาหาร / 45–55s เด็กหัวเราะ / 55–60s โลโก้ปิดท้าย", mood: "สดใส / เพลง EDM Chill", filming: "handheld / montage cut", equipment: "มือถือ, gimbal", location: "ทั่วร้าน", shootDate: "10 ต.ค.", notes: "คลิปสรุปสัปดาห์" }
+                    ]
+                },
+                {
+                    weekNumber: 3,
+                    range: "15–21 ตุลาคม 2025",
+                    shootDate: "17 ตุลาคม 2025",
+                    theme: "เทศกาลกินเจ, ปลายเดือน, คุ้มค่า, สนุก",
+                    content: [
+                        { postDate: "15 ต.ค.", title: "🧘‍♀️ หมูกระทะเจก็มีนะ", length: "0:45", details: "0–5s พนักงานโชว์ถาดผัก / 5–15s ผัดเต้าหู้ลงเตา / 15–25s เทน้ำซุป / 25–35s ลูกค้าพูด “เจก็อิ่มได้” / 35–45s โลโก้ร้าน “อิ่มบุญ อร่อยจริง”", mood: "อบอุ่น / เพลง light acoustic", filming: "tripod / macro shot / steady pan", equipment: "มือถือ, ไฟ LED, เต้าหู้, ผัก", location: "มุมครัวหลังร้าน", shootDate: "17 ต.ค.", notes: "เทศกาลกินเจ" },
+                        { postDate: "16 ต.ค.", title: "😂 มีม “สายเนื้อแอบกินเจ”", length: "0:15", details: "0–3s เพื่อนแอบตักหมู / 3–10s ตาโตทำหน้าเจ็บใจ / 10–15s ข้อความ “รู้ไหมว่าเราเห็นนะ!”", mood: "ตลก / เพลง funny remix", filming: "handheld / close-up reaction", equipment: "มือถือ", location: "มุมโต๊ะซ้าย", shootDate: "17 ต.ค.", notes: "คลิปไวรัลสั้น" },
+                        { postDate: "17 ต.ค.", title: "💬 รีวิวจริง “มากี่ครั้งก็ไม่เบื่อ”", length: "0:30", details: "0–8s ลูกค้าชายพูด “มาทุกอาทิตย์เลยครับ” / 8–15s ถ่ายบรรยากาศโต๊ะ / 15–25s zoom หน้าเตาย่าง / 25–30s โลโก้ + แคปชันรีวิว", mood: "น่าเชื่อถือ / เพลง soft pop", filming: "mid shot / handheld", equipment: "มือถือ, ไมค์ไร้สาย", location: "มุมลูกค้าประจำ", shootDate: "17 ต.ค.", notes: "รีวิวจากลูกค้าจริง" },
+                        { postDate: "18 ต.ค.", title: "🐷 โปร “เติมหมูฟรี 1 ถาด!”", length: "0:20", details: "0–5s ป้ายโปรขึ้น “ฟรี 1 ถาด!” / 5–10s พนักงานเสิร์ฟหมู / 10–15s zoom ถาดเนื้อ / 15–20s ตัวหนังสือ “เฉพาะวันเสาร์นี้!”", mood: "โปรโมต / เพลง pop bright", filming: "tripod / focus pull", equipment: "มือถือ, ป้ายโปร", location: "หน้าร้าน", shootDate: "17 ต.ค.", notes: "โปรสุดสัปดาห์" },
+                        { postDate: "19 ต.ค.", title: "🔥 สโลว์ควันเตา “อุ่นหัวใจ”", length: "0:10", details: "0–3s ควันลอยเบา / 3–7s หมูเริ่มสุก / 7–10s fade to โลโก้", mood: "ศิลป์ / เพลง ambient", filming: "macro slow motion", equipment: "มือถือ, ขาตั้ง", location: "เตากลางร้าน", shootDate: "17 ต.ค.", notes: "visual filler ใช้คั่น" },
+                        { postDate: "20 ต.ค.", title: "🎥 เบื้องหลัง “วันถ่ายจริงทีมงาน”", length: "0:60", details: "0–10s ทีมงานตั้งกล้อง / 10–20s พนักงานช่วยจัดไฟ / 20–40s ถ่าย reaction / 40–55s หัวเราะหลุด / 55–60s ตัวหนังสือ “เบื้องหลังความอร่อย”", mood: "เป็นกันเอง / เพลง chill beat", filming: "handheld / behind the scenes", equipment: "มือถือ, Gimbal", location: "ทั่วร้าน", shootDate: "17 ต.ค.", notes: "ใช้เก็บภาพจริงขณะถ่าย" },
+                        { postDate: "21 ต.ค.", title: "🧊 น้ำแข็งเย็นใจ", length: "0:15", details: "0–5s เทน้ำแข็งใส่แก้ว / 5–10s zoom หยดน้ำเกาะ / 10–15s โลโก้ร้าน “สดชื่นทุกคำ”", mood: "สดใส / เพลง chill", filming: "macro / handheld", equipment: "มือถือ, แก้วน้ำ, ไฟ LED", location: "มุมเครื่องดื่ม", shootDate: "17 ต.ค.", notes: "ใช้คั่นก่อนโพสต์ใหญ่" }
+                    ]
+                },
+                 {
+                    weekNumber: 4,
+                    range: "22–28 ตุลาคม 2025",
+                    shootDate: "24 ตุลาคม 2025",
+                    theme: "ปลายเดือน, โปรแรง, ขอบคุณลูกค้า, สดใส, อบอุ่น",
+                    content: [
+                        { postDate: "22 ต.ค.", title: "🍲 “เปิดหม้อ” ASMR เสียงซุปเดือด", length: "0:20", details: "0–5s เปิดฝาหม้อช้า ๆ / 5–10s เสียงซุปเดือดฟู่ / 10–15s เทน้ำซุปเพิ่ม / 15–20s โลโก้ร้าน fade in", mood: "สบาย ๆ / เสียงจริง (ASMR)", filming: "macro close / tripod", equipment: "มือถือ, ไมค์บันทึกเสียง, หม้อ", location: "ครัวกลาง", shootDate: "24 ต.ค.", notes: "คลิป ASMR" },
+                        { postDate: "23 ต.ค.", title: "😂 “เพื่อนบอกลดน้ำหนักแต่ชวนหมูกระทะ”", length: "0:25", details: "0–5s เพื่อนถือสลัด / 5–10s อีกคนถือจานหมู / 10–20s ตัดสลับ reaction “เอาวะ” / 20–25s ตัวหนังสือ “ชีวิตมันต้องบาลานซ์!”", mood: "ตลก / เพลง upbeat", filming: "handheld / two shot", equipment: "มือถือ, props สลัด", location: "โต๊ะลูกค้า", shootDate: "24 ต.ค.", notes: "แนวไวรัล" },
+                        { postDate: "24 ต.ค.", title: "💸 โปรปลายเดือน “มากิน 3 จ่าย 2”", length: "0:40", details: "0–5s ป้ายโปรขึ้น / 5–15s พนักงานชูนิ้ว “3 จ่าย 2” / 15–25s กลุ่มลูกค้าหัวเราะ / 25–35s ถ่ายอาหารจัดเต็ม / 35–40s โลโก้พร้อม QR", mood: "โปรโมชัน / เพลง lively pop", filming: "tripod / pan / focus pull", equipment: "มือถือ, ป้ายโปร", location: "หน้าร้าน", shootDate: "24 ต.ค.", notes: "โปรแรงปลายเดือน" },
+                        { postDate: "25 ต.ค.", title: "🐣 “ลูกเจี๊ยบขอบคุณลูกค้าทุกคน”", length: "0:45", details: "0–10s ทีมงานยิ้ม / 10–20s ตัดภาพลูกค้าประจำ / 20–30s พนักงานโบกมือ / 30–45s ข้อความ “ขอบคุณที่อิ่มด้วยกันทั้งเดือน ❤️”", mood: "อบอุ่น / เพลง soft acoustic", filming: "handheld / steady follow", equipment: "มือถือ, ขาตั้ง", location: "ทั่วร้าน", shootDate: "24 ต.ค.", notes: "ปิดเดือนอย่างอบอุ่น" },
+                        { postDate: "26 ต.ค.", title: "🎞️ รวมโมเมนต์เด่นตลอดเดือน", length: "0:60", details: "0–15s ช็อตอาหาร / 15–30s ช็อตลูกค้า / 30–45s เบื้องหลังทีมงาน / 45–60s ตัวหนังสือ “เดือนหน้าเจอกันใหม่!”", mood: "Recap / เพลงพลังบวก", filming: "montage edit", equipment: "ฟุตเทจรวม", location: "—", shootDate: "24 ต.ค.", notes: "ใช้คลิปตัดรวม" },
+                        { postDate: "27 ต.ค.", title: "💬 รีวิวลูกค้าสายครอบครัว", length: "0:35", details: "0–10s ครอบครัวกินพร้อมหน้า / 10–20s เด็กพูด “หนูชอบเตานี้” / 20–30s zoom close-up รอยยิ้ม / 30–35s โลโก้", mood: "อบอุ่น / เพลง mellow", filming: "handheld", equipment: "มือถือ, ไมค์", location: "มุมโต๊ะใหญ่", shootDate: "24 ต.ค.", notes: "รีวิวแนวครอบครัว" },
+                        { postDate: "28 ต.ค.", title: "🔥 ช็อตไฟเตาลุก “เดือนนี้อร่อยสุด!”", length: "0:10", details: "0–5s ถ่ายไฟเตาลุกสวย / 5–10s โลโก้ร้าน + สโลแกน “อร่อยจนต้องกลับมาอีก”", mood: "ดุดัน / เพลง beat slow-mo", filming: "slow motion / macro", equipment: "มือถือ, ขาตั้ง", location: "เตากลางร้าน", shootDate: "24 ต.ค.", notes: "ปิดคอนเทนต์รายเดือน" }
+                    ]
+                },
+                 {
+                    weekNumber: 5,
+                    range: "29–31 ตุลาคม 2025",
+                    shootDate: "ใช้ฟุตเทจจากวันที่ 24 ต.ค.",
+                    theme: "สรุปและขอบคุณ",
+                    content: [
+                        { postDate: "29 ต.ค.", title: "😋 “หมูสุกกำลังดี” (ASMR)", length: "0:10", details: "macro ถ่ายหมูเปลี่ยนสีบนเตา / เสียงจี่", mood: "ASMR", filming: "Macro", equipment: "มือถือ", location: "เตากลาง", shootDate: "24 ต.ค.", notes: "จากคอนเทนต์สำรอง" },
+                        { postDate: "30 ต.ค.", title: "🎉 “โปรต้อนรับเดือนหน้า”", length: "0:20", details: "ป้ายโปรใหม่ขึ้น / พนักงานถือป้าย", mood: "โปรโมชัน", filming: "Tripod", equipment: "มือถือ / ป้าย", location: "หน้าร้าน", shootDate: "24 ต.ค.", notes: "จากคอนเทนต์สำรอง" },
+                        { postDate: "31 ต.ค.", title: "🎈 “ลูกค้าประจำพูดถึงร้าน”", length: "0:45", details: "2 ลูกค้าพูดสั้น ๆ / ยิ้ม / ขอบคุณ", mood: "soft pop", filming: "Mid shot", equipment: "มือถือ / ไมค์", location: "มุมประจำ", shootDate: "24 ต.ค.", notes: "จากคอนเทนต์สำรอง" }
+                    ]
                 }
-                currentIndex++;
-            }
-            container.appendChild(row);
-            if (totalTasksFound === 0) {
-                noTasksMessage.classList.remove('hidden');
-            } else {
-                noTasksMessage.classList.add('hidden');
-            }
+            ],
+            backup: [
+                { title: "🌧️ “ฝนตกก็มากินได้”", length: "0:30", details: "ถ่ายฝนโปรย / คนเดินเข้าร้าน / กล้องแพนเข้าเตา", mood: "cozy / jazz", equipment: "มือถือ / ร่ม", location: "หน้าร้าน", notes: "ใช้วันฝนตก" },
+                { title: "🪑 “โต๊ะพร้อม เตาพร้อม”", length: "0:15", details: "ถ่ายร้านว่าง ๆ ตอนเปิดร้าน / fade in โลโก้", mood: "minimal", equipment: "มือถือ / tripod", location: "ในร้าน", notes: "filler video" },
+                { title: "🐷 “ถามลูกค้า — เมนูโปรดคือ?”", length: "0:40", details: "สัมภาษณ์ 3 คนพูดสั้น ๆ / ปิดท้ายรวมเสียงหัวเราะ", mood: "lively", equipment: "มือถือ / ไมค์", location: "มุมลูกค้า", notes: "ใช้ได้ตลอด" },
+                { title: "😋 “หมูสุกกำลังดี”", length: "0:10", details: "macro ถ่ายหมูเปลี่ยนสีบนเตา / เสียงจี่", mood: "ASMR", equipment: "มือถือ", location: "เตากลาง", notes: "visual filler" },
+                { title: "🎉 “โปรต้อนรับเดือนหน้า”", length: "0:20", details: "ป้ายโปรใหม่ขึ้น / พนักงานถือป้าย", mood: "โปรโมชัน", equipment: "มือถือ / ป้าย", location: "หน้าร้าน", notes: "ใช้ต่อเนื่อง" },
+                { title: "🎈 “ลูกค้าประจำพูดถึงร้าน”", length: "0:45", details: "2 ลูกค้าพูดสั้น ๆ / ยิ้ม / ขอบคุณ", mood: "soft pop", equipment: "มือถือ / ไมค์", location: "มุมประจำ", notes: "ใช้แทนคอนเทนต์จริง" }
+            ]
+        };
+
+        const contentGrid = document.getElementById('content-grid');
+        const modal = document.getElementById('detail-modal');
+        const modalContent = document.getElementById('modal-content');
+        const modalTitle = document.getElementById('modal-title');
+        const modalBody = document.getElementById('modal-body');
+        const closeModalBtn = document.getElementById('close-modal-btn');
+
+        function isShootDay(postDateStr, shootDateStr) {
+            const postDay = postDateStr.split(' ')[0];
+            const shootDay = shootDateStr.split(' ')[0];
+            return postDay === shootDay;
         }
 
-        // โหลดครั้งแรก
-        loadMoreDays();
+        function createDetailItem(icon, label, value) {
+            return `
+                <div class="flex items-start space-x-4">
+                    <div class="flex-shrink-0 text-amber-400 pt-1"><i data-lucide="${icon}" class="w-5 h-5"></i></div>
+                    <div>
+                        <p class="font-semibold text-gray-400">${label}</p>
+                        <p class="text-gray-200 text-base sm:text-lg">${value || 'N/A'}</p>
+                    </div>
+                </div>
+            `;
+        }
+        
+        function showModal(item) {
+            modalTitle.textContent = item.title;
+            modalBody.innerHTML = `
+                ${createDetailItem('calendar', 'วันโพสต์', item.postDate)}
+                ${createDetailItem('clock', 'ความยาว', item.length)}
+                ${createDetailItem('film', 'รายละเอียดช็อตต่อช็อต', item.details.replace(/\//g, '<br/>'))}
+                ${createDetailItem('music', 'Mood / เพลง', item.mood)}
+                ${createDetailItem('camera', 'วิธีถ่ายทำ / มุมกล้อง', item.filming)}
+                ${createDetailItem('box', 'วัสดุ / อุปกรณ์', item.equipment)}
+                ${createDetailItem('map-pin', 'สถานที่ถ่าย', item.location)}
+                ${createDetailItem('star', 'วันที่ถ่ายจริง', item.shootDate)}
+                ${createDetailItem('file-text', 'หมายเหตุ', item.notes)}
+            `;
+            lucide.createIcons();
+            modal.classList.remove('opacity-0', 'invisible');
+            modalContent.classList.remove('scale-95');
+        }
 
-        // ปรับ scroll snap ให้สมดุล: เลื่อนไปทีละการ์ด (snap)
-        let isScrolling = false;
-        row.addEventListener('scroll', function () {
-            if (isScrolling) return;
-            isScrolling = true;
+        function hideModal() {
+            modal.classList.add('opacity-0');
+            modalContent.classList.add('scale-95');
             setTimeout(() => {
-                // หาตำแหน่งการ์ดที่ใกล้ที่สุด
-                const cards = Array.from(row.children);
-                let closestCard = null;
-                let minDiff = Infinity;
-                const scrollLeft = row.scrollLeft;
-                cards.forEach(card => {
-                    const diff = Math.abs(card.offsetLeft - scrollLeft);
-                    if (diff < minDiff) {
-                        minDiff = diff;
-                        closestCard = card;
+                modal.classList.add('invisible');
+            }, 300);
+        }
+
+        // --- NEW: Create Shooting Schedule ---
+        const shootingSchedule = {};
+        contentData.weeks.forEach(week => {
+            const shootDateKey = week.shootDate;
+            if (shootDateKey.startsWith("ใช้ฟุตเทจ")) return; // Skip non-direct shooting days
+            
+            if (!shootingSchedule[shootDateKey]) {
+                shootingSchedule[shootDateKey] = [];
+            }
+            week.content.forEach(item => {
+                shootingSchedule[shootDateKey].push(item.title);
+            });
+        });
+
+        // --- NEW: Render Shooting Schedule ---
+        const scheduleContainer = document.getElementById('schedule-container');
+        for (const date in shootingSchedule) {
+            const scheduleItem = document.createElement('div');
+            scheduleItem.classList.add('bg-gray-900', 'border-2', 'border-gray-700', 'rounded-lg', 'overflow-hidden', 'transition-all', 'duration-300', 'hover:border-amber-500');
+            
+            const titles = shootingSchedule[date];
+            
+            scheduleItem.innerHTML = `
+                <button class="w-full flex justify-between items-center p-4 text-left hover:bg-gray-800 transition-colors duration-300">
+                    <span class="text-lg sm:text-xl font-semibold text-white">${date}</span>
+                    <div class="flex items-center space-x-3">
+                        <span class="text-amber-400 font-bold">${titles.length} รายการ</span>
+                        <i data-lucide="chevron-down" class="text-amber-400 transition-transform duration-300"></i>
+                    </div>
+                </button>
+                <div class="h-0 overflow-hidden transition-all duration-500 ease-in-out">
+                    <ul class="p-4 pt-0 border-t-2 border-gray-800 list-disc list-inside text-gray-300 space-y-2 text-sm sm:text-base">
+                        ${[...new Set(titles)].map(title => `<li>${title}</li>`).join('')}
+                    </ul>
+                </div>
+            `;
+            scheduleContainer.appendChild(scheduleItem);
+        }
+
+        // --- NEW: Add Accordion Interactivity ---
+        scheduleContainer.querySelectorAll('button').forEach(button => {
+            button.addEventListener('click', () => {
+                const contentDiv = button.nextElementSibling;
+                const icon = button.querySelector('i[data-lucide="chevron-down"]');
+
+                // Close other open accordions
+                scheduleContainer.querySelectorAll('.h-auto').forEach(openContent => {
+                    if (openContent !== contentDiv) {
+                        openContent.style.height = '0px';
+                        const otherIcon = openContent.previousElementSibling.querySelector('i[data-lucide="chevron-down"]');
+                        if(otherIcon) otherIcon.style.transform = 'rotate(0deg)';
                     }
                 });
-                if (closestCard) {
-                    closestCard.scrollIntoView({ behavior: 'smooth', inline: 'start' });
-                }
-                isScrolling = false;
-            }, 120);
-        });
 
-        // โหลดเพิ่มเมื่อ scroll แนวนอนใกล้ขวาสุด
-        row.addEventListener('scroll', function lazyLoadScroll() {
-            if (row.scrollLeft + row.clientWidth >= row.scrollWidth - 100) {
-                if (currentIndex < filteredSchedule.length) {
-                    loadMoreDays();
-                }
-            }
-        });
-    }
-    // ปรับฟังก์ชันเปิด/ปิด modal ให้ใช้แบบ dropdown
-    function showNotifyModal(task, dayDate) {
-        const modal = document.getElementById('notify-modal');
-        const modalContent = document.getElementById('modal-content');
-        if (!modal || !modalContent) return;
-        modalContent.innerHTML = `
-            <div>
-                <span class="font-bold text-gray-700">วันที่:</span>
-                <span class="ml-2 text-blue-700">${dayDate}</span>
-            </div>
-            <div>
-                <span class="font-bold text-gray-700">เวลา:</span>
-                <span class="ml-2 text-blue-700">${task.time}</span>
-            </div>
-            <div>
-                <span class="font-bold text-gray-700">หัวข้อ:</span>
-                <span class="ml-2 text-green-700">${task.title}</span>
-            </div>
-            ${task.details ? `
-            <div>
-                <span class="font-bold text-gray-700">รายละเอียด:</span>
-                <span class="ml-2 text-gray-800">${task.details}</span>
-            </div>
-            ` : ''}
-        `;
-        modal.classList.remove('hidden');
-        setTimeout(() => { modal.classList.add('opacity-100'); }, 10);
-    }
-    function closeNotifyModal() {
-        const modal = document.getElementById('notify-modal');
-        if (modal) modal.classList.add('hidden');
-    }
-    document.addEventListener('DOMContentLoaded', () => {
-        activeClient = localStorage.getItem('activeClient') || 'all';
-        renderTabs();
-        renderSchedule();
-        renderTodayTasks();
-        renderPerformanceCards(); // เพิ่มเรียกฟังก์ชันนี้
-
-        const closeBtn = document.getElementById('close-modal-btn');
-        if (closeBtn) {
-            closeBtn.onclick = closeNotifyModal;
-        }
-        // ปิด modal เมื่อคลิกนอก modal
-        const modal = document.getElementById('notify-modal');
-        if (modal) {
-            modal.onclick = function(e) {
-                if (e.target === modal) closeNotifyModal();
-            };
-        }
-        // เพิ่ม event ให้ไอคอนแจ้งเตือน
-        const notifyBtn = document.getElementById('header-notify-btn');
-        if (notifyBtn) {
-            notifyBtn.onclick = function() {
-                const modal = document.getElementById('notify-modal');
-                if (modal.classList.contains('hidden')) {
-                    showTodayNotifyModal();
+                if (contentDiv.style.height && contentDiv.style.height !== '0px') {
+                    contentDiv.style.height = '0px';
+                    if(icon) icon.style.transform = 'rotate(0deg)';
                 } else {
-                    closeNotifyModal();
+                    contentDiv.style.height = `${contentDiv.scrollHeight}px`;
+                    if(icon) icon.style.transform = 'rotate(180deg)';
                 }
-            };
-        }
-    });
-    // ฟังก์ชันเปิด modal แจ้งเตือน (ใช้กับ header)
-    function showTodayNotifyModal() {
-        const modal = document.getElementById('notify-modal');
-        const modalContent = document.getElementById('modal-content');
-        if (!modal || !modalContent) return;
-        // เนื้อหาประกาศจากแอดมิน (แก้ไขตรงนี้ได้ตามต้องการ)
-        const adminMessage = `
-            <div class="text-center text-lg font-bold text-blue-700 mb-2">ประกาศ</div>
-            <div class="text-base text-gray-800 mb-2">
-                แจ้งข่าวสาร/หมายเหตุ :<br>
-                - งานถ่ายทำอาจมีการเปลี่ยนแปลงตามหน้างาน<br>
-                - กรุณาเตรียมความพร้อมของท่าน<br>
-                - หากมีข้อสงสัยติดต่อ LINE หรือโทรที่เมนูด้านบน
-            </div>
-        `;
-        modalContent.innerHTML = adminMessage;
-        modal.classList.remove('hidden');
-        setTimeout(() => { modal.classList.add('opacity-100'); }, 10);
-    }
+            });
+        });
 
-    // ฟังก์ชันแสดงงานวันนี้
-    function renderTodayTasks() {
-        const section = document.getElementById('today-tasks-section');
-        if (!section) return;
-        const today = new Date();
-        // แปลงปี ค.ศ. เป็น พ.ศ.
-        const buddhistYear = today.getFullYear() + 543;
-        const day = today.getDate();
-        const month = today.toLocaleString('th-TH', { month: 'long' });
-        // สร้าง pattern สำหรับค้นหาใน scheduleData
-        const todayPattern = `${day} ${month} ${buddhistYear}`;
-        let foundDay = null;
-        for (const entry of scheduleData) {
-            if (entry.date.includes(todayPattern)) {
-                foundDay = entry;
-                break;
-            }
-        }
-        if (!foundDay) {
-            section.innerHTML = `
-                <div class="bg-yellow-50 rounded-xl shadow p-6 text-center text-lg text-gray-700 border border-yellow-200">
-                    วันนี้ไม่มีงานในตาราง
+
+        // Render main content grid
+        contentData.weeks.forEach((week, weekIndex) => {
+            const weekSection = document.createElement('section');
+            weekSection.classList.add('fade-in-up');
+            weekSection.style.animationDelay = `${(weekIndex + 2) * 150}ms`;
+            
+            weekSection.innerHTML = `
+                <div class="mb-6">
+                    <h2 class="text-2xl sm:text-3xl md:text-4xl font-bold text-white">Week ${week.weekNumber} <span class="text-amber-400 font-light">(${week.range})</span></h2>
+                    <p class="text-gray-400 mt-1"><strong>Theme:</strong> ${week.theme}</p>
+                    <p class="text-amber-400 font-semibold mt-1"><strong><i class="inline-block" data-lucide="camera"></i> Shoot Day:</strong> ${week.shootDate}</p>
+                </div>
+                <div class="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 lg:grid-cols-4 xl:grid-cols-7 gap-6">
+                    ${week.content.map((item, index) => {
+                         const isShootingDay = isShootDay(item.postDate, week.shootDate);
+                         return `
+                            <div data-week="${week.weekNumber-1}" data-content="${index}" class="content-card bg-gray-900 rounded-lg p-4 flex flex-col justify-between transition-all duration-300 cursor-pointer">
+                                <div>
+                                    <div class="flex justify-between items-center mb-3">
+                                        <p class="font-bold text-xl text-white">${item.postDate}</p>
+                                        ${isShootingDay ? '<span class="shoot-day-badge text-xs px-2 py-1 rounded">SHOOT</span>' : ''}
+                                    </div>
+                                    <h3 class="font-semibold h-24 text-gray-300 text-base sm:text-lg">${item.title}</h3>
+                                </div>
+                                <button class="mt-4 w-full bg-gray-800 text-amber-400 font-semibold py-2 rounded hover:bg-amber-400 hover:text-black transition-colors duration-300 text-sm border border-gray-700">DETAILS</button>
+                            </div>
+                         `;
+                    }).join('')}
                 </div>
             `;
-        } else {
-            let html = `
-                <div class="bg-blue-50 rounded-xl shadow p-6 border border-blue-200">
-                    <h2 class="text-2xl font-bold text-blue-700 mb-4">งานวันนี้ (${foundDay.date})</h2>
-            `;
-            foundDay.tasks.forEach(task => {
-                html += `
-                    <div class="mb-4 p-4 rounded-lg bg-white border border-gray-200 shadow flex flex-col sm:flex-row sm:items-center">
-                        <div class="font-bold text-blue-700 w-24 sm:w-32 text-right flex-shrink-0">${task.time}</div>
-                        <div class="flex-grow ml-0 sm:ml-6">
-                            <div class="font-semibold text-green-700">${task.title}</div>
-                            ${task.details ? `<div class="text-gray-800 text-sm mt-1">รายละเอียด: ${task.details}</div>` : ''}
+            contentGrid.appendChild(weekSection);
+        });
+
+        // Render backup content
+        const backupSection = document.createElement('section');
+        backupSection.classList.add('fade-in-up');
+        backupSection.style.animationDelay = `${(contentData.weeks.length + 2) * 150}ms`;
+
+        backupSection.innerHTML = `
+            <div class="mb-6">
+                <h2 class="text-2xl sm:text-3xl md:text-4xl font-bold text-slate-300">Backup Content</h2>
+                <p class="text-gray-400">สำหรับใช้ในกรณีฉุกเฉิน หรือปรับเปลี่ยนแผน</p>
+            </div>
+            <div class="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 lg:grid-cols-4 gap-6">
+                 ${contentData.backup.map((item, index) => `
+                    <div data-backup="${index}" class="content-card bg-gray-900 rounded-lg p-4 flex flex-col justify-between transition-all duration-300 cursor-pointer border-dashed border-gray-600">
+                        <div>
+                            <h3 class="font-semibold text-slate-300 h-16 text-base sm:text-lg">${item.title}</h3>
                         </div>
+                         <button class="mt-4 w-full bg-gray-800 text-amber-400 font-semibold py-2 rounded hover:bg-amber-400 hover:text-black transition-colors duration-300 text-sm border border-gray-700">DETAILS</button>
                     </div>
-                `;
+                 `).join('')}
+            </div>
+        `;
+        contentGrid.appendChild(backupSection);
+
+        // Add event listeners
+        document.querySelectorAll('.content-card').forEach(card => {
+            card.addEventListener('click', () => {
+                const weekIndex = card.dataset.week;
+                const contentIndex = card.dataset.content;
+                const backupIndex = card.dataset.backup;
+
+                if (weekIndex !== undefined && contentIndex !== undefined) {
+                    const item = contentData.weeks[weekIndex].content[contentIndex];
+                    showModal(item);
+                } else if (backupIndex !== undefined) {
+                    const item = contentData.backup[backupIndex];
+                    showModal(item);
+                }
             });
-            html += `</div>`;
-            section.innerHTML = html;
-        }
-    }
-
-    // เพิ่มฟังก์ชันแสดงผลการดำเนินงานรายวัน (เฉพาะวันที่ผ่านมา)
-    function renderPerformanceCards() {
-        const container = document.getElementById('performance-cards');
-        if (!container) return;
-        container.innerHTML = '';
-
-        const today = new Date();
-        const buddhistYear = today.getFullYear() + 543;
-        const month = today.toLocaleString('th-TH', { month: 'long' });
-        const day = today.getDate();
-
-        // ปรับรูปแบบปัญหาให้เป็น array เพื่อแสดงเป็นข้อๆ
-        const issuesList = [
-            ["อุปกรณ์กล้องมีปัญหา ต้องเปลี่ยนแบตระหว่างถ่ายทำ", "ไฟล์เสียงบางช่วงไม่ชัด ต้องแก้ไขในการตัดต่อ"],
-            ["ทีมงานล่าช้าเล็กน้อยเนื่องจากฝนตก"],
-            ["ร้านขอเปลี่ยนคิวถ่ายทำกะทันหัน", "อินเทอร์เน็ตช้า ส่งไฟล์งานล่าช้า"],
-            [],
-            ["ไม่มีปัญหา"]
-        ];
-
-        let totalDays = 0;
-        let totalTasks = 0;
-        let totalFinished = 0;
-
-        scheduleData.forEach((entry, idx) => {
-            const match = entry.date.match(/(\d{1,2}) ([ก-๙]+) (\d{4})/);
-            if (!match) return;
-            const entryDay = parseInt(match[1]);
-            const entryMonth = match[2];
-            const entryYear = parseInt(match[3]);
-            if (
-                entryYear < buddhistYear ||
-                (entryYear === buddhistYear && entryMonth === month && entryDay < day)
-            ) {
-                totalDays++;
-                const finishedTasks = entry.tasks.length;
-                totalTasks += entry.tasks.length;
-                totalFinished += finishedTasks;
-
-                // เลือกปัญหาจาก issuesList แบบวนลูป
-                const issues = issuesList[idx % issuesList.length];
-                const hasIssue = issues.length > 0 && !(issues.length === 1 && issues[0] === "ไม่มีปัญหา");
-                let issueColor = hasIssue ? "text-red-600" : "text-green-700";
-                let statusText = hasIssue ? "มีปัญหา" : "เสร็จสมบูรณ์";
-                let statusColor = hasIssue ? "bg-red-100 text-red-700" : "bg-green-100 text-green-700";
-
-                container.innerHTML += `
-                    <div class="rounded-xl border border-gray-200 shadow p-4 ${statusColor}">
-                        <div class="flex items-center justify-between mb-2">
-                            <span class="font-bold text-lg">${entry.date}</span>
-                            <span class="px-3 py-1 rounded-full font-semibold ${statusColor}">${statusText}</span>
-                        </div>
-                        <div class="text-gray-700 mb-2">จำนวนงาน: ${finishedTasks} / ${entry.tasks.length}</div>
-                        <ul class="list-disc pl-6 text-base text-gray-800 mb-2">
-                            ${entry.tasks.map(task => `<li>${task.time} - ${task.title}</li>`).join('')}
-                        </ul>
-                        <div class="mt-2 font-kanit text-base ${issueColor}">
-                            <span class="font-semibold">หมายเหตุ:</span>
-                            ${issues.length === 0 ? `<span>ไม่มีปัญหา</span>` : `
-                                <ul class="list-decimal pl-6 mt-1">
-                                    ${issues.map(issue => `<li>${issue}</li>`).join('')}
-                                </ul>
-                            `}
-                        </div>
-                    </div>
-                `;
+        });
+        
+        closeModalBtn.addEventListener('click', hideModal);
+        modal.addEventListener('click', (e) => {
+            if (e.target === modal) {
+                hideModal();
             }
         });
 
-        // สรุปภาพรวมด้านบน
-        if (totalDays > 0) {
-            const percent = Math.round((totalFinished / totalTasks) * 100);
-            container.innerHTML = `
-                <div class="mb-6 p-4 rounded-xl bg-green-200 text-green-900 font-kanit text-lg font-semibold flex flex-col sm:flex-row sm:items-center sm:justify-between">
-                    <div>จำนวนวันที่ผ่านมา: ${totalDays} วัน</div>
-                    <div>งานที่เสร็จ: ${totalFinished} / ${totalTasks} (${percent}%)</div>
-                </div>
-            ` + container.innerHTML;
-        } else {
-            container.innerHTML = `
-                <div class="p-6 text-center text-gray-500 font-kanit">ยังไม่มีผลการดำเนินงานในช่วงเวลานี้</div>
-            `;
-        }
-    }
-</script>
+        lucide.createIcons();
+    </script>
 </body>
 </html>
+
