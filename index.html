@@ -43,6 +43,7 @@
             border-radius: 50%;
             filter: blur(150px);
             opacity: 0.25;
+            transition: background-color 0.5s ease-in-out;
         }
 
         .aurora-1 {
@@ -99,9 +100,16 @@
             to { box-shadow: 0 0 15px var(--accent-color), 0 0 25px var(--accent-color); }
         }
         
+        #qr-code-container {
+            position: relative;
+            width: 140px;
+            height: 140px;
+        }
         #qr-code {
-            box-shadow: var(--accent-glow);
-            animation: pulse-glow 2.5s infinite alternate;
+           border-radius: 0.5rem;
+           box-shadow: var(--accent-glow);
+           animation: pulse-glow 2.5s infinite alternate;
+           border: 2px solid var(--accent-color);
         }
 
         .modal { transition: opacity 0.3s ease, visibility 0.3s ease; }
@@ -237,8 +245,10 @@
                     <p class="flex items-center space-x-2"><i data-lucide="message-square" class="w-4 h-4" style="color: var(--accent-color);"></i><span>Line ID: frankchetsarit</span></p>
                 </div>
             </div>
-            <div class="text-center">
-                 <canvas id="qr-code" class="rounded-lg border-2" style="border-color: var(--accent-color);"></canvas>
+            <div class="flex flex-col items-center justify-center">
+                 <div id="qr-code-container">
+                    <canvas id="qr-code"></canvas>
+                 </div>
                  <p class="mt-2 text-sm font-semibold" style="color: var(--accent-color);">สแกนเพื่อแชร์หน้านี้</p>
             </div>
         </section>
@@ -644,9 +654,49 @@
 
 
         window.onload = function() {
-            new QRious({ element: document.getElementById('qr-code'), value: 'https://marketingntk.vercel.app/', size: 140, padding: 10, background: '#111827', foreground: 'var(--accent-color)' });
-            setupTabs();
-            renderPageForRestaurant(Object.keys(allRestaurantsData)[0]);
+            const qrCanvas = document.getElementById('qr-code');
+            function generateQrCode() {
+                const accentColor = getComputedStyle(document.body).getPropertyValue('--accent-color').trim();
+                new QRious({ 
+                    element: qrCanvas, 
+                    value: 'https://marketingntk.vercel.app/', 
+                    size: 140, 
+                    padding: 10, 
+                    background: 'transparent', 
+                    foreground: accentColor 
+                });
+            }
+
+            function renderAndGenerateQr(restaurantName) {
+                renderPageForRestaurant(restaurantName);
+                generateQrCode();
+            }
+
+            const restaurantNames = Object.keys(allRestaurantsData);
+            restaurantTabsContainer.innerHTML = '';
+            restaurantNames.forEach((name, index) => {
+                const tab = document.createElement('button');
+                tab.className = 'restaurant-tab text-gray-400 font-semibold py-3 px-6 hover:text-[var(--accent-color)] whitespace-nowrap';
+                tab.textContent = name;
+                tab.dataset.restaurant = name;
+                if (index === 0) {
+                    tab.classList.add('active');
+                }
+                restaurantTabsContainer.appendChild(tab);
+            });
+
+            restaurantTabsContainer.addEventListener('click', (e) => {
+                if (e.target.matches('.restaurant-tab')) {
+                    const restaurantName = e.target.dataset.restaurant;
+                    if (restaurantTabsContainer.querySelector('.active')) {
+                        restaurantTabsContainer.querySelector('.active').classList.remove('active');
+                    }
+                    e.target.classList.add('active');
+                    renderAndGenerateQr(restaurantName);
+                }
+            });
+            
+            renderAndGenerateQr(Object.keys(allRestaurantsData)[0]);
         };
     </script>
 </body>
