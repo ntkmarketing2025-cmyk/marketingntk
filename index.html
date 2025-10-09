@@ -129,6 +129,8 @@
             padding: 0.5rem;
             border-radius: 0.375rem;
             transition: border-color 0.3s ease;
+            display: flex;
+            flex-direction: column;
         }
         .calendar-day.other-month {
             background-color: #030712;
@@ -156,6 +158,23 @@
         }
         .content-entry:hover {
             background-color: #374151;
+        }
+
+        @media (max-width: 768px) {
+            .calendar-grid {
+                grid-template-columns: repeat(7, minmax(120px, 1fr));
+            }
+            .calendar-day {
+                min-height: 120px;
+                padding: 0.25rem;
+            }
+            .day-number {
+                font-size: 0.75rem;
+            }
+            .content-entry {
+                font-size: 0.65rem;
+                padding: 0.2rem 0.4rem;
+            }
         }
     </style>
 </head>
@@ -429,7 +448,39 @@
                 const dateKey = `${day} ต.ค.`;
                 const dayEl = document.createElement('div');
                 dayEl.className = 'calendar-day';
-                dayEl.innerHTML = `<div class="day-number">${day}</div>`;
+                
+                const dayNumberDiv = document.createElement('div');
+                dayNumberDiv.className = 'day-number flex justify-between items-center';
+                dayNumberDiv.innerHTML = `<span>${day}</span>`;
+
+                const shootDateKeyForThisDay = Object.keys(shootingSchedule).find(shootKey => {
+                    const shootDay = parseInt(shootKey.split(' ')[0]);
+                    return day === shootDay;
+                });
+                
+                if (shootDateKeyForThisDay) {
+                    const shootBadgeContainer = document.createElement('div');
+                    shootBadgeContainer.className = 'shoot-day-badge-container';
+
+                    const shootBadge = document.createElement('span');
+                    shootBadge.className = 'shoot-day-badge text-xs px-2 py-0.5 rounded';
+                    shootBadge.textContent = 'SHOOT';
+                    shootBadgeContainer.appendChild(shootBadge);
+
+                    const popover = document.createElement('div');
+                    popover.className = 'shoot-day-popover';
+                    
+                    const popoverList = shootingSchedule[shootDateKeyForThisDay].map(sItem => 
+                        `<li data-week="${sItem.weekIndex}" data-content="${sItem.contentIndex}">${sItem.title}</li>`
+                    ).join('');
+
+                    popover.innerHTML = `<h4 class="font-bold text-amber-400 mb-1 text-sm">รายการที่ถ่ายวันนี้:</h4><ul>${popoverList}</ul>`;
+                    shootBadgeContainer.appendChild(popover);
+                    dayNumberDiv.appendChild(shootBadgeContainer);
+                }
+
+
+                dayEl.appendChild(dayNumberDiv);
                 
                 const dayContent = document.createElement('div');
                 dayContent.className = 'space-y-1';
@@ -491,6 +542,33 @@
                         showModal(item);
                     }
                 });
+            });
+
+             document.querySelectorAll('.shoot-day-popover li').forEach(li => {
+                li.addEventListener('click', (e) => {
+                    e.stopPropagation();
+                    const weekIndex = li.dataset.week;
+                    const contentIndex = li.dataset.content;
+                    if (weekIndex !== undefined && contentIndex !== undefined) {
+                        showModal(contentData.weeks[weekIndex].content[contentIndex]);
+                    }
+                });
+            });
+
+            document.querySelectorAll('.shoot-day-badge-container').forEach(container => {
+                const badge = container.querySelector('.shoot-day-badge');
+                if (badge) {
+                    badge.addEventListener('click', (event) => {
+                        event.stopPropagation();
+                        const popover = container.querySelector('.shoot-day-popover');
+                        if (popover) {
+                            document.querySelectorAll('.shoot-day-popover.popover-visible').forEach(p => {
+                                if (p !== popover) p.classList.remove('popover-visible');
+                            });
+                            popover.classList.toggle('popover-visible');
+                        }
+                    });
+                }
             });
 
             lucide.createIcons();
