@@ -25,6 +25,7 @@
             letter-spacing: 0.5px;
             position: relative;
             z-index: 10;
+            cursor: pointer;
         }
 
         /* Glowing effect for shoot-day-badge */
@@ -97,13 +98,20 @@
         .shoot-day-popover li {
             padding: 0.25rem 0;
             border-bottom: 1px dashed #374151;
+            cursor: pointer;
+            transition: color 0.2s ease-in-out;
+        }
+
+        .shoot-day-popover li:hover {
+            color: #fbbf24;
         }
 
         .shoot-day-popover li:last-child {
             border-bottom: none;
         }
 
-        .shoot-day-badge-container:hover .shoot-day-popover {
+        .shoot-day-badge-container:hover .shoot-day-popover,
+        .shoot-day-popover.popover-visible {
             opacity: 1;
             visibility: visible;
             transform: translateX(-50%) translateY(-20px); /* Lift slightly on hover */
@@ -480,11 +488,11 @@
                 <div class="grid grid-cols-2 sm:grid-cols-3 md:grid-cols-4 lg:grid-cols-5 xl:grid-cols-7 gap-4">
                     ${week.content.map((item, index) => {
                          const isShootingDay = isShootDay(item.postDate, week.shootDate);
-                         let shootDayItems = [];
+                         let shootDayScheduleItems = [];
                          if (isShootingDay) {
                             const shootDateKey = normalizeDateKey(item.postDate);
                             if (shootingSchedule[shootDateKey]) {
-                                shootDayItems = shootingSchedule[shootDateKey].map(sItem => sItem.title);
+                                shootDayScheduleItems = shootingSchedule[shootDateKey];
                             }
                          }
 
@@ -499,7 +507,10 @@
                                                 <div class="shoot-day-popover">
                                                     <h4 class="font-bold text-amber-400 mb-1">รายการที่ถ่ายวันนี้:</h4>
                                                     <ul>
-                                                        ${shootDayItems.map(title => `<li>${title}</li>`).join('')}
+                                                        ${shootDayScheduleItems.map(sItem => `
+                                                        <li data-week="${sItem.weekIndex}" data-content="${sItem.contentIndex}">
+                                                            ${sItem.title}
+                                                        </li>`).join('')}
                                                     </ul>
                                                 </div>
                                             </div>
@@ -541,7 +552,11 @@
 
         // Add event listeners
         document.querySelectorAll('.content-card').forEach(card => {
-            card.addEventListener('click', () => {
+            card.addEventListener('click', (e) => {
+                 // Stop if the click is on the badge/popover area itself
+                if (e.target.closest('.shoot-day-badge-container')) {
+                    return;
+                }
                 const weekIndex = card.dataset.week;
                 const contentIndex = card.dataset.content;
                 const backupIndex = card.dataset.backup;
@@ -556,10 +571,47 @@
             });
         });
         
+        document.querySelectorAll('.shoot-day-popover li').forEach(li => {
+            li.addEventListener('click', (e) => {
+                e.stopPropagation();
+                const weekIndex = li.dataset.week;
+                const contentIndex = li.dataset.content;
+
+                if (weekIndex !== undefined && contentIndex !== undefined) {
+                    const item = contentData.weeks[weekIndex].content[contentIndex];
+                    showModal(item);
+                }
+            });
+        });
+
+        document.querySelectorAll('.shoot-day-badge-container').forEach(container => {
+            const badge = container.querySelector('.shoot-day-badge');
+            if (badge) {
+                badge.addEventListener('click', (event) => {
+                    event.stopPropagation();
+                    const popover = container.querySelector('.shoot-day-popover');
+                    if (popover) {
+                        document.querySelectorAll('.shoot-day-popover.popover-visible').forEach(p => {
+                            if (p !== popover) p.classList.remove('popover-visible');
+                        });
+                        popover.classList.toggle('popover-visible');
+                    }
+                });
+            }
+        });
+        
         closeModalBtn.addEventListener('click', hideModal);
-        modal.addEventListener('click', (e) => {
+        
+        document.addEventListener('click', (e) => {
+            // Close modal if click is outside
             if (e.target === modal) {
                 hideModal();
+            }
+            // Close popover if click is outside badge container
+            if (!e.target.closest('.shoot-day-badge-container')) {
+                document.querySelectorAll('.shoot-day-popover.popover-visible').forEach(p => {
+                    p.classList.remove('popover-visible');
+                });
             }
         });
 
