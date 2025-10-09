@@ -7,6 +7,7 @@
     <script src="https://cdn.tailwindcss.com"></script>
     <link href="https://fonts.googleapis.com/css2?family=Kanit:wght@300;400;500;600;700&display=swap" rel="stylesheet">
     <script src="https://unpkg.com/lucide@latest"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/qrious/4.0.2/qrious.min.js"></script>
     <style>
         body {
             font-family: 'Kanit', sans-serif;
@@ -22,7 +23,92 @@
             font-weight: 600;
             text-transform: uppercase;
             letter-spacing: 0.5px;
+            position: relative;
+            z-index: 10;
         }
+
+        /* Glowing effect for shoot-day-badge */
+        .shoot-day-badge::before {
+            content: '';
+            position: absolute;
+            top: -2px;
+            left: -2px;
+            right: -2px;
+            bottom: -2px;
+            background-color: #fbbf24;
+            filter: blur(8px); /* Increased blur for more glow */
+            border-radius: 0.25rem; /* Match badge border-radius */
+            opacity: 0.6; /* More subtle glow */
+            z-index: -1;
+            transition: opacity 0.3s ease-in-out;
+        }
+
+        .shoot-day-badge:hover::before {
+            opacity: 1;
+            filter: blur(12px); /* Stronger glow on hover */
+        }
+
+        /* Popover for shoot day items */
+        .shoot-day-badge-container {
+            position: relative;
+            display: inline-block; /* Essential for positioning */
+        }
+
+        .shoot-day-popover {
+            position: absolute;
+            bottom: 100%; /* Position above the badge */
+            left: 50%;
+            transform: translateX(-50%) translateY(-10px); /* Adjust for spacing */
+            background-color: #1a1a1a;
+            border: 1px solid #fbbf24;
+            border-radius: 0.5rem;
+            padding: 0.75rem 1rem;
+            color: #e5e7eb;
+            font-size: 0.875rem;
+            white-space: nowrap;
+            opacity: 0;
+            visibility: hidden;
+            transition: opacity 0.3s ease, visibility 0.3s ease, transform 0.3s ease;
+            z-index: 50; /* Ensure it's above other elements */
+            box-shadow: 0 4px 15px rgba(251, 191, 36, 0.2);
+            min-width: 150px; /* Minimum width for readability */
+        }
+
+        .shoot-day-popover::after { /* Arrow at the bottom of the popover */
+            content: '';
+            position: absolute;
+            top: 100%;
+            left: 50%;
+            transform: translateX(-50%) translateY(-1px);
+            width: 0;
+            height: 0;
+            border-left: 8px solid transparent;
+            border-right: 8px solid transparent;
+            border-top: 8px solid #fbbf24;
+            filter: drop-shadow(0 4px 2px rgba(251, 191, 36, 0.1)); /* Soft shadow for arrow */
+        }
+
+        .shoot-day-popover ul {
+            list-style: none;
+            padding: 0;
+            margin: 0;
+        }
+
+        .shoot-day-popover li {
+            padding: 0.25rem 0;
+            border-bottom: 1px dashed #374151;
+        }
+
+        .shoot-day-popover li:last-child {
+            border-bottom: none;
+        }
+
+        .shoot-day-badge-container:hover .shoot-day-popover {
+            opacity: 1;
+            visibility: visible;
+            transform: translateX(-50%) translateY(-20px); /* Lift slightly on hover */
+        }
+
         .modal {
             transition: opacity 0.3s ease, visibility 0.3s ease;
         }
@@ -60,51 +146,65 @@
 </head>
 <body class="text-gray-200">
 
-    <!-- Header -->
-    <header class="header-gradient text-white p-6 sm:p-8 shadow-2xl text-center border-b-2 border-amber-500 fade-in-up">
+    <!-- Header --><header class="header-gradient text-white p-6 sm:p-8 shadow-2xl text-center border-b-2 border-amber-500 fade-in-up">
         <h1 class="text-3xl sm:text-4xl md:text-5xl font-bold tracking-wide">Production Plan</h1>
         <p class="text-lg sm:text-xl mt-2 font-light text-amber-400">ร้านลูกเจี๊ยบ หมูกระทะ | ตุลาคม 2025</p>
     </header>
 
-    <!-- Shooting Day Summary -->
-    <div class="container mx-auto p-4 sm:px-6 md:px-8 mt-8">
+    <!-- Shooting Day Summary --><div class="container mx-auto p-4 sm:px-6 md:px-8 mt-8">
         <section id="shooting-summary" class="fade-in-up" style="animation-delay: 150ms;">
             <h2 class="text-2xl sm:text-3xl font-bold text-amber-400 mb-4 border-b-2 border-gray-800 pb-2 flex items-center space-x-3">
                 <i data-lucide="clapperboard" class="w-7 h-7 sm:w-8 sm:h-8"></i>
                 <span>สรุปวันถ่ายทำ (Shooting Schedule)</span>
             </h2>
             <div id="schedule-container" class="space-y-4">
-                <!-- Schedule will be injected here by JavaScript -->
-            </div>
+                <!-- Schedule will be injected here by JavaScript --></div>
         </section>
     </div>
 
-    <!-- Main Content -->
-    <main class="container mx-auto p-4 sm:p-6 md:p-8">
+    <!-- Main Content --><main class="container mx-auto p-4 sm:p-6 md:p-8">
         <div id="content-grid" class="space-y-16">
-            <!-- Content will be injected here by JavaScript -->
-        </div>
+            <!-- Content will be injected here by JavaScript --></div>
     </main>
 
-    <!-- Modal -->
-    <div id="detail-modal" class="modal fixed inset-0 z-50 flex items-center justify-center bg-black bg-opacity-80 p-4 opacity-0 invisible">
+    <!-- Modal --><div id="detail-modal" class="modal fixed inset-0 z-50 flex items-center justify-center bg-black bg-opacity-80 p-4 opacity-0 invisible">
         <div id="modal-content" class="modal-content bg-black border-2 border-amber-500 rounded-lg shadow-2xl w-full max-w-2xl max-h-[90vh] overflow-y-auto transform scale-95">
-            <!-- Modal Header -->
-            <div class="sticky top-0 bg-black bg-opacity-80 backdrop-blur-sm p-4 sm:p-5 border-b border-amber-500/50 flex justify-between items-center">
+            <!-- Modal Header --><div class="sticky top-0 bg-black bg-opacity-80 backdrop-blur-sm p-4 sm:p-5 border-b border-amber-500/50 flex justify-between items-center">
                 <h2 id="modal-title" class="text-xl sm:text-2xl font-semibold text-amber-400"></h2>
                 <button id="close-modal-btn" class="text-gray-400 hover:text-red-500 transition-colors">
                     <i data-lucide="x-circle" class="w-8 h-8"></i>
                 </button>
             </div>
-            <!-- Modal Body -->
-            <div id="modal-body" class="p-4 sm:p-6 space-y-5">
-                <!-- Details will be injected here -->
-            </div>
+            <!-- Modal Body --><div id="modal-body" class="p-4 sm:p-6 space-y-5">
+                <!-- Details will be injected here --></div>
         </div>
     </div>
     
-    <!-- Footer -->
-    <footer class="mt-20 py-10 border-t border-gray-800">
+    <!-- Project Manager & QR Code Section --><div class="container mx-auto p-4 sm:px-6 md:px-8 mt-16">
+        <section class="bg-gray-900 border-2 border-gray-700 rounded-lg p-6 flex flex-col sm:flex-row items-center justify-between gap-6 fade-in-up" style="animation-delay: 50ms;">
+            <div class="flex-1">
+                <h2 class="text-xl sm:text-2xl font-bold text-amber-400 mb-3">ผู้รับผิดชอบโครงการ</h2>
+                <p class="text-lg font-semibold text-white">Frank Chetsarit</p>
+                <p class="text-md text-gray-400">Graphic design NTK</p>
+                <div class="mt-4 space-y-2 text-gray-300">
+                    <p class="flex items-center space-x-2">
+                        <i data-lucide="phone" class="w-4 h-4 text-amber-400"></i>
+                        <span>081-262-5455</span>
+                    </p>
+                    <p class="flex items-center space-x-2">
+                        <i data-lucide="message-square" class="w-4 h-4 text-amber-400"></i>
+                        <span>Line ID: frankchetsarit</span>
+                    </p>
+                </div>
+            </div>
+            <div class="text-center">
+                 <canvas id="qr-code" class="rounded-lg border-2 border-amber-500"></canvas>
+                 <p class="mt-2 text-sm text-amber-400 font-semibold">สแกนเพื่อแชร์หน้านี้</p>
+            </div>
+        </section>
+    </div>
+
+    <!-- Footer --><footer class="mt-10 py-10 border-t border-gray-800">
         <div class="container mx-auto text-center text-gray-500 px-4">
             <p class="font-bold text-base sm:text-lg text-gray-400">LUKJEAB Mookrata Official</p>
             <p class="text-sm mt-1">Production & Content Calendar Management System</p>
@@ -208,10 +308,28 @@
         const modalBody = document.getElementById('modal-body');
         const closeModalBtn = document.getElementById('close-modal-btn');
 
+        const thaiMonthMap = {
+            'มกราคม': 'ม.ค.', 'กุมภาพันธ์': 'ก.พ.', 'มีนาคม': 'มี.ค.',
+            'เมษายน': 'เม.ย.', 'พฤษภาคม': 'พ.ค.', 'มิถุนายน': 'มิ.ย.',
+            'กรกฎาคม': 'ก.ค.', 'สิงหาคม': 'ส.ค.', 'กันยายน': 'ก.ย.',
+            'ตุลาคม': 'ต.ค.', 'พฤศจิกายน': 'พ.ย.', 'ธันวาคม': 'ธ.ค.'
+        };
+
+        function normalizeDateKey(dateStr) {
+            if (!dateStr) return '';
+            const parts = dateStr.split(' ');
+            if (parts.length < 2) return dateStr;
+            const day = parts[0];
+            let month = parts[1];
+            if (thaiMonthMap[month]) {
+                month = thaiMonthMap[month];
+            }
+            return `${day} ${month}`;
+        }
+
         function isShootDay(postDateStr, shootDateStr) {
-            const postDay = postDateStr.split(' ')[0];
-            const shootDay = shootDateStr.split(' ')[0];
-            return postDay === shootDay;
+            if (!postDateStr || !shootDateStr) return false;
+            return normalizeDateKey(postDateStr) === normalizeDateKey(shootDateStr);
         }
 
         function createDetailItem(icon, label, value) {
@@ -252,52 +370,69 @@
             }, 300);
         }
 
-        // --- NEW: Create Shooting Schedule ---
+        // --- Create Shooting Schedule ---
         const shootingSchedule = {};
-        contentData.weeks.forEach(week => {
-            const shootDateKey = week.shootDate;
-            if (shootDateKey.startsWith("ใช้ฟุตเทจ")) return; // Skip non-direct shooting days
+        contentData.weeks.forEach((week, weekIndex) => {
+            const rawShootDateKey = week.shootDate; 
+            if (rawShootDateKey.startsWith("ใช้ฟุตเทจ")) return; 
+
+            const shootDateKey = normalizeDateKey(rawShootDateKey);
             
             if (!shootingSchedule[shootDateKey]) {
                 shootingSchedule[shootDateKey] = [];
             }
-            week.content.forEach(item => {
-                shootingSchedule[shootDateKey].push(item.title);
+            week.content.forEach((item, contentIndex) => {
+                if (normalizeDateKey(item.shootDate) === shootDateKey) {
+                    const scheduleItem = {
+                        title: item.title,
+                        weekIndex: weekIndex,
+                        contentIndex: contentIndex
+                    };
+                    if (!shootingSchedule[shootDateKey].some(existingItem => existingItem.title === scheduleItem.title)) {
+                        shootingSchedule[shootDateKey].push(scheduleItem);
+                    }
+                }
             });
         });
 
-        // --- NEW: Render Shooting Schedule ---
+
+        // --- Render Shooting Schedule ---
         const scheduleContainer = document.getElementById('schedule-container');
         for (const date in shootingSchedule) {
             const scheduleItem = document.createElement('div');
             scheduleItem.classList.add('bg-gray-900', 'border-2', 'border-gray-700', 'rounded-lg', 'overflow-hidden', 'transition-all', 'duration-300', 'hover:border-amber-500');
             
-            const titles = shootingSchedule[date];
+            const items = shootingSchedule[date];
             
             scheduleItem.innerHTML = `
                 <button class="w-full flex justify-between items-center p-4 text-left hover:bg-gray-800 transition-colors duration-300">
                     <span class="text-lg sm:text-xl font-semibold text-white">${date}</span>
                     <div class="flex items-center space-x-3">
-                        <span class="text-amber-400 font-bold">${titles.length} รายการ</span>
+                        <span class="text-amber-400 font-bold">${items.length} รายการ</span>
                         <i data-lucide="chevron-down" class="text-amber-400 transition-transform duration-300"></i>
                     </div>
                 </button>
                 <div class="h-0 overflow-hidden transition-all duration-500 ease-in-out">
-                    <ul class="p-4 pt-0 border-t-2 border-gray-800 list-disc list-inside text-gray-300 space-y-2 text-sm sm:text-base">
-                        ${[...new Set(titles)].map(title => `<li>${title}</li>`).join('')}
+                    <ul class="p-4 pt-0 border-t-2 border-gray-800 list-inside text-gray-300 space-y-2 text-sm sm:text-base">
+                        ${items.map(item => `
+                            <li class="cursor-pointer hover:text-amber-400 transition-colors duration-200 pl-2"
+                                data-week="${item.weekIndex}" 
+                                data-content="${item.contentIndex}">
+                                ${item.title}
+                            </li>
+                        `).join('')}
                     </ul>
                 </div>
             `;
             scheduleContainer.appendChild(scheduleItem);
         }
 
-        // --- NEW: Add Accordion Interactivity ---
+        // --- Add Accordion & Schedule Item Interactivity ---
         scheduleContainer.querySelectorAll('button').forEach(button => {
             button.addEventListener('click', () => {
                 const contentDiv = button.nextElementSibling;
                 const icon = button.querySelector('i[data-lucide="chevron-down"]');
 
-                // Close other open accordions
                 scheduleContainer.querySelectorAll('.h-auto').forEach(openContent => {
                     if (openContent !== contentDiv) {
                         openContent.style.height = '0px';
@@ -316,13 +451,26 @@
             });
         });
 
+        scheduleContainer.querySelectorAll('li[data-week]').forEach(li => {
+            li.addEventListener('click', (e) => {
+                e.stopPropagation(); 
+                const weekIndex = li.dataset.week;
+                const contentIndex = li.dataset.content;
+
+                if (weekIndex !== undefined && contentIndex !== undefined) {
+                    const item = contentData.weeks[weekIndex].content[contentIndex];
+                    showModal(item);
+                }
+            });
+        });
+
 
         // Render main content grid
         contentData.weeks.forEach((week, weekIndex) => {
             const weekSection = document.createElement('section');
             weekSection.classList.add('fade-in-up');
             weekSection.style.animationDelay = `${(weekIndex + 2) * 150}ms`;
-            
+
             weekSection.innerHTML = `
                 <div class="mb-6">
                     <h2 class="text-2xl sm:text-3xl md:text-4xl font-bold text-white">Week ${week.weekNumber} <span class="text-amber-400 font-light">(${week.range})</span></h2>
@@ -332,12 +480,30 @@
                 <div class="grid grid-cols-2 sm:grid-cols-3 md:grid-cols-4 lg:grid-cols-5 xl:grid-cols-7 gap-4">
                     ${week.content.map((item, index) => {
                          const isShootingDay = isShootDay(item.postDate, week.shootDate);
+                         let shootDayItems = [];
+                         if (isShootingDay) {
+                            const shootDateKey = normalizeDateKey(item.postDate);
+                            if (shootingSchedule[shootDateKey]) {
+                                shootDayItems = shootingSchedule[shootDateKey].map(sItem => sItem.title);
+                            }
+                         }
+
                          return `
                             <div data-week="${week.weekNumber-1}" data-content="${index}" class="content-card bg-gray-900 rounded-lg p-3 flex flex-col justify-between transition-all duration-300 cursor-pointer">
                                 <div>
                                     <div class="flex justify-between items-center mb-2">
                                         <p class="font-bold text-lg text-white">${item.postDate}</p>
-                                        ${isShootingDay ? '<span class="shoot-day-badge text-xs px-2 py-1 rounded">SHOOT</span>' : ''}
+                                        ${isShootingDay ? `
+                                            <div class="shoot-day-badge-container">
+                                                <span class="shoot-day-badge text-xs px-2 py-1 rounded">SHOOT</span>
+                                                <div class="shoot-day-popover">
+                                                    <h4 class="font-bold text-amber-400 mb-1">รายการที่ถ่ายวันนี้:</h4>
+                                                    <ul>
+                                                        ${shootDayItems.map(title => `<li>${title}</li>`).join('')}
+                                                    </ul>
+                                                </div>
+                                            </div>
+                                        ` : ''}
                                     </div>
                                     <h3 class="font-semibold h-20 text-gray-300 text-base">${item.title}</h3>
                                 </div>
@@ -396,6 +562,21 @@
                 hideModal();
             }
         });
+
+        // Generate QR Code
+        window.onload = function() {
+            const qrCanvas = document.getElementById('qr-code');
+            if (qrCanvas) {
+                new QRious({
+                    element: qrCanvas,
+                    value: window.location.href,
+                    size: 140,
+                    padding: 10,
+                    background: '#ffffff',
+                    foreground: '#000000'
+                });
+            }
+        };
 
         lucide.createIcons();
     </script>
