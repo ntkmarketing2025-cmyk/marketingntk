@@ -99,6 +99,11 @@
             to { box-shadow: 0 0 15px var(--accent-color), 0 0 25px var(--accent-color); }
         }
         
+        #qr-code {
+            box-shadow: var(--accent-glow);
+            animation: pulse-glow 2.5s infinite alternate;
+        }
+
         .modal { transition: opacity 0.3s ease, visibility 0.3s ease; }
         .modal-content {
             transition: transform 0.3s ease;
@@ -608,10 +613,8 @@
         closeShootModalBtn.addEventListener('click', hideShootModal);
         
         document.addEventListener('click', (e) => {
-            const detailModal = document.getElementById('detail-modal');
-            const shootModal = document.getElementById('shoot-modal');
-            if (e.target === detailModal) hideModal();
-            if (e.target === shootModal) hideShootModal();
+            if (e.target === document.getElementById('detail-modal')) hideModal();
+            if (e.target === document.getElementById('shoot-modal')) hideShootModal();
         });
         
         const searchInput = document.getElementById('search-input');
@@ -641,7 +644,7 @@
 
 
         window.onload = function() {
-            new QRious({ element: document.getElementById('qr-code'), value: 'https://marketingntk.vercel.app/', size: 140, padding: 10, background: '#ffffff', foreground: '#000000' });
+            new QRious({ element: document.getElementById('qr-code'), value: 'https://marketingntk.vercel.app/', size: 140, padding: 10, background: '#111827', foreground: 'var(--accent-color)' });
             setupTabs();
             renderPageForRestaurant(Object.keys(allRestaurantsData)[0]);
         };
