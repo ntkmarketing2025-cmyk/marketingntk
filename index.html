@@ -469,11 +469,9 @@
                 const dateKey = `${day} ต.ค.`;
                 const rowEl = document.createElement('div');
                 rowEl.className = 'date-row';
-                // Highlight today's date
-                if(day === 9 && new Date().getMonth() === 9 && new Date().getFullYear() === 2025) { // Assuming current date is Oct 9, 2025 for demo
+                if(day === 9 && new Date().getMonth() === 9 && new Date().getFullYear() === 2025) { 
                      rowEl.classList.add('is-today');
                 }
-
 
                 const dateCol = document.createElement('div');
                 dateCol.className = 'date-col';
@@ -629,7 +627,7 @@
                             hasMatch = true;
                         }
                     });
-                } else if(row.querySelector('.text-gray-600')) { // Check for "no content"
+                } else if(row.querySelector('.text-gray-600')) { 
                     if(searchTerm === "") hasMatch = true;
                 }
                 
@@ -643,7 +641,7 @@
 
 
         window.onload = function() {
-            new QRious({ element: document.getElementById('qr-code'), value: window.location.href, size: 140, padding: 10, background: '#ffffff', foreground: '#000000' });
+            new QRious({ element: document.getElementById('qr-code'), value: 'https://marketingntk.vercel.app/', size: 140, padding: 10, background: '#ffffff', foreground: '#000000' });
             setupTabs();
             renderPageForRestaurant(Object.keys(allRestaurantsData)[0]);
         };
