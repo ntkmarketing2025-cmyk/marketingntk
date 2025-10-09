@@ -3,31 +3,77 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Production Plan (Multi-Restaurant) - Luxury Edition</title>
+    <title>Production Plan (Multi-Restaurant) - WOW Edition</title>
     <script src="https://cdn.tailwindcss.com"></script>
     <link href="https://fonts.googleapis.com/css2?family=Kanit:wght@300;400;500;600;700&display=swap" rel="stylesheet">
     <script src="https://unpkg.com/lucide@latest"></script>
     <script src="https://cdnjs.cloudflare.com/ajax/libs/qrious/4.0.2/qrious.min.js"></script>
     <style>
         :root {
-            --accent-color: #fbbf24; /* amber-400 */
-            --accent-color-text-dark: #1f2937;
+            --accent-color: #fbbf24; 
+            --accent-glow: 0 0 15px #fbbf24, 0 0 30px #fbbf24, 0 0 45px #ca8a04;
         }
         [data-theme="blue"] {
-            --accent-color: #38bdf8; /* sky-400 */
+            --accent-color: #38bdf8;
+            --accent-glow: 0 0 15px #38bdf8, 0 0 30px #38bdf8, 0 0 45px #0ea5e9;
         }
         [data-theme="green"] {
-            --accent-color: #34d399; /* emerald-400 */
+            --accent-color: #34d399;
+             --accent-glow: 0 0 15px #34d399, 0 0 30px #34d399, 0 0 45px #059669;
         }
 
         body {
             font-family: 'Kanit', sans-serif;
             background-color: #000000;
             color: #e5e7eb; 
+            overflow-x: hidden;
         }
-        .header-gradient {
-            background: linear-gradient(145deg, #1f1f1f 0%, #000000 100%);
+        
+        #aurora-bg {
+            position: fixed;
+            top: 0; left: 0;
+            width: 100vw;
+            height: 100vh;
+            z-index: -1;
+            overflow: hidden;
         }
+
+        .aurora-circle {
+            position: absolute;
+            border-radius: 50%;
+            filter: blur(150px);
+            opacity: 0.25;
+        }
+
+        .aurora-1 {
+            width: 600px; height: 600px;
+            background: var(--accent-color);
+            top: -20%; left: -20%;
+            animation: move-aurora-1 25s infinite alternate ease-in-out;
+        }
+
+        .aurora-2 {
+            width: 500px; height: 500px;
+            background: #a855f7; /* purple-500 */
+            bottom: -15%; right: -15%;
+             animation: move-aurora-2 28s infinite alternate ease-in-out;
+        }
+
+        @keyframes move-aurora-1 {
+            0% { transform: translate(0, 0) scale(1); }
+            100% { transform: translate(40vw, 30vh) scale(1.2); }
+        }
+        @keyframes move-aurora-2 {
+            0% { transform: translate(0, 0) scale(1.2); }
+            100% { transform: translate(-30vw, -40vh) scale(1); }
+        }
+        
+        .glassmorphism {
+            background: rgba(17, 24, 39, 0.6); /* gray-900 with opacity */
+            backdrop-filter: blur(12px);
+            border: 1px solid rgba(255, 255, 255, 0.1);
+        }
+
         .restaurant-tab {
             transition: all 0.3s ease;
             border-bottom: 3px solid transparent;
@@ -35,38 +81,27 @@
         .restaurant-tab.active {
             color: var(--accent-color);
             border-bottom-color: var(--accent-color);
-            background-color: #111827;
+            background-color: rgba(17, 24, 39, 0.8);
         }
         .shoot-day-badge {
             background-color: var(--accent-color);
-            color: var(--accent-color-text-dark);
+            color: #000;
             font-weight: 600;
             text-transform: uppercase;
             letter-spacing: 0.5px;
-            position: relative;
-            z-index: 10;
             cursor: pointer;
+            box-shadow: var(--accent-glow);
+            animation: pulse-glow 2s infinite alternate;
         }
-        .shoot-day-badge::before {
-            content: '';
-            position: absolute;
-            top: -2px; left: -2px; right: -2px; bottom: -2px;
-            background-color: var(--accent-color);
-            filter: blur(8px);
-            border-radius: 0.25rem;
-            opacity: 0.6;
-            z-index: -1;
-            transition: opacity 0.3s ease-in-out;
-        }
-        .shoot-day-badge:hover::before {
-            opacity: 1;
-            filter: blur(12px);
+        
+        @keyframes pulse-glow {
+            from { box-shadow: 0 0 5px var(--accent-color), 0 0 10px var(--accent-color); }
+            to { box-shadow: 0 0 15px var(--accent-color), 0 0 25px var(--accent-color); }
         }
         
         .modal { transition: opacity 0.3s ease, visibility 0.3s ease; }
         .modal-content {
             transition: transform 0.3s ease;
-            box-shadow: 0px 0px 50px rgba(0,0,0, 0.5);
         }
         @keyframes fadeInUp { from { opacity: 0; transform: translateY(30px); } to { opacity: 1; transform: translateY(0); } }
         .fade-in-up { animation: fadeInUp 0.7s ease-out forwards; }
@@ -74,59 +109,97 @@
         .date-row {
             display: flex;
             align-items: flex-start;
-            padding: 1rem 0;
+            padding: 1rem;
             border-bottom: 1px solid #1f2937;
+            border-radius: 0.5rem;
+            transition: background-color 0.3s ease, transform 0.3s ease;
         }
-        .date-col {
-            flex: 0 0 100px;
-            font-weight: 600;
+        .date-row:hover {
+            background-color: rgba(31, 41, 55, 0.5);
+            transform: scale(1.02);
         }
-        .content-col {
-            flex: 1 1 auto;
+        .date-row.is-today {
+            background-color: rgba(31, 41, 55, 0.7);
+            border-left: 4px solid var(--accent-color);
         }
+        .date-col { flex: 0 0 100px; font-weight: 600; }
+        .content-col { flex: 1 1 auto; }
         .content-entry {
-            background-color: #1f2937;
+            background-color: #111827;
             padding: 0.5rem 0.75rem;
             border-radius: 0.375rem;
             cursor: pointer;
-            transition: background-color 0.2s ease;
+            transition: background-color 0.2s ease, transform 0.2s ease;
             border-left: 3px solid var(--accent-color);
         }
         .content-entry:hover {
             background-color: #374151;
+            transform: translateX(4px);
+        }
+        .backup-card {
+            background-color: rgba(31, 41, 55, 0.5);
+            padding: 0.75rem;
+            border-radius: 0.375rem;
+            cursor: pointer;
+            transition: all 0.2s ease;
+            border: 1px dashed #4b5563;
+        }
+        .backup-card:hover {
+            background-color: #374151;
+            border-color: var(--accent-color);
+            transform: translateY(-4px);
         }
     </style>
 </head>
 <body class="text-gray-200">
 
+    <div id="aurora-bg">
+        <div class="aurora-circle aurora-1"></div>
+        <div class="aurora-circle aurora-2"></div>
+    </div>
+
     <header class="header-gradient text-white p-6 sm:p-8 shadow-2xl text-center border-b-2" style="border-color: var(--accent-color);">
-        <h1 class="text-3xl sm:text-4xl md:text-5xl font-bold tracking-wide">Production Plan</h1>
+        <h1 class="text-3xl sm:text-4xl md:text-5xl font-bold tracking-wider uppercase">Production Plan</h1>
         <p id="restaurant-name-header" class="text-lg sm:text-xl mt-2 font-light" style="color: var(--accent-color);"></p>
     </header>
 
-    <div class="bg-gray-900 border-b-2 border-gray-800 sticky top-0 z-40">
+    <div class="glassmorphism sticky top-0 z-40 border-b border-gray-700/50">
         <div id="restaurant-tabs" class="container mx-auto flex items-center sm:justify-center overflow-x-auto">
             <!-- Tabs will be injected here -->
         </div>
     </div>
 
     <div class="container mx-auto p-4 sm:px-6 md:px-8 mt-8">
-        <section id="shooting-summary" class="fade-in-up" style="animation-delay: 150ms;">
-            <h2 class="text-2xl sm:text-3xl font-bold mb-4 border-b-2 border-gray-800 pb-2 flex items-center space-x-3" style="color: var(--accent-color);">
+        <section id="shooting-summary" class="fade-in-up glassmorphism rounded-xl p-6" style="animation-delay: 150ms;">
+            <h2 class="text-2xl sm:text-3xl font-bold mb-4 border-b-2 border-gray-700 pb-2 flex items-center space-x-3" style="color: var(--accent-color);">
                 <i data-lucide="clapperboard" class="w-7 h-7 sm:w-8 sm:h-8"></i>
-                <span>สรุปวันถ่ายทำ (Shooting Schedule)</span>
+                <span>สรุปวันถ่ายทำ</span>
             </h2>
             <div id="schedule-container" class="space-y-4"></div>
         </section>
     </div>
 
-    <main class="container mx-auto p-4 sm:p-6 md:p-8">
-        <div id="content-list-container"></div>
+    <main class="container mx-auto p-4 sm:p-6 md:px-8">
+        <div class="relative mb-6">
+             <i data-lucide="search" class="absolute left-4 top-1/2 -translate-y-1/2 text-gray-500"></i>
+            <input type="search" id="search-input" placeholder="ค้นหาคอนเทนต์..." class="w-full bg-gray-900/80 border-2 border-gray-700 rounded-lg pl-12 pr-4 py-3 text-white focus:outline-none focus:border-[var(--accent-color)] transition-colors">
+        </div>
+        <div id="content-list-container" class="glassmorphism rounded-xl p-2"></div>
     </main>
 
+    <div class="container mx-auto p-4 sm:px-6 md:px-8 mt-8">
+        <section id="backup-content-section" class="fade-in-up glassmorphism rounded-xl p-6">
+            <h2 class="text-2xl sm:text-3xl font-bold mb-4 border-b-2 border-gray-700 pb-2 flex items-center space-x-3" style="color: var(--accent-color);">
+                <i data-lucide="archive" class="w-7 h-7 sm:w-8 sm:h-8"></i>
+                <span>คอนเทนต์สำรอง</span>
+            </h2>
+            <div id="backup-content-grid" class="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 lg:grid-cols-4 gap-4"></div>
+        </section>
+    </div>
+
     <div id="detail-modal" class="modal fixed inset-0 z-50 flex items-center justify-center bg-black/60 backdrop-blur-sm p-4 opacity-0 invisible">
-        <div id="detail-modal-content" class="modal-content bg-black border-2 rounded-lg shadow-2xl w-full max-w-2xl max-h-[90vh] overflow-y-auto transform scale-95" style="border-color: var(--accent-color);">
-            <div class="sticky top-0 bg-black/80 backdrop-blur-sm p-4 sm:p-5 border-b flex justify-between items-center" style="border-color: var(--accent-color);">
+        <div id="detail-modal-content" class="modal-content glassmorphism rounded-lg shadow-2xl w-full max-w-2xl max-h-[90vh] overflow-y-auto transform scale-95" style="border-color: var(--accent-color);">
+            <div class="sticky top-0 glassmorphism p-4 sm:p-5 border-b flex justify-between items-center" style="border-color: var(--accent-color);">
                 <h2 id="modal-title" class="text-xl sm:text-2xl font-semibold" style="color: var(--accent-color);"></h2>
                 <button id="close-modal-btn" class="text-gray-400 hover:text-red-500 transition-colors">
                     <i data-lucide="x-circle" class="w-8 h-8"></i>
@@ -137,8 +210,8 @@
     </div>
 
      <div id="shoot-modal" class="modal fixed inset-0 z-[60] flex items-center justify-center bg-black/60 backdrop-blur-sm p-4 opacity-0 invisible">
-        <div id="shoot-modal-content" class="modal-content bg-gray-900 border-2 rounded-lg shadow-2xl w-full max-w-md max-h-[90vh] overflow-y-auto transform scale-95" style="border-color: var(--accent-color);">
-            <div class="sticky top-0 bg-gray-900/80 backdrop-blur-sm p-4 sm:p-5 border-b flex justify-between items-center" style="border-color: var(--accent-color);">
+        <div id="shoot-modal-content" class="modal-content glassmorphism rounded-lg shadow-2xl w-full max-w-md max-h-[90vh] overflow-y-auto transform scale-95" style="border-color: var(--accent-color);">
+            <div class="sticky top-0 glassmorphism p-4 sm:p-5 border-b flex justify-between items-center" style="border-color: var(--accent-color);">
                 <h2 id="shoot-modal-title" class="text-xl sm:text-2xl font-semibold" style="color: var(--accent-color);"></h2>
                 <button id="close-shoot-modal-btn" class="text-gray-400 hover:text-red-500 transition-colors">
                     <i data-lucide="x-circle" class="w-8 h-8"></i>
@@ -149,9 +222,9 @@
     </div>
     
     <div class="container mx-auto p-4 sm:px-6 md:px-8 mt-16">
-        <section class="bg-gray-900 border-2 border-gray-700 rounded-lg p-6 flex flex-col sm:flex-row items-center justify-between gap-6 fade-in-up" style="animation-delay: 50ms;">
+        <section class="glassmorphism rounded-xl p-6 flex flex-col sm:flex-row items-center justify-between gap-6 fade-in-up" style="animation-delay: 50ms;">
             <div class="flex-1">
-                <h2 class="text-xl sm:text-2xl font-bold text-white mb-3">ผู้รับผิดชอบโครงการ</h2>
+                <h2 class="text-xl sm:text-2xl font-bold text-white mb-3">ผู้ประสานงาน</h2>
                 <p class="text-lg font-semibold text-white">Frank Chetsarit</p>
                 <p class="text-md text-gray-400">Graphic design NTK</p>
                 <div class="mt-4 space-y-2 text-gray-300">
@@ -171,21 +244,14 @@
             <p id="footer-restaurant-name" class="font-bold text-base sm:text-lg text-gray-400"></p>
             <p class="text-sm mt-1">Production & Content Calendar Management System</p>
             <p class="text-xs mt-2">&copy; 2025 All Rights Reserved.</p>
-        </div>
-    </footer>
+        </footer>
 
 
     <script>
         const allRestaurantsData = {
             "ร้านลูกเจี๊ยบ หมูกระทะ": {
                 theme: "default",
-                weeks: [ 
-                    { weekNumber: 1, range: "1–7 ตุลาคม 2025", shootDate: "3 ตุลาคม 2025", theme: "อบอุ่น, ตลก, โปรโมต, โรแมนติก", content: [ { postDate: "1 ต.ค.", title: "เปิดร้านรับเดือนใหม่", length: "0:30", details: "ตัวอย่าง", mood: "สดใส", filming: "Gimbal", equipment: "มือถือ", location: "หน้าร้าน", shootDate: "3 ต.ค.", notes: "สร้างบรรยากาศ" }, { postDate: "2 ต.ค.", title: "รวมมิตรความอร่อย", length: "0:45", details: "ซูมเมนูต่างๆ", mood: "น่ากิน", filming: "Macro", equipment: "มือถือ, ไฟ", location: "บนโต๊ะ", shootDate: "3 ต.ค.", notes: "โชว์เมนู" }, { postDate: "3 ต.ค.", title: "วันศุกร์แห่งชาติ", length: "0:30", details: "ลูกค้าแน่นร้าน", mood: "คึกคัก", filming: "Wide", equipment: "มือถือ", location: "ทั่วร้าน", shootDate: "3 ต.ค.", notes: "บรรยากาศวันศุกร์" }, { postDate: "4 ต.ค.", title: "คู่รักนักกิน", length: "0:30", details: "คู่รักป้อนหมูกระทะ", mood: "โรแมนติก", filming: "Close-up", equipment: "มือถือ", location: "โต๊ะมุม", shootDate: "3 ต.ค.", notes: "คอนเทนต์คู่รัก" }, { postDate: "5 ต.ค.", title: "ครอบครัวหรรษา", length: "0:45", details: "ครอบครัวกินพร้อมหน้า", mood: "อบอุ่น", filming: "Steady", equipment: "มือถือ", location: "โต๊ะใหญ่", shootDate: "3 ต.ค.", notes: "คอนเทนต์ครอบครัว" }, { postDate: "6 ต.ค.", title: "หมูเน้นๆ คำโตๆ", length: "0:20", details: "คีบหมูชิ้นใหญ่", mood: "ยั่วๆ", filming: "Slow-motion", equipment: "มือถือ", location: "เตาย่าง", shootDate: "3 ต.ค.", notes: "Food porn" }, { postDate: "7 ต.ค.", title: "ASMR เสียงย่าง", length: "0:25", details: "เสียงหมูบนเตา", mood: "ASMR", filming: "Macro", equipment: "ไมค์, มือถือ", location: "เตาย่าง", shootDate: "3 ต.ค.", notes: "เรียกน้ำย่อย" } ] }, 
-                    { weekNumber: 2, range: "8–14 ตุลาคม 2025", shootDate: "10 ตุลาคม 2025", theme: "ไวรัล, ครอบครัว, โปรโมชัน", content: [ { postDate: "8 ต.ค.", title: "🍖 หมูเต้นบนเตา (ไวรัล)", length: "0:15", details: "0–3s หมูเด้งบนเตา / 3–7s เสียงพากย์ “อุ๊ย! ร้อนๆ เด้งใหญ่เลย!” / 7–15s zoom-in พร้อมข้อความ “หมูเด้งในตำนาน”", mood: "ตลก / เพลง remix funny", filming: "handheld close-up 240fps", equipment: "มือถือ, ไมค์พากย์, ไฟ LED", location: "เตากลางร้าน", shootDate: "10 ต.ค.", notes: "ไวรัลเสียงพากย์" }, { postDate: "9 ต.ค.", title: "👨‍👩‍👧 คืนแห่งครอบครัว", length: "0:45", details: "0–8s ครอบครัวเข้าร้าน / 8–15s เด็กหัวเราะ / 15–25s พ่อจ่ายเงิน / 25–40s แม่พูด “ถูกและอร่อย” / 40–45s โลโก้ร้าน", mood: "อบอุ่น / เพลง family acoustic", filming: "tripod / pan slow / wide shot", equipment: "มือถือ, ไฟ LED warm", location: "โต๊ะใหญ่กลางร้าน", shootDate: "10 ต.ค.", notes: "mood ครอบครัว" }, { postDate: "10 ต.ค.", title: "🧂 เบื้องหลัง “เตรียมหมู”", length: "0:60", details: "0–10s พนักงานหั่นหมู / 10–20s หมักซอส / 20–30s คลุกมือ / 30–45s วางถาดเรียง / 45–55s ซูมใกล้เนื้อ / 55–60s ตัวหนังสือ “ทุกจานคือความตั้งใจ”", mood: "documentary / เพลง soft beat", filming: "handheld / macro", equipment: "มือถือ, ไฟ LED, ถุงมือ, เขียง", location: "ครัวหลังร้าน", shootDate: "10 ต.ค.", notes: "เบื้องหลังจริง" }, { postDate: "11 ต.ค.", title: "💬 เสียงพากย์พนักงาน", length: "0:30", details: "0–5s พนักงานพูด “เจอกันทุกศุกร์เลยนะคะ” / 5–15s ภาพลูกค้าหัวเราะ / 15–25s เตาย่างหมู / 25–30s ปิดด้วยโลโก้", mood: "เป็นกันเอง / เพลง chill pop", filming: "mid shot / talking head", equipment: "มือถือ, ไมค์ไร้สาย", location: "มุมพนักงานหน้าเคาน์เตอร์", shootDate: "10 ต.ค.", notes: "ใช้เสียงจริง" }, { postDate: "12 ต.ค.", title: "🐷 โปร “มากับเพื่อนลดอีก!”", length: "0:20", details: "0–4s ป้ายโปร / 4–10s เพื่อน 3 คน high five / 10–15s zoom ใบเสร็จ / 15–20s ตัวหนังสือ “ชวนเพื่อนมากินกัน!”", mood: "สนุก / เพลง upbeat", filming: "wide shot / handheld move", equipment: "มือถือ, ป้ายโปร", location: "หน้าร้าน", shootDate: "10 ต.ค.", notes: "โปรโมตวันอาทิตย์" }, { postDate: "13 ต.ค.", title: "🔥 สโลว์หมูไหม้ (Art shot)", length: "0:10", details: "0–3s หมูค่อยๆ เปลี่ยนสี / 3–6s ควันลอย / 6–10s fade to logo", mood: "ศิลป์ / เพลง ambient", filming: "slow motion macro", equipment: "มือถือ, ขาตั้ง", location: "เตากลางร้าน", shootDate: "10 ต.ค.", notes: "Visual filler" }, { postDate: "14 ต.ค.", title: "🪩 รวมช็อตบรรยากาศ", length: "0:60", details: "0–8s เปิดร้าน / 8–20s ลูกค้าแน่น / 20–35s ย่างหมู / 35–45s เสิร์ฟอาหาร / 45–55s เด็กหัวเราะ / 55–60s โลโก้ปิดท้าย", mood: "สดใส / เพลง EDM Chill", filming: "handheld / montage cut", equipment: "มือถือ, gimbal", location: "ทั่วร้าน", shootDate: "10 ต.ค.", notes: "คลิปสรุปสัปดาห์" } ] }, 
-                    { weekNumber: 3, range: "15–21 ตุลาคม 2025", shootDate: "17 ตุลาคม 2025", theme: "เทศกาลกินเจ, คุ้มค่า", content: [ { postDate: "15 ต.ค.", title: "🧘‍♀️ หมูกระทะเจก็มีนะ", length: "0:45", details: "0–5s พนักงานโชว์ถาดผัก / 5–15s ผัดเต้าหู้ลงเตา / 15–25s เทน้ำซุป / 25–35s ลูกค้าพูด “เจก็อิ่มได้” / 35–45s โลโก้ร้าน “อิ่มบุญ อร่อยจริง”", mood: "อบอุ่น / เพลง light acoustic", filming: "tripod / macro shot / steady pan", equipment: "มือถือ, ไฟ LED, เต้าหู้, ผัก", location: "มุมครัวหลังร้าน", shootDate: "17 ต.ค.", notes: "เทศกาลกินเจ" }, { postDate: "16 ต.ค.", title: "😂 มีม “สายเนื้อแอบกินเจ”", length: "0:15", details: "0–3s เพื่อนแอบตักหมู / 3–10s ตาโตทำหน้าเจ็บใจ / 10–15s ข้อความ “รู้ไหมว่าเราเห็นนะ!”", mood: "ตลก / เพลง funny remix", filming: "handheld / close-up reaction", equipment: "มือถือ", location: "มุมโต๊ะซ้าย", shootDate: "17 ต.ค.", notes: "คลิปไวรัลสั้น" }, { postDate: "17 ต.ค.", title: "💬 รีวิวจริง “มากี่ครั้งก็ไม่เบื่อ”", length: "0:30", details: "0–8s ลูกค้าชายพูด “มาทุกอาทิตย์เลยครับ” / 8–15s ถ่ายบรรยากาศโต๊ะ / 15–25s zoom หน้าเตาย่าง / 25–30s โลโก้ + แคปชันรีวิว", mood: "น่าเชื่อถือ / เพลง soft pop", filming: "mid shot / handheld", equipment: "มือถือ, ไมค์ไร้สาย", location: "มุมลูกค้าประจำ", shootDate: "17 ต.ค.", notes: "รีวิวจากลูกค้าจริง" }, { postDate: "18 ต.ค.", title: "🐷 โปร “เติมหมูฟรี 1 ถาด!”", length: "0:20", details: "0–5s ป้ายโปรขึ้น “ฟรี 1 ถาด!” / 5–10s พนักงานเสิร์ฟหมู / 10–15s zoom ถาดเนื้อ / 15–20s ตัวหนังสือ “เฉพาะวันเสาร์นี้!”", mood: "โปรโมต / เพลง pop bright", filming: "tripod / focus pull", equipment: "มือถือ, ป้ายโปร", location: "หน้าร้าน", shootDate: "17 ต.ค.", notes: "โปรสุดสัปดาห์" }, { postDate: "19 ต.ค.", title: "🔥 สโลว์ควันเตา “อุ่นหัวใจ”", length: "0:10", details: "0–3s ควันลอยเบา / 3–7s หมูเริ่มสุก / 7–10s fade to โลโก้", mood: "ศิลป์ / เพลง ambient", filming: "macro slow motion", equipment: "มือถือ, ขาตั้ง", location: "เตากลางร้าน", shootDate: "17 ต.ค.", notes: "visual filler ใช้คั่น" }, { postDate: "20 ต.ค.", title: "🎥 เบื้องหลัง “วันถ่ายจริงทีมงาน”", length: "0:60", details: "0–10s ทีมงานตั้งกล้อง / 10–20s พนักงานช่วยจัดไฟ / 20–40s ถ่าย reaction / 40–55s หัวเราะหลุด / 55–60s ตัวหนังสือ “เบื้องหลังความอร่อย”", mood: "เป็นกันเอง / เพลง chill beat", filming: "handheld / behind the scenes", equipment: "มือถือ, Gimbal", location: "ทั่วร้าน", shootDate: "17 ต.ค.", notes: "ใช้เก็บภาพจริงขณะถ่าย" }, { postDate: "21 ต.ค.", title: "🧊 น้ำแข็งเย็นใจ", length: "0:15", details: "0–5s เทน้ำแข็งใส่แก้ว / 5–10s zoom หยดน้ำเกาะ / 10–15s โลโก้ร้าน “สดชื่นทุกคำ”", mood: "สดใส / เพลง chill", filming: "macro / handheld", equipment: "มือถือ, แก้วน้ำ, ไฟ LED", location: "มุมเครื่องดื่ม", shootDate: "17 ต.ค.", notes: "ใช้คั่นก่อนโพสต์ใหญ่" } ] }, 
-                    { weekNumber: 4, range: "22–28 ตุลาคม 2025", shootDate: "24 ตุลาคม 2025", theme: "ปลายเดือน, โปรแรง", content: [ { postDate: "22 ต.ค.", title: "🍲 “เปิดหม้อ” ASMR", length: "0:20", details: "0–5s เปิดฝาหม้อช้า ๆ / 5–10s เสียงซุปเดือดฟู่ / 15–20s โลโก้ร้าน fade in", mood: "สบาย ๆ / เสียงจริง (ASMR)", filming: "macro close / tripod", equipment: "มือถือ, ไมค์บันทึกเสียง, หม้อ", location: "ครัวกลาง", shootDate: "24 ต.ค.", notes: "คลิป ASMR" }, { postDate: "23 ต.ค.", title: "😂 มีม “เพื่อนชวนกินหมูกระทะ”", length: "0:25", details: "0–5s เพื่อนถือสลัด / 5–10s อีกคนถือจานหมู / 20–25s ตัวหนังสือ “ชีวิตมันต้องบาลานซ์!”", mood: "ตลก / เพลง upbeat", filming: "handheld / two shot", equipment: "มือถือ, props สลัด", location: "โต๊ะลูกค้า", shootDate: "24 ต.ค.", notes: "แนวไวรัล" }, { postDate: "24 ต.ค.", title: "💸 โปรปลายเดือน “3 จ่าย 2”", length: "0:40", details: "0–5s ป้ายโปรขึ้น / 5–15s พนักงานชูนิ้ว “3 จ่าย 2” / 25–35s ถ่ายอาหารจัดเต็ม / 35–40s โลโก้พร้อม QR", mood: "โปรโมชัน / เพลง lively pop", filming: "tripod / pan / focus pull", equipment: "มือถือ, ป้ายโปร", location: "หน้าร้าน", shootDate: "24 ต.ค.", notes: "โปรแรงปลายเดือน" }, { postDate: "25 ต.ค.", title: "🐣 ขอบคุณลูกค้า", length: "0:45", details: "0–10s ทีมงานยิ้ม / 10–20s ตัดภาพลูกค้าประจำ / 30–45s ข้อความ “ขอบคุณที่อิ่มด้วยกันทั้งเดือน ❤️”", mood: "อบอุ่น / เพลง soft acoustic", filming: "handheld / steady follow", equipment: "มือถือ, ขาตั้ง", location: "ทั่วร้าน", shootDate: "24 ต.ค.", notes: "ปิดเดือนอย่างอบอุ่น" }, { postDate: "26 ต.ค.", title: "🎞️ รวมโมเมนต์เด่น", length: "0:60", details: "0–15s ช็อตอาหาร / 15–30s ช็อตลูกค้า / 45–60s ตัวหนังสือ “เดือนหน้าเจอกันใหม่!”", mood: "Recap / เพลงพลังบวก", filming: "montage edit", equipment: "ฟุตเทจรวม", location: "—", shootDate: "24 ต.ค.", notes: "ใช้คลิปตัดรวม" }, { postDate: "27 ต.ค.", title: "💬 รีวิวสายครอบครัว", length: "0:35", details: "0–10s ครอบครัวกินพร้อมหน้า / 10–20s เด็กพูด “หนูชอบเตานี้” / 30–35s โลโก้", mood: "อบอุ่น / เพลง mellow", filming: "handheld", equipment: "มือถือ, ไมค์", location: "มุมโต๊ะใหญ่", shootDate: "24 ต.ค.", notes: "รีวิวแนวครอบครัว" }, { postDate: "28 ต.ค.", title: "🔥 ช็อตไฟเตาลุก", length: "0:10", details: "0–5s ถ่ายไฟเตาลุกสวย / 5–10s โลโก้ร้าน + สโลแกน “อร่อยจนต้องกลับมาอีก”", mood: "ดุดัน / เพลง beat slow-mo", filming: "slow motion / macro", equipment: "มือถือ, ขาตั้ง", location: "เตากลางร้าน", shootDate: "24 ต.ค.", notes: "ปิดคอนเทนต์รายเดือน" } ] }, 
-                    { weekNumber: 5, range: "29–31 ตุลาคม 2025", shootDate: "ใช้ฟุตเทจจากวันที่ 24 ต.ค.", theme: "สรุปและขอบคุณ", content: [ { postDate: "29 ต.ค.", title: "😋 “หมูสุกกำลังดี” (ASMR)", length: "0:10", details: "macro ถ่ายหมูเปลี่ยนสีบนเตา / เสียงจี่", mood: "ASMR", filming: "Macro", equipment: "มือถือ", location: "เตากลาง", shootDate: "24 ต.ค.", notes: "จากคอนเทนต์สำรอง" }, { postDate: "30 ต.ค.", title: "🎉 “โปรเดือนหน้า”", length: "0:20", details: "ป้ายโปรใหม่ขึ้น / พนักงานถือป้าย", mood: "โปรโมชัน", filming: "Tripod", equipment: "มือถือ / ป้าย", location: "หน้าร้าน", shootDate: "24 ต.ค.", notes: "จากคอนเทนต์สำรอง" }, { postDate: "31 ต.ค.", title: "🎈 ลูกค้าประจำพูดถึงร้าน", length: "0:45", details: "2 ลูกค้าพูดสั้น ๆ / ยิ้ม / ขอบคุณ", mood: "soft pop", filming: "Mid shot", equipment: "มือถือ / ไมค์", location: "มุมประจำ", shootDate: "24 ต.ค.", notes: "จากคอนเทนต์สำรอง" } ] } 
-                ],
+                weeks: [ { weekNumber: 1, range: "1–7 ตุลาคม 2025", shootDate: "3 ตุลาคม 2025", theme: "อบอุ่น, ตลก, โปรโมต, โรแมนติก", content: [ { postDate: "1 ต.ค.", title: "เปิดร้านรับเดือนใหม่", length: "0:30", details: "ตัวอย่าง", mood: "สดใส", filming: "Gimbal", equipment: "มือถือ", location: "หน้าร้าน", shootDate: "3 ต.ค.", notes: "สร้างบรรยากาศ" }, { postDate: "2 ต.ค.", title: "รวมมิตรความอร่อย", length: "0:45", details: "ซูมเมนูต่างๆ", mood: "น่ากิน", filming: "Macro", equipment: "มือถือ, ไฟ", location: "บนโต๊ะ", shootDate: "3 ต.ค.", notes: "โชว์เมนู" }, { postDate: "3 ต.ค.", title: "วันศุกร์แห่งชาติ", length: "0:30", details: "ลูกค้าแน่นร้าน", mood: "คึกคัก", filming: "Wide", equipment: "มือถือ", location: "ทั่วร้าน", shootDate: "3 ต.ค.", notes: "บรรยากาศวันศุกร์" }, { postDate: "4 ต.ค.", title: "คู่รักนักกิน", length: "0:30", details: "คู่รักป้อนหมูกระทะ", mood: "โรแมนติก", filming: "Close-up", equipment: "มือถือ", location: "โต๊ะมุม", shootDate: "3 ต.ค.", notes: "คอนเทนต์คู่รัก" }, { postDate: "5 ต.ค.", title: "ครอบครัวหรรษา", length: "0:45", details: "ครอบครัวกินพร้อมหน้า", mood: "อบอุ่น", filming: "Steady", equipment: "มือถือ", location: "โต๊ะใหญ่", shootDate: "3 ต.ค.", notes: "คอนเทนต์ครอบครัว" }, { postDate: "6 ต.ค.", title: "หมูเน้นๆ คำโตๆ", length: "0:20", details: "คีบหมูชิ้นใหญ่", mood: "ยั่วๆ", filming: "Slow-motion", equipment: "มือถือ", location: "เตาย่าง", shootDate: "3 ต.ค.", notes: "Food porn" }, { postDate: "7 ต.ค.", title: "ASMR เสียงย่าง", length: "0:25", details: "เสียงหมูบนเตา", mood: "ASMR", filming: "Macro", equipment: "ไมค์, มือถือ", location: "เตาย่าง", shootDate: "3 ต.ค.", notes: "เรียกน้ำย่อย" } ] }, { weekNumber: 2, range: "8–14 ตุลาคม 2025", shootDate: "10 ตุลาคม 2025", theme: "ไวรัล, ครอบครัว, โปรโมชัน", content: [ { postDate: "8 ต.ค.", title: "🍖 หมูเต้นบนเตา (ไวรัล)", length: "0:15", details: "0–3s หมูเด้งบนเตา / 3–7s เสียงพากย์ “อุ๊ย! ร้อนๆ เด้งใหญ่เลย!” / 7–15s zoom-in พร้อมข้อความ “หมูเด้งในตำนาน”", mood: "ตลก / เพลง remix funny", filming: "handheld close-up 240fps", equipment: "มือถือ, ไมค์พากย์, ไฟ LED", location: "เตากลางร้าน", shootDate: "10 ต.ค.", notes: "ไวรัลเสียงพากย์" }, { postDate: "9 ต.ค.", title: "👨‍👩‍👧 คืนแห่งครอบครัว", length: "0:45", details: "0–8s ครอบครัวเข้าร้าน / 8–15s เด็กหัวเราะ / 15–25s พ่อจ่ายเงิน / 25–40s แม่พูด “ถูกและอร่อย” / 40–45s โลโก้ร้าน", mood: "อบอุ่น / เพลง family acoustic", filming: "tripod / pan slow / wide shot", equipment: "มือถือ, ไฟ LED warm", location: "โต๊ะใหญ่กลางร้าน", shootDate: "10 ต.ค.", notes: "mood ครอบครัว" }, { postDate: "10 ต.ค.", title: "🧂 เบื้องหลัง “เตรียมหมู”", length: "0:60", details: "0–10s พนักงานหั่นหมู / 10–20s หมักซอส / 20–30s คลุกมือ / 30–45s วางถาดเรียง / 45–55s ซูมใกล้เนื้อ / 55–60s ตัวหนังสือ “ทุกจานคือความตั้งใจ”", mood: "documentary / เพลง soft beat", filming: "handheld / macro", equipment: "มือถือ, ไฟ LED, ถุงมือ, เขียง", location: "ครัวหลังร้าน", shootDate: "10 ต.ค.", notes: "เบื้องหลังจริง" }, { postDate: "11 ต.ค.", title: "💬 เสียงพากย์พนักงาน", length: "0:30", details: "0–5s พนักงานพูด “เจอกันทุกศุกร์เลยนะคะ” / 5–15s ภาพลูกค้าหัวเราะ / 15–25s เตาย่างหมู / 25–30s ปิดด้วยโลโก้", mood: "เป็นกันเอง / เพลง chill pop", filming: "mid shot / talking head", equipment: "มือถือ, ไมค์ไร้สาย", location: "มุมพนักงานหน้าเคาน์เตอร์", shootDate: "10 ต.ค.", notes: "ใช้เสียงจริง" }, { postDate: "12 ต.ค.", title: "🐷 โปร “มากับเพื่อนลดอีก!”", length: "0:20", details: "0–4s ป้ายโปร / 4–10s เพื่อน 3 คน high five / 10–15s zoom ใบเสร็จ / 15–20s ตัวหนังสือ “ชวนเพื่อนมากินกัน!”", mood: "สนุก / เพลง upbeat", filming: "wide shot / handheld move", equipment: "มือถือ, ป้ายโปร", location: "หน้าร้าน", shootDate: "10 ต.ค.", notes: "โปรโมตวันอาทิตย์" }, { postDate: "13 ต.ค.", title: "🔥 สโลว์หมูไหม้ (Art shot)", length: "0:10", details: "0–3s หมูค่อยๆ เปลี่ยนสี / 3–6s ควันลอย / 6–10s fade to logo", mood: "ศิลป์ / เพลง ambient", filming: "slow motion macro", equipment: "มือถือ, ขาตั้ง", location: "เตากลางร้าน", shootDate: "10 ต.ค.", notes: "Visual filler" }, { postDate: "14 ต.ค.", title: "🪩 รวมช็อตบรรยากาศ", length: "0:60", details: "0–8s เปิดร้าน / 8–20s ลูกค้าแน่น / 20–35s ย่างหมู / 35–45s เสิร์ฟอาหาร / 45–55s เด็กหัวเราะ / 55–60s โลโก้ปิดท้าย", mood: "สดใส / เพลง EDM Chill", filming: "handheld / montage cut", equipment: "มือถือ, gimbal", location: "ทั่วร้าน", shootDate: "10 ต.ค.", notes: "คลิปสรุปสัปดาห์" } ] }, { weekNumber: 3, range: "15–21 ตุลาคม 2025", shootDate: "17 ตุลาคม 2025", theme: "เทศกาลกินเจ, คุ้มค่า", content: [ { postDate: "15 ต.ค.", title: "🧘‍♀️ หมูกระทะเจก็มีนะ", length: "0:45", details: "0–5s พนักงานโชว์ถาดผัก / 5–15s ผัดเต้าหู้ลงเตา / 15–25s เทน้ำซุป / 25–35s ลูกค้าพูด “เจก็อิ่มได้” / 35–45s โลโก้ร้าน “อิ่มบุญ อร่อยจริง”", mood: "อบอุ่น / เพลง light acoustic", filming: "tripod / macro shot / steady pan", equipment: "มือถือ, ไฟ LED, เต้าหู้, ผัก", location: "มุมครัวหลังร้าน", shootDate: "17 ต.ค.", notes: "เทศกาลกินเจ" }, { postDate: "16 ต.ค.", title: "😂 มีม “สายเนื้อแอบกินเจ”", length: "0:15", details: "0–3s เพื่อนแอบตักหมู / 3–10s ตาโตทำหน้าเจ็บใจ / 10–15s ข้อความ “รู้ไหมว่าเราเห็นนะ!”", mood: "ตลก / เพลง funny remix", filming: "handheld / close-up reaction", equipment: "มือถือ", location: "มุมโต๊ะซ้าย", shootDate: "17 ต.ค.", notes: "คลิปไวรัลสั้น" }, { postDate: "17 ต.ค.", title: "💬 รีวิวจริง “มากี่ครั้งก็ไม่เบื่อ”", length: "0:30", details: "0–8s ลูกค้าชายพูด “มาทุกอาทิตย์เลยครับ” / 8–15s ถ่ายบรรยากาศโต๊ะ / 15–25s zoom หน้าเตาย่าง / 25–30s โลโก้ + แคปชันรีวิว", mood: "น่าเชื่อถือ / เพลง soft pop", filming: "mid shot / handheld", equipment: "มือถือ, ไมค์ไร้สาย", location: "มุมลูกค้าประจำ", shootDate: "17 ต.ค.", notes: "รีวิวจากลูกค้าจริง" }, { postDate: "18 ต.ค.", title: "🐷 โปร “เติมหมูฟรี 1 ถาด!”", length: "0:20", details: "0–5s ป้ายโปรขึ้น “ฟรี 1 ถาด!” / 5–10s พนักงานเสิร์ฟหมู / 10–15s zoom ถาดเนื้อ / 15–20s ตัวหนังสือ “เฉพาะวันเสาร์นี้!”", mood: "โปรโมต / เพลง pop bright", filming: "tripod / focus pull", equipment: "มือถือ, ป้ายโปร", location: "หน้าร้าน", shootDate: "17 ต.ค.", notes: "โปรสุดสัปดาห์" }, { postDate: "19 ต.ค.", title: "🔥 สโลว์ควันเตา “อุ่นหัวใจ”", length: "0:10", details: "0–3s ควันลอยเบา / 3–7s หมูเริ่มสุก / 7–10s fade to โลโก้", mood: "ศิลป์ / เพลง ambient", filming: "macro slow motion", equipment: "มือถือ, ขาตั้ง", location: "เตากลางร้าน", shootDate: "17 ต.ค.", notes: "visual filler ใช้คั่น" }, { postDate: "20 ต.ค.", title: "🎥 เบื้องหลัง “วันถ่ายจริงทีมงาน”", length: "0:60", details: "0–10s ทีมงานตั้งกล้อง / 10–20s พนักงานช่วยจัดไฟ / 20–40s ถ่าย reaction / 40–55s หัวเราะหลุด / 55–60s ตัวหนังสือ “เบื้องหลังความอร่อย”", mood: "เป็นกันเอง / เพลง chill beat", filming: "handheld / behind the scenes", equipment: "มือถือ, Gimbal", location: "ทั่วร้าน", shootDate: "17 ต.ค.", notes: "ใช้เก็บภาพจริงขณะถ่าย" }, { postDate: "21 ต.ค.", title: "🧊 น้ำแข็งเย็นใจ", length: "0:15", details: "0–5s เทน้ำแข็งใส่แก้ว / 5–10s zoom หยดน้ำเกาะ / 10–15s โลโก้ร้าน “สดชื่นทุกคำ”", mood: "สดใส / เพลง chill", filming: "macro / handheld", equipment: "มือถือ, แก้วน้ำ, ไฟ LED", location: "มุมเครื่องดื่ม", shootDate: "17 ต.ค.", notes: "ใช้คั่นก่อนโพสต์ใหญ่" } ] }, { weekNumber: 4, range: "22–28 ตุลาคม 2025", shootDate: "24 ตุลาคม 2025", theme: "ปลายเดือน, โปรแรง", content: [ { postDate: "22 ต.ค.", title: "🍲 “เปิดหม้อ” ASMR", length: "0:20", details: "0–5s เปิดฝาหม้อช้า ๆ / 5–10s เสียงซุปเดือดฟู่ / 15–20s โลโก้ร้าน fade in", mood: "สบาย ๆ / เสียงจริง (ASMR)", filming: "macro close / tripod", equipment: "มือถือ, ไมค์บันทึกเสียง, หม้อ", location: "ครัวกลาง", shootDate: "24 ต.ค.", notes: "คลิป ASMR" }, { postDate: "23 ต.ค.", title: "😂 มีม “เพื่อนชวนกินหมูกระทะ”", length: "0:25", details: "0–5s เพื่อนถือสลัด / 5–10s อีกคนถือจานหมู / 20–25s ตัวหนังสือ “ชีวิตมันต้องบาลานซ์!”", mood: "ตลก / เพลง upbeat", filming: "handheld / two shot", equipment: "มือถือ, props สลัด", location: "โต๊ะลูกค้า", shootDate: "24 ต.ค.", notes: "แนวไวรัล" }, { postDate: "24 ต.ค.", title: "💸 โปรปลายเดือน “3 จ่าย 2”", length: "0:40", details: "0–5s ป้ายโปรขึ้น / 5–15s พนักงานชูนิ้ว “3 จ่าย 2” / 25–35s ถ่ายอาหารจัดเต็ม / 35–40s โลโก้พร้อม QR", mood: "โปรโมชัน / เพลง lively pop", filming: "tripod / pan / focus pull", equipment: "มือถือ, ป้ายโปร", location: "หน้าร้าน", shootDate: "24 ต.ค.", notes: "โปรแรงปลายเดือน" }, { postDate: "25 ต.ค.", title: "🐣 ขอบคุณลูกค้า", length: "0:45", details: "0–10s ทีมงานยิ้ม / 10–20s ตัดภาพลูกค้าประจำ / 30–45s ข้อความ “ขอบคุณที่อิ่มด้วยกันทั้งเดือน ❤️”", mood: "อบอุ่น / เพลง soft acoustic", filming: "handheld / steady follow", equipment: "มือถือ, ขาตั้ง", location: "ทั่วร้าน", shootDate: "24 ต.ค.", notes: "ปิดเดือนอย่างอบอุ่น" }, { postDate: "26 ต.ค.", title: "🎞️ รวมโมเมนต์เด่น", length: "0:60", details: "0–15s ช็อตอาหาร / 15–30s ช็อตลูกค้า / 45–60s ตัวหนังสือ “เดือนหน้าเจอกันใหม่!”", mood: "Recap / เพลงพลังบวก", filming: "montage edit", equipment: "ฟุตเทจรวม", location: "—", shootDate: "24 ต.ค.", notes: "ใช้คลิปตัดรวม" }, { postDate: "27 ต.ค.", title: "💬 รีวิวสายครอบครัว", length: "0:35", details: "0–10s ครอบครัวกินพร้อมหน้า / 10–20s เด็กพูด “หนูชอบเตานี้” / 30–35s โลโก้", mood: "อบอุ่น / เพลง mellow", filming: "handheld", equipment: "มือถือ, ไมค์", location: "มุมโต๊ะใหญ่", shootDate: "24 ต.ค.", notes: "รีวิวแนวครอบครัว" }, { postDate: "28 ต.ค.", title: "🔥 ช็อตไฟเตาลุก", length: "0:10", details: "0–5s ถ่ายไฟเตาลุกสวย / 5–10s โลโก้ร้าน + สโลแกน “อร่อยจนต้องกลับมาอีก”", mood: "ดุดัน / เพลง beat slow-mo", filming: "slow motion / macro", equipment: "มือถือ, ขาตั้ง", location: "เตากลางร้าน", shootDate: "24 ต.ค.", notes: "ปิดคอนเทนต์รายเดือน" } ] }, { weekNumber: 5, range: "29–31 ตุลาคม 2025", shootDate: "ใช้ฟุตเทจจากวันที่ 24 ต.ค.", theme: "สรุปและขอบคุณ", content: [ { postDate: "29 ต.ค.", title: "😋 “หมูสุกกำลังดี” (ASMR)", length: "0:10", details: "macro ถ่ายหมูเปลี่ยนสีบนเตา / เสียงจี่", mood: "ASMR", filming: "Macro", equipment: "มือถือ", location: "เตากลาง", shootDate: "24 ต.ค.", notes: "จากคอนเทนต์สำรอง" }, { postDate: "30 ต.ค.", title: "🎉 “โปรเดือนหน้า”", length: "0:20", details: "ป้ายโปรใหม่ขึ้น / พนักงานถือป้าย", mood: "โปรโมชัน", filming: "Tripod", equipment: "มือถือ / ป้าย", location: "หน้าร้าน", shootDate: "24 ต.ค.", notes: "จากคอนเทนต์สำรอง" }, { postDate: "31 ต.ค.", title: "🎈 ลูกค้าประจำพูดถึงร้าน", length: "0:45", details: "2 ลูกค้าพูดสั้น ๆ / ยิ้ม / ขอบคุณ", mood: "soft pop", filming: "Mid shot", equipment: "มือถือ / ไมค์", location: "มุมประจำ", shootDate: "24 ต.ค.", notes: "จากคอนเทนต์สำรอง" } ] } ],
                 backup: [ { title: "🌧️ วันฝนตก", details: "ถ่ายฝนโปรย / คนเดินเข้าร้าน / กล้องแพนเข้าเตา" }, { title: "🪑 ร้านว่างๆ", details: "ถ่ายร้านว่าง ๆ ตอนเปิดร้าน / fade in โลโก้" }, { title: "🐷 ถามเมนูโปรด", details: "สัมภาษณ์ 3 คนพูดสั้น ๆ / ปิดท้ายรวมเสียงหัวเราะ" }, { title: "😋 หมูสุก ASMR", details: "macro ถ่ายหมูเปลี่ยนสีบนเตา / เสียงจี่" }, { title: "🎉 โปรใหม่", details: "ป้ายโปรใหม่ขึ้น / พนักงานถือป้าย" }, { title: "🎈 รีวิวลูกค้าประจำ", details: "2 ลูกค้าพูดสั้น ๆ / ยิ้ม / ขอบคุณ" } ]
             },
             "ร้านอิ่มสุข หมูกระทะ": {
@@ -353,9 +419,11 @@
 
             const scheduleContainer = document.getElementById('schedule-container');
             const listContainer = document.getElementById('content-list-container');
+            const backupGrid = document.getElementById('backup-content-grid');
 
             scheduleContainer.innerHTML = '';
             listContainer.innerHTML = '';
+            backupGrid.innerHTML = '';
             restaurantNameHeader.textContent = `${restaurantName} | ตุลาคม 2025`;
             footerRestaurantName.textContent = `${restaurantName} Official`;
 
@@ -401,6 +469,11 @@
                 const dateKey = `${day} ต.ค.`;
                 const rowEl = document.createElement('div');
                 rowEl.className = 'date-row';
+                // Highlight today's date
+                if(day === 9 && new Date().getMonth() === 9 && new Date().getFullYear() === 2025) { // Assuming current date is Oct 9, 2025 for demo
+                     rowEl.classList.add('is-today');
+                }
+
 
                 const dateCol = document.createElement('div');
                 dateCol.className = 'date-col';
@@ -441,6 +514,24 @@
                 }
                 rowEl.appendChild(contentCol);
                 listContainer.appendChild(rowEl);
+            }
+
+            // Backup Content Rendering
+            if (restaurantData.backup && restaurantData.backup.length > 0) {
+                restaurantData.backup.forEach((item, index) => {
+                    const backupCard = document.createElement('div');
+                    backupCard.className = 'backup-card';
+                    backupCard.innerHTML = `<p class="font-semibold">${item.title}</p>`;
+                    backupCard.dataset.backupIndex = index;
+                    backupGrid.appendChild(backupCard);
+                });
+
+                backupGrid.querySelectorAll('.backup-card').forEach(card => {
+                    card.addEventListener('click', () => {
+                        const index = card.dataset.backupIndex;
+                        showModal(restaurantData.backup[index]);
+                    });
+                });
             }
 
 
@@ -519,9 +610,37 @@
         closeShootModalBtn.addEventListener('click', hideShootModal);
         
         document.addEventListener('click', (e) => {
-            if (e.target === modal) hideModal();
+            const detailModal = document.getElementById('detail-modal');
+            const shootModal = document.getElementById('shoot-modal');
+            if (e.target === detailModal) hideModal();
             if (e.target === shootModal) hideShootModal();
         });
+        
+        const searchInput = document.getElementById('search-input');
+        searchInput.addEventListener('input', () => {
+            const searchTerm = searchInput.value.toLowerCase();
+            const rows = document.querySelectorAll('#content-list-container .date-row');
+            rows.forEach(row => {
+                const contentEntries = row.querySelectorAll('.content-entry');
+                let hasMatch = false;
+                if (contentEntries.length > 0) {
+                     contentEntries.forEach(entry => {
+                        if (entry.textContent.toLowerCase().includes(searchTerm)) {
+                            hasMatch = true;
+                        }
+                    });
+                } else if(row.querySelector('.text-gray-600')) { // Check for "no content"
+                    if(searchTerm === "") hasMatch = true;
+                }
+                
+                if (hasMatch) {
+                    row.style.display = 'flex';
+                } else {
+                    row.style.display = 'none';
+                }
+            });
+        });
+
 
         window.onload = function() {
             new QRious({ element: document.getElementById('qr-code'), value: window.location.href, size: 140, padding: 10, background: '#ffffff', foreground: '#000000' });
